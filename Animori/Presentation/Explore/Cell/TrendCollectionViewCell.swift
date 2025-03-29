@@ -9,9 +9,11 @@ import UIKit
 import SnapKit
 import FSPagerView
 
+// MARK: - TrendCollectionViewCell
 final class TrendCollectionViewCell: BaseCollectionViewCell {
     
     static let identifier = "TrendCollectionViewCell"
+    private var featuredItems: [AnimeProtocol] = []
     
     private let trendPagerView = FSPagerView()
     
@@ -26,44 +28,163 @@ final class TrendCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configureView() {
-        let transformer = FSPagerViewTransformer(type: .overlap)
+        let transformer = FSPagerViewTransformer(type: .linear)
+        transformer.minimumAlpha = 0.5
         transformer.minimumScale = 0.6
-        transformer.minimumAlpha = 0.6
         trendPagerView.transformer = transformer
-        
-        trendPagerView.automaticSlidingInterval = 3.0
-        trendPagerView.isInfinite = true
+        trendPagerView.scrollDirection = .horizontal
+        trendPagerView.itemSize = CGSize(width: bounds.width * 0.6, height: bounds.height)
         
         trendPagerView.register(TrendPagerViewCell.self, forCellWithReuseIdentifier: TrendPagerViewCell.identifier)
+        trendPagerView.delegate = self
+        trendPagerView.dataSource = self
+    }
+    
+    func configure(with items: [AnimeProtocol]) {
+        featuredItems = items
+        trendPagerView.reloadData()
     }
     
 }
 
-final class TrendPagerViewCell: FSPagerViewCell {
+// MARK: - FSPagerView Extensions
+extension TrendCollectionViewCell: FSPagerViewDelegate, FSPagerViewDataSource {
+    func numberOfItems(in pagerView: FSPagerView) -> Int {
+        return featuredItems.count
+    }
+    
+    func pagerView(_ pagerView: FSPagerView, cellForItemAt index: Int) -> FSPagerViewCell {
+        guard let cell = pagerView.dequeueReusableCell(withReuseIdentifier: TrendPagerViewCell.identifier, at: index) as? TrendPagerViewCell else {
+            return FSPagerViewCell()
+        }
+        
+        let item = featuredItems[index]
+        cell.configureData(data: item)
+        return cell
+    }
+}
+
+// MARK: - TrendPagerViewCell
+final class TrendPagerViewCell: BaseFSPagerViewCell {
     
     static let identifier = "TrendPagerViewCell"
     
+    private let containView = UIView()
     private let posterImageView = UIImageView()
-    private let url: String
+    private let lineView = UIView()
+    
+    private let titleStackView = UIStackView()
+    private let titleLabel = UILabel()
+    private let ratingLabel = UILabel()
+    
+    private let genreStackView = UIStackView()
+    
+    private var totalGenreStackViewWidth: CGFloat = 0
+    private var genreStackViewWidth: CGFloat = 0
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        totalGenreStackViewWidth = containView.frame.width - 20
+        genreStackViewWidth = genreStackView.frame.width
+    }
 
-    init(url: String) {
-        self.url = url
-        super.init(frame: .zero)
+    override func configureHierarchy() {
+        titleStackView.addArrangedSubviews(titleLabel, ratingLabel)
+
+        containView.addSubViews(
+            posterImageView,
+            lineView,
+            titleStackView,
+            genreStackView
+        )
+        
+        addSubview(containView)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func setupViews() {
-        // 이미지뷰 설정
-        contentView.addSubview(posterImageView)
-        posterImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+    override func configureLayout() {
+        containView.snp.makeConstraints { make in
+            make.top.horizontalEdges.equalToSuperview()
+            make.bottom.equalTo(genreStackView.snp.bottom).offset(10)
         }
+        
+        posterImageView.snp.makeConstraints { make in
+            make.top.horizontalEdges.equalToSuperview()
+            make.height.equalTo(255)
+        }
+        
+        lineView.snp.makeConstraints { make in
+            make.top.equalTo(posterImageView.snp.bottom)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(0.6)
+        }
+        
+        titleStackView.snp.makeConstraints { make in
+            make.top.equalTo(posterImageView.snp.bottom).offset(10)
+            make.horizontalEdges.equalToSuperview().inset(10)
+        }
+        
+        genreStackView.snp.makeConstraints { make in
+            make.top.equalTo(titleStackView.snp.bottom).offset(10)
+            make.leading.equalToSuperview().inset(10)
+            make.trailing.lessThanOrEqualToSuperview().inset(10)
+        }
+    }
+    
+    override func configureView() {
+        containView.layer.cornerRadius = 10
+        containView.layer.borderWidth = 0.5
+        containView.layer.borderColor = .am(.base(.white))
+        containView.backgroundColor = .am(.base(.black))
+        containView.clipsToBounds = true
+        
+        posterImageView.tintColor = .am(.base(.gray))
         posterImageView.contentMode = .scaleAspectFill
         posterImageView.clipsToBounds = true
-        posterImageView.image?.setImage(with: url)
+        
+        lineView.backgroundColor = .am(.base(.white))
+        
+        titleStackView.axis = .horizontal
+        titleStackView.distribution = .equalSpacing
+        titleStackView.alignment = .center
+        
+        titleLabel.font = .am(.titleSemibold)
+        titleLabel.textColor = .am(.base(.white))
+        titleLabel.textAlignment = .left
+        
+        ratingLabel.font = .am(.bodyRegular)
+        ratingLabel.textColor = .am(.base(.white))
+        ratingLabel.textAlignment = .right
+        
+        genreStackView.axis = .horizontal
+        genreStackView.spacing = 5
+        genreStackView.distribution = .fillProportionally
+        genreStackView.alignment = .leading
+        genreStackView.isLayoutMarginsRelativeArrangement = true
+        genreStackView.layoutMargins = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        genreStackView.clipsToBounds = true
     }
     
+    
+    func configureData(data: AnimeProtocol) {
+        posterImageView.setImage(with: data.image)
+        titleLabel.text = data.title
+        ratingLabel.text = "★ \(data.rate)"
+        
+        genreStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
+        let availableWidth = bounds.width - 25
+        var currentWidth: CGFloat = 0
+        
+        for tag in data.genre {
+            let genreBox = GenreBoxView(genre: tag)
+            let boxWidth = genreBox.intrinsicContentSize.width
+            
+            if currentWidth + boxWidth <= availableWidth {
+                genreStackView.addArrangedSubview(genreBox)
+                currentWidth += boxWidth + genreStackView.spacing
+            } else {
+                break
+            }
+        }
+    }
 }
