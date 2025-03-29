@@ -1,5 +1,5 @@
 //
-//  UIImage+.swift
+//  UIImageView+.swift
 //  Animori
 //
 //  Created by 이빈 on 3/28/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIImage {
+extension UIImageView {
     
     func setImage(with url: String?) {
         guard let url,
