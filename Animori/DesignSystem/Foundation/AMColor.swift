@@ -25,11 +25,13 @@ extension AMColor {
     enum Base {
         case black
         case white
+        case gray
         
         var color: UIColor {
             switch self {
             case .black: return .amBlack
             case .white: return .amWhite
+            case .gray: return .amGray
             }
         }
     }
