@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+protocol AnimeProtocol {
+    var title: String { get }
+    var image: String { get }
+    var genre: [String] { get }
+    var rate: String { get }
+}
