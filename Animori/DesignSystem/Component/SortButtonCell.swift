@@ -13,13 +13,12 @@ final class SortButtonCell: BaseCollectionViewCell {
     static let identifier = "SortButtonCell"
     
     private let button = UIButton()
-    private var config = UIButton.Configuration.plain()
+    private var config = UIButton.Configuration.filled()
     private var titleContainer = AttributeContainer()
     
     override var isSelected: Bool {
         didSet {
-            button.isSelected = isSelected
-            print("선택됨")
+            configureButton()
         }
     }
     
@@ -34,7 +33,6 @@ final class SortButtonCell: BaseCollectionViewCell {
     }
     
     override func configureView() {
-        
         config.cornerStyle = .capsule
         config.baseBackgroundColor = .am(.base(.black))
         config.baseForegroundColor = .am(.base(.white))
@@ -42,33 +40,18 @@ final class SortButtonCell: BaseCollectionViewCell {
         config.background.strokeWidth = 0.6
         config.background.cornerRadius = 15
         button.configuration = config
-        
+        button.isUserInteractionEnabled = false
         titleContainer.font = .am(.subtitleMedium)
-        
-        button.configurationUpdateHandler = { [weak self] btn in
-            switch btn.state {
-            case .selected:
-                self?.config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-                    var outgoing = incoming
-                    outgoing.foregroundColor = .am(.base(.black)) // 눌렸을 때 흰색
-                    return outgoing
-                }
-                self?.config.baseBackgroundColor = .am(.base(.white))
-                self?.config.background.strokeColor = .am(.base(.black))
-            default:
-                self?.config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-                    var outgoing = incoming
-                    outgoing.foregroundColor = .am(.base(.white)) // 눌렸을 때 흰색
-                    return outgoing
-                }
-                self?.config.baseBackgroundColor = .am(.base(.black))
-                self?.config.background.strokeColor = .am(.base(.white))
-            }
-        }
     }
     
     func configureData(title: String) {
         config.attributedTitle = AttributedString(title, attributes: titleContainer)
+        configureButton()
+    }
+    
+    private func configureButton() {
+        config.baseBackgroundColor = isSelected ? .am(.base(.white)) : .am(.base(.black))
+        config.baseForegroundColor = isSelected ? .am(.base(.black)) : .am(.base(.white))
         button.configuration = config
     }
 
