@@ -22,6 +22,7 @@ final class ExploreViewModel: Reactor {
         case setTopAnime([any AnimeProtocol])
         case setSeasonAnime([any AnimeProtocol])
         case setCompleteAnime(([any AnimeProtocol]))
+        case setShortAnime(([any AnimeProtocol]))
         case setSelectedAnime(Int)
     }
     
@@ -30,6 +31,7 @@ final class ExploreViewModel: Reactor {
         @Pulse var topAnime: [any AnimeProtocol] // 탑인기 애니메이션
         @Pulse var seasonAnime: [any AnimeProtocol] // 이번 시즌 애니메이션
         @Pulse var completeAnime: [any AnimeProtocol] // 완결 명작 애니메이션
+        @Pulse var shortAnime: [any AnimeProtocol] // 짧은 애니메이션
         var selectedSortOption: SortOption = .popular
         @Pulse var selectedAnime: Int?
     }
@@ -49,8 +51,9 @@ final class ExploreViewModel: Reactor {
             let topAnime = Observable.just(Mutation.setTopAnime(mockAnimeEntity.shuffled()))
             let seasonAnime = Observable.just(Mutation.setSeasonAnime(mockAnimeEntity.shuffled()))
             let completeAnime = Observable.just(Mutation.setCompleteAnime(mockAnimeEntity.shuffled()))
+            let shortAnime = Observable.just(Mutation.setShortAnime(mockAnimeEntity.shuffled()))
             
-            return Observable.merge(topAnime, seasonAnime, completeAnime)
+            return Observable.merge(topAnime, seasonAnime, completeAnime, shortAnime)
             
         case .sortSelected(let sortOption):
             print("정렬 탭", sortOption.displayName)
@@ -78,6 +81,8 @@ final class ExploreViewModel: Reactor {
             newState.seasonAnime = anime
         case .setCompleteAnime(let anime):
             newState.completeAnime = anime
+        case .setShortAnime(let anime):
+            newState.shortAnime = anime
         case .setSelectedAnime(let id):
             newState.selectedAnime = id
         }

@@ -19,6 +19,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             topAnime: [],
             seasonAnime: [],
             completeAnime: [],
+            shortAnime: [],
             selectedSortOption: .popular
         )
         let viewModel = ExploreViewModel(initialState: state)

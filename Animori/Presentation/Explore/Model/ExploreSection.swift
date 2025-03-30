@@ -14,6 +14,7 @@ enum ExploreItem {
     case topAnime([any AnimeProtocol])
     case seasonAnime(any AnimeProtocol)
     case completeAnime(any AnimeProtocol)
+    case shortAnime(any AnimeProtocol)
 }
 
 extension ExploreItem: IdentifiableType, Equatable {
@@ -23,6 +24,7 @@ extension ExploreItem: IdentifiableType, Equatable {
         case .topAnime: return "topAnime"
         case .seasonAnime(let anime): return "seasonAnime_\(anime.id)"
         case .completeAnime(let anime): return "completeAnime_\(anime.id)"
+        case .shortAnime(let anime): return "shortAnime_\(anime.id)"
         }
     }
     

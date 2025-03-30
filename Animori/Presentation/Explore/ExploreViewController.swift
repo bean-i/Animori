@@ -60,6 +60,11 @@ final class ExploreViewController: BaseViewController<ExploreView> {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendCollectionViewCell.identifier, for: indexPath) as! RecommendCollectionViewCell
                 cell.configureData(with: anime)
                 return cell
+                
+            case .shortAnime(let anime):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendCollectionViewCell.identifier, for: indexPath) as! RecommendCollectionViewCell
+                cell.configureData(with: anime)
+                return cell
             }
         },
         configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
@@ -88,13 +93,16 @@ extension ExploreViewController: View {
             let section1 = ExploreSection(header: nil,
                                           items: [.topAnime(state.topAnime)])
             
-            let section2 = ExploreSection(header: "이번 시즌 애니메이션",
+            let section2 = ExploreSection(header: RecommendOption.season.displayName,
                                           items: state.seasonAnime.map { .seasonAnime($0) })
             
-            let section3 = ExploreSection(header: "완결 명작 애니메이션",
+            let section3 = ExploreSection(header: RecommendOption.complete.displayName,
                                           items: state.completeAnime.map { .completeAnime($0) })
             
-            return [section0, section1, section2, section3]
+            let section4 = ExploreSection(header: RecommendOption.short.displayName,
+                                          items: state.shortAnime.map { .shortAnime($0) })
+            
+            return [section0, section1, section2, section3, section4]
         }
         .bind(to: sectionsRelay)
         .disposed(by: disposeBag)
