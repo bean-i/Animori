@@ -9,11 +9,17 @@ import UIKit
 import SnapKit
 import FSPagerView
 
+// MARK: - 화면 전환 프로토콜
+protocol TrendCollectionViewCellDelegate: AnyObject {
+    func trendCollectionViewCellTapped(_ cell: TrendCollectionViewCell, didSelectAnime anime: any AnimeProtocol)
+}
+
 // MARK: - TrendCollectionViewCell
 final class TrendCollectionViewCell: BaseCollectionViewCell {
     
     static let identifier = "TrendCollectionViewCell"
-    private var featuredItems: [AnimeProtocol] = []
+    private var featuredItems: [any AnimeProtocol] = []
+    weak var delegate: TrendCollectionViewCellDelegate?
     
     private let trendPagerView = FSPagerView()
     
@@ -40,7 +46,7 @@ final class TrendCollectionViewCell: BaseCollectionViewCell {
         trendPagerView.dataSource = self
     }
     
-    func configure(with items: [AnimeProtocol]) {
+    func configure(with items: [any AnimeProtocol]) {
         featuredItems = items
         trendPagerView.reloadData()
     }
@@ -61,6 +67,11 @@ extension TrendCollectionViewCell: FSPagerViewDelegate, FSPagerViewDataSource {
         let item = featuredItems[index]
         cell.configureData(data: item)
         return cell
+    }
+    
+    func pagerView(_ pagerView: FSPagerView, didSelectItemAt index: Int) {
+        let selectedAnime = featuredItems[index]
+        delegate?.trendCollectionViewCellTapped(self, didSelectAnime: selectedAnime)
     }
 }
 
@@ -165,7 +176,7 @@ final class TrendPagerViewCell: BaseFSPagerViewCell {
     }
     
     
-    func configureData(data: AnimeProtocol) {
+    func configureData(data: any AnimeProtocol) {
         posterImageView.setImage(with: data.image)
         titleLabel.text = data.title
         ratingLabel.text = "★ \(data.rate)"

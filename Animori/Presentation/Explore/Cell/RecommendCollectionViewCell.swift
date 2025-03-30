@@ -95,7 +95,7 @@ final class RecommendCollectionViewCell: BaseCollectionViewCell {
         gradientView.layer.addSublayer(gradientLayer)
     }
     
-    func configureData(with anime: AnimeProtocol) {
+    func configureData(with anime: any AnimeProtocol) {
         posterImageView.setImage(with: anime.image)
         titleLabel.text = anime.title
         ratingLabel.text = "★ \(anime.rate)"
