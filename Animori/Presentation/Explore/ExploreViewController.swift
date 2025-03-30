@@ -6,85 +6,146 @@
 //
 
 import UIKit
-
-struct SortingOption {
-    let title: String
-    let isSelected: Bool
-}
+import RxSwift
+import RxCocoa
+import ReactorKit
+import RxDataSources
 
 final class ExploreViewController: BaseViewController<ExploreView> {
-    private var sortingOptions: [SortingOption] = []
-    private var featuredItems: [AnimeProtocol] = mockAnimeEntity
-    private var contentSections: [[AnimeProtocol]] = [mockAnimeEntity.shuffled(), mockAnimeEntity.shuffled()]
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupCollectionView()
-        loadData()
+    // 섹션 배열
+    private let sectionsRelay = BehaviorRelay<[ExploreSection]>(value: [])
+
+    var disposeBag = DisposeBag()
+    
+    init(reactor: ExploreViewModel) {
+        super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
     }
     
-    private func setupCollectionView() {
-        mainView.collectionView.dataSource = self
-        mainView.collectionView.delegate = self
+    // 밑 컬렉션뷰 2개에서 화면 전환하면, 정렬 탭 UI가 초기화되는 버그..
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let selectedSort = reactor?.currentState.selectedSortOption {
+            let indexPath = IndexPath(item: selectedSort.rawValue, section: 0)
+            mainView.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .bottom)
+        }
     }
     
-    private func loadData() {
-        // 샘플 데이터 (실제 데이터 소스로 교체 필요)
-        sortingOptions = [
-            SortingOption(title: "인기순", isSelected: true),
-            SortingOption(title: "최신순", isSelected: false),
-            SortingOption(title: "방영 중", isSelected: false),
-            SortingOption(title: "방영 예정", isSelected: false)
-        ]
+    // RxDataSources diff 기반 업데이트
+    private lazy var dataSource = RxCollectionViewSectionedAnimatedDataSource<ExploreSection>(
+        configureCell: { [weak self] dataSource, collectionView, indexPath, item in
+            guard let self = self else { return UICollectionViewCell() }
+            switch item {
+            case .sort(let sortOption):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SortButtonCell.identifier, for: indexPath) as! SortButtonCell
+                if indexPath.item == self.reactor?.currentState.selectedSortOption.rawValue {
+                    self.mainView.collectionView.selectItem(at: IndexPath(item: indexPath.item, section: 0), animated: false, scrollPosition: .bottom)
+                }
+                cell.configureData(title: sortOption.displayName)
+                return cell
+                
+            case .topAnime(let animeArray):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrendCollectionViewCell.identifier, for: indexPath) as! TrendCollectionViewCell
+                cell.configure(with: animeArray)
+                cell.delegate = self
+                return cell
+                
+            case .seasonAnime(let anime):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendCollectionViewCell.identifier, for: indexPath) as! RecommendCollectionViewCell
+                cell.configureData(with: anime)
+                return cell
+                
+            case .completeAnime(let anime):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendCollectionViewCell.identifier, for: indexPath) as! RecommendCollectionViewCell
+                cell.configureData(with: anime)
+                return cell
+            }
+        },
+        configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+            if kind == UICollectionView.elementKindSectionHeader,
+               let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeaderView.identifier, for: indexPath) as? SectionHeaderView {
+                headerView.configure(with: dataSource[indexPath.section].header ?? "")
+                headerView.delegate = self
+                headerView.tag = indexPath.section// tag 설정
+                return headerView
+            }
+            return UICollectionReusableView()
+        }
+    )
+}
+
+extension ExploreViewController: View {
+    func bind(reactor: ExploreViewModel) {
+
+        reactor.action.onNext(.loadAnime)
         
-        mainView.collectionView.reloadData()
+        // Reactor의 state를 섹션 배열로 매핑
+        reactor.state.map { state -> [ExploreSection] in
+            let section0 = ExploreSection(header: "Sort",
+                                          items: state.sort.map { .sort($0) })
+            
+            let section1 = ExploreSection(header: nil,
+                                          items: [.topAnime(state.topAnime)])
+            
+            let section2 = ExploreSection(header: "이번 시즌 애니메이션",
+                                          items: state.seasonAnime.map { .seasonAnime($0) })
+            
+            let section3 = ExploreSection(header: "완결 명작 애니메이션",
+                                          items: state.completeAnime.map { .completeAnime($0) })
+            
+            return [section0, section1, section2, section3]
+        }
+        .bind(to: sectionsRelay)
+        .disposed(by: disposeBag)
+        
+        // Relay를 컬렉션뷰에 바인딩 (애니메이션 기반 업데이트)
+        sectionsRelay
+            .bind(to: mainView.collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        // 셀 선택 처리
+        mainView.collectionView.rx.modelSelected(ExploreItem.self)
+            .subscribe(onNext: { item in
+                switch item {
+                case .seasonAnime(let anime), .completeAnime(let anime):
+                    reactor.action.onNext(.animeSelected(anime.id))
+                case .sort(let sortOption):
+                    print("정렬 선택 옵션!", sortOption)
+                    reactor.action.onNext(.sortSelected(sortOption))
+                default:
+                    break
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        // 애니메이션 상세화면으로 전환
+        reactor.pulse(\.$selectedAnime)
+            .bind(with: self) { owner, id in
+                print("애니메이션 상세화면으로 전환")
+                let nextVC = UIViewController()
+                owner.navigationController?.pushViewController(nextVC, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
-extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2 + contentSections.count
+// FSPagerView를 사용하는 셀 내부 선택 delegate
+extension ExploreViewController: TrendCollectionViewCellDelegate {
+    func trendCollectionViewCellTapped(_ cell: TrendCollectionViewCell, didSelectAnime anime: any AnimeProtocol) {
+        reactor?.action.onNext(.animeSelected(anime.id))
     }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 0 {
-            return sortingOptions.count
-        } else if section == 1 {
-            return 1 // FSPagerView용 단일 셀
-        } else {
-            return contentSections[section - 2].count
+}
+
+// 헤더 탭 -> 애니메이션 목록 화면으로 전환
+extension ExploreViewController: SectionHeaderViewDelegate {
+    func sectionHeaderViewTapped(_ headerView: SectionHeaderView) {
+        let sectionIndex = headerView.tag
+        // 다음 화면에 섹션 넘겨주기
+        if sectionIndex == 2 { // 예: "이번 시즌 애니메이션" 섹션일 때
+            print("섹션 상세화면으로 전환")
+            let nextVC = UIViewController()
+            self.navigationController?.pushViewController(nextVC, animated: true)
         }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if indexPath.section == 0 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SortButtonCell.identifier, for: indexPath) as! SortButtonCell
-            let option = sortingOptions[indexPath.item]
-            cell.configureData(title: option.title)
-            return cell
-        } else if indexPath.section == 1 {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrendCollectionViewCell.identifier, for: indexPath) as! TrendCollectionViewCell
-            cell.configure(with: featuredItems)
-            return cell
-        } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendCollectionViewCell.identifier, for: indexPath) as! RecommendCollectionViewCell
-            let anime = contentSections[indexPath.section - 2][indexPath.item]
-            cell.configureData(with: anime)
-            return cell
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if kind == UICollectionView.elementKindSectionHeader && indexPath.section >= 2 {
-            let header = collectionView.dequeueReusableSupplementaryView(
-                ofKind: kind,
-                withReuseIdentifier: "SectionHeaderView",
-                for: indexPath
-            ) as! SectionHeaderView
-//            let section = contentSections[indexPath.section - 2]
-            header.configure(with: "이번 시즌! 신작 애니메이션")
-            return header
-        }
-        return UICollectionReusableView()
     }
 }
