@@ -40,6 +40,8 @@ extension ExploreItem: IdentifiableType, Equatable {
             return l.id == r.id
         case (.completeAnime(let l), .completeAnime(let r)):
             return l.id == r.id
+        case (.shortAnime(let l), .shortAnime(let r)):
+            return l.id == r.id
         default:
             return false
         }
@@ -48,7 +50,7 @@ extension ExploreItem: IdentifiableType, Equatable {
 
 // MARK: - 섹션 모델
 struct ExploreSection {
-    var header: String?
+    var header: String
     var items: [ExploreItem]
 }
 
@@ -56,7 +58,7 @@ extension ExploreSection: AnimatableSectionModelType {
     typealias Item = ExploreItem
     
     var identity: String {
-        return header ?? "default"
+        return header
     }
     
     init(original: ExploreSection, items: [ExploreItem]) {

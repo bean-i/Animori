@@ -90,7 +90,7 @@ extension ExploreViewController: View {
             let section0 = ExploreSection(header: "Sort",
                                           items: state.sort.map { .sort($0) })
             
-            let section1 = ExploreSection(header: nil,
+            let section1 = ExploreSection(header: "TopAnime",
                                           items: [.topAnime(state.topAnime)])
             
             let section2 = ExploreSection(header: RecommendOption.season.displayName,
