@@ -1,6 +1,30 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "classic_finished_anime" : {
+      "comment" : "명작 완결 애니메이션",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haven’t seen it yet? Must-Watch Completed Anime"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "まだ観てないの？名作完結アニメ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 안 봤어? 명작 완결 애니메이션"
+          }
+        }
+      }
+    },
     "currently_airing" : {
       "comment" : "현재 방영 중 필터",
       "extractionState" : "manual",
@@ -21,6 +45,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "방영 중"
+          }
+        }
+      }
+    },
+    "new_season_anime" : {
+      "comment" : "이번 시즌 애니메이션",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This Season! New Anime Releases"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今期！新作アニメ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이번 시즌! 신작 애니메이션"
+          }
+        }
+      }
+    },
+    "short_anime_for_busy_people" : {
+      "comment" : "짧은 애니메이션",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Short Anime for Your Busy Schedule"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "忙しいあなたにぴったりの短編アニメ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시간이 없는 당신을 위한 짧은 애니메이션"
           }
         }
       }

@@ -16,4 +16,10 @@ enum LocalizedKey {
         static let upcoming = "upcoming_broadcast"
     }
     
+    enum RecommendOption {
+        static let season = "new_season_anime"
+        static let complete = "classic_finished_anime"
+        static let short = "short_anime_for_busy_people"
+    }
+    
 }

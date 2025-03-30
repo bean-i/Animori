@@ -16,4 +16,10 @@ enum LocalizedStrings {
         static let upcoming = NSLocalizedString(LocalizedKey.Sort.upcoming, comment: "")
     }
     
+    enum RecommendOption {
+        static let season = NSLocalizedString(LocalizedKey.RecommendOption.season, comment: "")
+        static let complete = NSLocalizedString(LocalizedKey.RecommendOption.complete, comment: "")
+        static let short = NSLocalizedString(LocalizedKey.RecommendOption.short, comment: "")
+    }
+    
 }
