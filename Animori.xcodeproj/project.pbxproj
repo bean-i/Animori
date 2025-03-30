@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		8CC2A6164329DD04EFDE427F /* Pods_Animori.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17B662409F57C97A942D0B04 /* Pods_Animori.framework */; };
+		EA7521292D983F56006C1DCC /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = EA7521282D983F56006C1DCC /* RxDataSources */; };
+		EAB5F7AD2D981352000D1B38 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = EAB5F7AC2D981352000D1B38 /* Localizable.xcstrings */; };
 		EAF70B742D95388400ED7696 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = EAF70B732D95388400ED7696 /* .gitignore */; };
 		EAF70BA72D95628C00ED7696 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BA62D95628C00ED7696 /* SnapKit */; };
 		EAF70BAA2D95629C00ED7696 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BA92D95629C00ED7696 /* Alamofire */; };
@@ -24,6 +26,7 @@
 		17B662409F57C97A942D0B04 /* Pods_Animori.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Animori.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E2C75104FD3AC4FB0B9C810 /* Pods-Animori.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Animori.release.xcconfig"; path = "Pods/Target Support Files/Pods-Animori/Pods-Animori.release.xcconfig"; sourceTree = "<group>"; };
 		816F3E1C243D7A470109C4D3 /* Pods-Animori.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Animori.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Animori/Pods-Animori.debug.xcconfig"; sourceTree = "<group>"; };
+		EAB5F7AC2D981352000D1B38 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		EAF70B4B2D9537CB00ED7696 /* Animori.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Animori.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAF70B732D95388400ED7696 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -59,6 +62,7 @@
 				EAF70BAA2D95629C00ED7696 /* Alamofire in Frameworks */,
 				EAF70BB52D9562DC00ED7696 /* ReactorKit in Frameworks */,
 				8CC2A6164329DD04EFDE427F /* Pods_Animori.framework in Frameworks */,
+				EA7521292D983F56006C1DCC /* RxDataSources in Frameworks */,
 				EAF70BAF2D9562B600ED7696 /* RxSwift in Frameworks */,
 				EAF70BAD2D9562B600ED7696 /* RxCocoa in Frameworks */,
 				EAF70C9A2D9563AF00ED7696 /* SkeletonView in Frameworks */,
@@ -90,6 +94,7 @@
 		EAF70B422D9537CB00ED7696 = {
 			isa = PBXGroup;
 			children = (
+				EAB5F7AC2D981352000D1B38 /* Localizable.xcstrings */,
 				EAF70B732D95388400ED7696 /* .gitignore */,
 				EAF70B4D2D9537CB00ED7696 /* Animori */,
 				EAF70B4C2D9537CB00ED7696 /* Products */,
@@ -153,6 +158,8 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
+				ja,
 			);
 			mainGroup = EAF70B422D9537CB00ED7696;
 			minimizedProjectReferenceProxies = 1;
@@ -165,6 +172,7 @@
 				EAF70C952D95637A00ED7696 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				EAF70C982D9563AF00ED7696 /* XCRemoteSwiftPackageReference "SkeletonView" */,
 				EAF70C9B2D9563C600ED7696 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+				EA7521272D983F56006C1DCC /* XCRemoteSwiftPackageReference "RxDataSources" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EAF70B4C2D9537CB00ED7696 /* Products */;
@@ -182,6 +190,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EAF70B742D95388400ED7696 /* .gitignore in Resources */,
+				EAB5F7AD2D981352000D1B38 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -335,6 +344,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -389,6 +399,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -398,6 +409,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -445,6 +457,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -473,6 +486,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		EA7521272D983F56006C1DCC /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
 		EAF70BA52D95628C00ED7696 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -540,6 +561,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		EA7521282D983F56006C1DCC /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EA7521272D983F56006C1DCC /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
+		};
 		EAF70BA62D95628C00ED7696 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EAF70BA52D95628C00ED7696 /* XCRemoteSwiftPackageReference "SnapKit" */;
