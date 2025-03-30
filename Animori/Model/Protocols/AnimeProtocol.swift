@@ -7,7 +7,8 @@
 
 import Foundation
 
-protocol AnimeProtocol {
+protocol AnimeProtocol: Equatable {
+    var id: Int { get }
     var title: String { get }
     var image: String { get }
     var genre: [String] { get }

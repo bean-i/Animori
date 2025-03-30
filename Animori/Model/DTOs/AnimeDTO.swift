@@ -78,6 +78,7 @@ extension AnimeDTO {
         let rate = self.score.map { String($0) } ?? "N/A"
         
         return Anime(
+            id: self.id,
             title: preferredTitle,
             image: image,
             genre: genre,

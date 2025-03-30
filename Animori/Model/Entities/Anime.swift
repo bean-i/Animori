@@ -8,6 +8,7 @@
 import Foundation
 
 struct Anime: AnimeProtocol {
+    let id: Int
     let title: String
     let image: String
     let genre: [String]
