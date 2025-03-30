@@ -8,9 +8,16 @@
 import UIKit
 import SnapKit
 
+// MARK: - 화면 전환 프로토콜
+protocol SectionHeaderViewDelegate: AnyObject {
+    func sectionHeaderViewTapped(_ headerView: SectionHeaderView)
+}
+
+// MARK: - SectionHeaderView
 final class SectionHeaderView: UICollectionReusableView {
     
     static let identifier = "SectionHeaderView"
+    weak var delegate: SectionHeaderViewDelegate?
     
     private let titleLabel = UILabel()
     private let arrowButton = UIButton()
@@ -46,9 +53,16 @@ final class SectionHeaderView: UICollectionReusableView {
         titleLabel.textColor = .white
         arrowButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
         arrowButton.tintColor = .am(.base(.white))
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(headerTapped))
+        addGestureRecognizer(tapGesture)
     }
 
     func configure(with title: String) {
         titleLabel.text = title
+    }
+    
+    @objc private func headerTapped() {
+        delegate?.sectionHeaderViewTapped(self)
     }
 }
