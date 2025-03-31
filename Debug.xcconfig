@@ -1,0 +1,12 @@
+//
+//  Debug.xcconfig
+//  Animori
+//
+//  Created by 이빈 on 3/31/25.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "Pods/Target Support Files/Pods-Animori/Pods-Animori.debug.xcconfig"
+#include "Secret.xcconfig"
