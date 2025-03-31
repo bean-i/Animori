@@ -22,7 +22,7 @@ final class ExploreViewModel: Reactor {
         case setTopAnime([any AnimeProtocol])
         case setSeasonAnime([any AnimeProtocol])
         case setCompleteAnime(([any AnimeProtocol]))
-        case setShortAnime(([any AnimeProtocol]))
+        case setMovieAnime(([any AnimeProtocol]))
         case setSelectedAnime(Int)
     }
     
@@ -31,7 +31,7 @@ final class ExploreViewModel: Reactor {
         @Pulse var topAnime: [any AnimeProtocol] // 탑인기 애니메이션
         @Pulse var seasonAnime: [any AnimeProtocol] // 이번 시즌 애니메이션
         @Pulse var completeAnime: [any AnimeProtocol] // 완결 명작 애니메이션
-        @Pulse var shortAnime: [any AnimeProtocol] // 짧은 애니메이션
+        @Pulse var movieAnime: [any AnimeProtocol] // 영화 애니메이션
         var selectedSortOption: SortOption = .popular
         @Pulse var selectedAnime: Int?
     }
@@ -42,18 +42,30 @@ final class ExploreViewModel: Reactor {
         self.initialState = initialState
     }
     
-    
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadAnime:
-            // 추후 API 통신 적용
-            print("로드")
-            let topAnime = Observable.just(Mutation.setTopAnime(mockAnimeEntity.shuffled()))
-            let seasonAnime = Observable.just(Mutation.setSeasonAnime(mockAnimeEntity.shuffled()))
-            let completeAnime = Observable.just(Mutation.setCompleteAnime(mockAnimeEntity.shuffled()))
-            let shortAnime = Observable.just(Mutation.setShortAnime(mockAnimeEntity.shuffled()))
+            let topAnime = AnimeClient.shared.getTopAnime()
+                .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
+                .map { Mutation.setTopAnime($0) }
+                .asObservable()
             
-            return Observable.merge(topAnime, seasonAnime, completeAnime, shortAnime)
+            let seasonAnime = AnimeClient.shared.getSeasonNow()
+                .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
+                .map { Mutation.setSeasonAnime($0) }
+                .asObservable()
+            
+            let completeAnime = AnimeClient.shared.getCompleteAnime()
+                .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
+                .map { Mutation.setCompleteAnime($0) }
+                .asObservable()
+            
+            let movieAnime = AnimeClient.shared.getMovieAnime()
+                .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
+                .map { Mutation.setMovieAnime($0) }
+                .asObservable()
+             
+            return Observable.concat(topAnime, seasonAnime, completeAnime, movieAnime)
             
         case .sortSelected(let sortOption):
             print("정렬 탭", sortOption.displayName)
@@ -81,8 +93,8 @@ final class ExploreViewModel: Reactor {
             newState.seasonAnime = anime
         case .setCompleteAnime(let anime):
             newState.completeAnime = anime
-        case .setShortAnime(let anime):
-            newState.shortAnime = anime
+        case .setMovieAnime(let anime):
+            newState.movieAnime = anime
         case .setSelectedAnime(let id):
             newState.selectedAnime = id
         }

@@ -100,7 +100,7 @@ extension ExploreViewController: View {
                                           items: state.completeAnime.map { .completeAnime($0) })
             
             let section4 = ExploreSection(header: RecommendOption.short.displayName,
-                                          items: state.shortAnime.map { .shortAnime($0) })
+                                          items: state.movieAnime.map { .shortAnime($0) })
             
             return [section0, section1, section2, section3, section4]
         }
