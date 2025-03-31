@@ -44,10 +44,8 @@ enum AnimeEndPoint: EndPoint {
             return AnimeRequestDTO.seasonNow.queryParameters
         case .completeAnime:
             return AnimeRequestDTO.completeAnime.queryParameters
-//            return CompleteAnimeRequest()
         case .movieAnime:
             return AnimeRequestDTO.movieAnime.queryParameters
-//            return MovieAnimeRequest()
         }
     }
     
