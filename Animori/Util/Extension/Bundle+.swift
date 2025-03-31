@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+extension Bundle {
+    var baseURL: String? {
+        return self.object(forInfoDictionaryKey: "BASE_URL") as? String
+    }
+}
