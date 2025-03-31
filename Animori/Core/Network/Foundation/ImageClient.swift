@@ -7,13 +7,11 @@
 
 import Foundation
 
-import Alamofire
-
 final class ImageClient {
     
     static let shared = ImageClient()
     
-    private let session: Session
+    private let session: URLSession
     
     private let memoryCapacity = 10 * 1024 * 1024 // ram에 저장 가능한 최대 크기
     private let diskCapacity = 100 * 1024 * 1024 // 디스크에 저장 가능한 최대 크기
@@ -29,29 +27,23 @@ final class ImageClient {
         config.urlCache = urlCache
         config.requestCachePolicy = .returnCacheDataElseLoad // 캐시 된 데이터가 있으면 사용
         
-        session = Session(configuration: config)
+        session = URLSession(configuration: config)
     }
     
-    func requestImage(with url: URL, handler: @escaping (Result<Data, AFError>) -> Void) {
-        
+    func requestImage(with url: URL) async throws -> Data {
         let request = URLRequest(url: url)
         
         if let cached = URLCache.shared.cachedResponse(for: request) {
-            handler(.success(cached.data))
-            return
+            return cached.data
         }
         
-        let task = session.request(url)
-            .validate(statusCode: 200..<300)
-            .responseData { response in
-                switch response.result {
-                case .success(let data):
-                    handler(.success(data))
-                case .failure(let error):
-                    handler(.failure(error))
-                }
-            }
-    }
+        let (data, response) = try await session.data(for: request)
     
+        guard let httpResponse = response as? HTTPURLResponse,
+              (200..<300).contains(httpResponse.statusCode) else {
+            let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
+            throw NSError(domain: "ImageClient", code: statusCode, userInfo: [NSLocalizedDescriptionKey: "유효하지 않은 응답"])
+        }
+        return data
+    }
 }
-

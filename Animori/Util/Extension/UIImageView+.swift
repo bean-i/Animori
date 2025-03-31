@@ -13,11 +13,11 @@ extension UIImageView {
         guard let url,
               let imageUrl = URL(string: url) else { return }
         
-        ImageClient.shared.requestImage(with: imageUrl) { response in
-            switch response {
-            case .success(let data):
+        Task {
+            do {
+                let data = try await ImageClient.shared.requestImage(with: imageUrl)
                 self.image = UIImage(data: data)
-            case .failure(_):
+            } catch {
                 self.image = UIImage(systemName: "arrow.down.app.dashed.trianglebadge.exclamationmark")
             }
         }

@@ -10,9 +10,11 @@
 		8CC2A6164329DD04EFDE427F /* Pods_Animori.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17B662409F57C97A942D0B04 /* Pods_Animori.framework */; };
 		EA7521292D983F56006C1DCC /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = EA7521282D983F56006C1DCC /* RxDataSources */; };
 		EAB5F7AD2D981352000D1B38 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = EAB5F7AC2D981352000D1B38 /* Localizable.xcstrings */; };
+		EAB71EA82D9A8A630066E803 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = EAB71EA52D9A8A630066E803 /* Debug.xcconfig */; };
+		EAB71EA92D9A8A630066E803 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = EAB71EA62D9A8A630066E803 /* Release.xcconfig */; };
+		EAB71EAA2D9A8A630066E803 /* Secret.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = EAB71EA72D9A8A630066E803 /* Secret.xcconfig */; };
 		EAF70B742D95388400ED7696 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = EAF70B732D95388400ED7696 /* .gitignore */; };
 		EAF70BA72D95628C00ED7696 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BA62D95628C00ED7696 /* SnapKit */; };
-		EAF70BAA2D95629C00ED7696 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BA92D95629C00ED7696 /* Alamofire */; };
 		EAF70BAD2D9562B600ED7696 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BAC2D9562B600ED7696 /* RxCocoa */; };
 		EAF70BAF2D9562B600ED7696 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BAE2D9562B600ED7696 /* RxSwift */; };
 		EAF70BB22D9562BF00ED7696 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BB12D9562BF00ED7696 /* RxFlow */; };
@@ -27,6 +29,9 @@
 		1E2C75104FD3AC4FB0B9C810 /* Pods-Animori.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Animori.release.xcconfig"; path = "Pods/Target Support Files/Pods-Animori/Pods-Animori.release.xcconfig"; sourceTree = "<group>"; };
 		816F3E1C243D7A470109C4D3 /* Pods-Animori.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Animori.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Animori/Pods-Animori.debug.xcconfig"; sourceTree = "<group>"; };
 		EAB5F7AC2D981352000D1B38 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		EAB71EA52D9A8A630066E803 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		EAB71EA62D9A8A630066E803 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		EAB71EA72D9A8A630066E803 /* Secret.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secret.xcconfig; sourceTree = "<group>"; };
 		EAF70B4B2D9537CB00ED7696 /* Animori.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Animori.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAF70B732D95388400ED7696 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -59,7 +64,6 @@
 			files = (
 				EAF70C972D95637B00ED7696 /* RealmSwift in Frameworks */,
 				EAF70BB22D9562BF00ED7696 /* RxFlow in Frameworks */,
-				EAF70BAA2D95629C00ED7696 /* Alamofire in Frameworks */,
 				EAF70BB52D9562DC00ED7696 /* ReactorKit in Frameworks */,
 				8CC2A6164329DD04EFDE427F /* Pods_Animori.framework in Frameworks */,
 				EA7521292D983F56006C1DCC /* RxDataSources in Frameworks */,
@@ -94,6 +98,9 @@
 		EAF70B422D9537CB00ED7696 = {
 			isa = PBXGroup;
 			children = (
+				EAB71EA52D9A8A630066E803 /* Debug.xcconfig */,
+				EAB71EA62D9A8A630066E803 /* Release.xcconfig */,
+				EAB71EA72D9A8A630066E803 /* Secret.xcconfig */,
 				EAB5F7AC2D981352000D1B38 /* Localizable.xcstrings */,
 				EAF70B732D95388400ED7696 /* .gitignore */,
 				EAF70B4D2D9537CB00ED7696 /* Animori */,
@@ -165,7 +172,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				EAF70BA52D95628C00ED7696 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				EAF70BA82D95629C00ED7696 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				EAF70BAB2D9562B600ED7696 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				EAF70BB02D9562BF00ED7696 /* XCRemoteSwiftPackageReference "RxFlow" */,
 				EAF70BB32D9562DC00ED7696 /* XCRemoteSwiftPackageReference "ReactorKit" */,
@@ -190,6 +196,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				EAF70B742D95388400ED7696 /* .gitignore in Resources */,
+				EAB71EA82D9A8A630066E803 /* Debug.xcconfig in Resources */,
+				EAB71EA92D9A8A630066E803 /* Release.xcconfig in Resources */,
+				EAB71EAA2D9A8A630066E803 /* Secret.xcconfig in Resources */,
 				EAB5F7AD2D981352000D1B38 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -275,7 +284,7 @@
 /* Begin XCBuildConfiguration section */
 		EAF70B5F2D9537CC00ED7696 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 816F3E1C243D7A470109C4D3 /* Pods-Animori.debug.xcconfig */;
+			baseConfigurationReference = EAB71EA52D9A8A630066E803 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -284,6 +293,8 @@
 				DEVELOPMENT_TEAM = 5S7XHWYU87;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Animori/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -308,7 +319,7 @@
 		};
 		EAF70B602D9537CC00ED7696 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1E2C75104FD3AC4FB0B9C810 /* Pods-Animori.release.xcconfig */;
+			baseConfigurationReference = EAB71EA62D9A8A630066E803 /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -317,6 +328,8 @@
 				DEVELOPMENT_TEAM = 5S7XHWYU87;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Animori/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -502,14 +515,6 @@
 				minimumVersion = 5.7.1;
 			};
 		};
-		EAF70BA82D95629C00ED7696 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.10.2;
-			};
-		};
 		EAF70BAB2D9562B600ED7696 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
@@ -570,11 +575,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EAF70BA52D95628C00ED7696 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
-		};
-		EAF70BA92D95629C00ED7696 /* Alamofire */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EAF70BA82D95629C00ED7696 /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = Alamofire;
 		};
 		EAF70BAC2D9562B600ED7696 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
