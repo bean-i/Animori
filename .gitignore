@@ -143,3 +143,5 @@ iOSInjectionProject/
 Package.resolved
 Animori.xcworkspace/xcshareddata/swiftpm/Package.resolved
 *.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
+*.xcconfig
