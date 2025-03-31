@@ -1,5 +1,5 @@
 //
-//  AnimeEndPoint.swift
+//  Bundle+.swift
 //  Animori
 //
 //  Created by 이빈 on 3/31/25.
