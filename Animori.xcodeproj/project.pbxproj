@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8CC2A6164329DD04EFDE427F /* Pods_Animori.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17B662409F57C97A942D0B04 /* Pods_Animori.framework */; };
 		EA7521292D983F56006C1DCC /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = EA7521282D983F56006C1DCC /* RxDataSources */; };
 		EAB5F7AD2D981352000D1B38 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = EAB5F7AC2D981352000D1B38 /* Localizable.xcstrings */; };
 		EAB71EA82D9A8A630066E803 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = EAB71EA52D9A8A630066E803 /* Debug.xcconfig */; };
 		EAB71EA92D9A8A630066E803 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = EAB71EA62D9A8A630066E803 /* Release.xcconfig */; };
 		EAB71EAA2D9A8A630066E803 /* Secret.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = EAB71EA72D9A8A630066E803 /* Secret.xcconfig */; };
+		EAB722942D9B04F70066E803 /* Pods_Animori.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17B662409F57C97A942D0B04 /* Pods_Animori.framework */; };
+		EAB722952D9B04F70066E803 /* Pods_Animori.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 17B662409F57C97A942D0B04 /* Pods_Animori.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		EAB722972D9B04F90066E803 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = EAF70C962D95637B00ED7696 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		EAF70B742D95388400ED7696 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = EAF70B732D95388400ED7696 /* .gitignore */; };
 		EAF70BA72D95628C00ED7696 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BA62D95628C00ED7696 /* SnapKit */; };
 		EAF70BAD2D9562B600ED7696 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BAC2D9562B600ED7696 /* RxCocoa */; };
@@ -23,6 +25,21 @@
 		EAF70C9A2D9563AF00ED7696 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70C992D9563AF00ED7696 /* SkeletonView */; };
 		EAF70C9D2D9563C600ED7696 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70C9C2D9563C600ED7696 /* Toast */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		EAB722962D9B04F70066E803 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				EAB722972D9B04F90066E803 /* RealmSwift in Embed Frameworks */,
+				EAB722952D9B04F70066E803 /* Pods_Animori.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		17B662409F57C97A942D0B04 /* Pods_Animori.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Animori.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,10 +82,10 @@
 				EAF70C972D95637B00ED7696 /* RealmSwift in Frameworks */,
 				EAF70BB22D9562BF00ED7696 /* RxFlow in Frameworks */,
 				EAF70BB52D9562DC00ED7696 /* ReactorKit in Frameworks */,
-				8CC2A6164329DD04EFDE427F /* Pods_Animori.framework in Frameworks */,
 				EA7521292D983F56006C1DCC /* RxDataSources in Frameworks */,
 				EAF70BAF2D9562B600ED7696 /* RxSwift in Frameworks */,
 				EAF70BAD2D9562B600ED7696 /* RxCocoa in Frameworks */,
+				EAB722942D9B04F70066E803 /* Pods_Animori.framework in Frameworks */,
 				EAF70C9A2D9563AF00ED7696 /* SkeletonView in Frameworks */,
 				EAF70C9D2D9563C600ED7696 /* Toast in Frameworks */,
 				EAF70BA72D95628C00ED7696 /* SnapKit in Frameworks */,
@@ -131,6 +148,7 @@
 				EAF70B492D9537CB00ED7696 /* Resources */,
 				20D0F2109BF85C0D601BD272 /* [CP] Embed Pods Frameworks */,
 				6E422919BEF2134D9596923A /* [CP] Copy Pods Resources */,
+				EAB722962D9B04F70066E803 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
