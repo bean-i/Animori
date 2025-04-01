@@ -24,7 +24,7 @@ extension ExploreItem: IdentifiableType, Equatable {
         case .topAnime: return "topAnime"
         case .seasonAnime(let anime): return "seasonAnime_\(anime.id)"
         case .completeAnime(let anime): return "completeAnime_\(anime.id)"
-        case .shortAnime(let anime): return "shortAnime_\(anime.id)"
+        case .shortAnime(let anime): return "movieAnime_\(anime.id)"
         }
     }
     

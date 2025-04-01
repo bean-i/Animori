@@ -7,13 +7,6 @@
 
 import Foundation
 
-// MARK: - Request
-struct AnimeRequestDTO: Encodable {
-    let filter: String
-    let sfw: Bool = true
-    let limit: Int
-}
-
 // MARK: - Response
 struct AnimeResponseDTO: Decodable {
     let data: [AnimeDTO]
@@ -54,6 +47,11 @@ struct AnimeTitle: Decodable {
 struct AnimeGenre: Decodable {
     let id: Int
     let name: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "mal_id"
+        case name
+    }
 }
 
 // MARK: - AnimeDTO Extension: empty data
@@ -84,5 +82,12 @@ extension AnimeDTO {
             genre: genre,
             rate: rate
         )
+    }
+}
+
+// MARK: - 빈 데이터
+extension AnimeResponseDTO {
+    static var empty: AnimeResponseDTO {
+        return AnimeResponseDTO(data: [])
     }
 }

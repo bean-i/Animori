@@ -49,6 +49,11 @@ final class TrendCollectionViewCell: BaseCollectionViewCell {
     func configure(with items: [any AnimeProtocol]) {
         featuredItems = items
         trendPagerView.reloadData()
+        
+        DispatchQueue.main.async {
+            guard !items.isEmpty else { return }
+            self.trendPagerView.scrollToItem(at: 0, animated: true)
+        }
     }
     
 }

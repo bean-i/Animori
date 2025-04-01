@@ -70,7 +70,7 @@ final class ExploreViewController: BaseViewController<ExploreView> {
         configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
             if kind == UICollectionView.elementKindSectionHeader,
                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeaderView.identifier, for: indexPath) as? SectionHeaderView {
-                headerView.configure(with: dataSource[indexPath.section].header ?? "")
+                headerView.configure(with: dataSource[indexPath.section].header)
                 headerView.delegate = self
                 headerView.tag = indexPath.section// tag 설정
                 return headerView
@@ -100,7 +100,7 @@ extension ExploreViewController: View {
                                           items: state.completeAnime.map { .completeAnime($0) })
             
             let section4 = ExploreSection(header: RecommendOption.short.displayName,
-                                          items: state.shortAnime.map { .shortAnime($0) })
+                                          items: state.movieAnime.map { .shortAnime($0) })
             
             return [section0, section1, section2, section3, section4]
         }
