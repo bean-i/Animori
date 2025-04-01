@@ -28,7 +28,7 @@ final class ExploreViewController: BaseViewController<ExploreView> {
         super.viewWillAppear(animated)
         if let selectedSort = reactor?.currentState.selectedSortOption {
             let indexPath = IndexPath(item: selectedSort.rawValue, section: 0)
-            mainView.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .bottom)
+            mainView.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
         }
     }
     
@@ -40,7 +40,7 @@ final class ExploreViewController: BaseViewController<ExploreView> {
             case .sort(let sortOption):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SortButtonCell.identifier, for: indexPath) as! SortButtonCell
                 if indexPath.item == self.reactor?.currentState.selectedSortOption.rawValue {
-                    self.mainView.collectionView.selectItem(at: IndexPath(item: indexPath.item, section: 0), animated: false, scrollPosition: .bottom)
+                    self.mainView.collectionView.selectItem(at: IndexPath(item: indexPath.item, section: 0), animated: false, scrollPosition: [])
                 }
                 cell.configureData(title: sortOption.displayName)
                 return cell
@@ -150,7 +150,7 @@ extension ExploreViewController: SectionHeaderViewDelegate {
     func sectionHeaderViewTapped(_ headerView: SectionHeaderView) {
         let sectionIndex = headerView.tag
         // 다음 화면에 섹션 넘겨주기
-        if sectionIndex == 2 { // 예: "이번 시즌 애니메이션" 섹션일 때
+        if sectionIndex >= 2 { // 예: "이번 시즌 애니메이션" 섹션일 때
             print("섹션 상세화면으로 전환")
             let nextVC = UIViewController()
             self.navigationController?.pushViewController(nextVC, animated: true)
