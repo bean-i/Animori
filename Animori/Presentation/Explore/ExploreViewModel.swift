@@ -45,7 +45,7 @@ final class ExploreViewModel: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadAnime:
-            let topAnime = AnimeClient.shared.getTopAnime()
+            let topAnime = AnimeClient.shared.getTopAnime(query: TopAnimeRequest.basic)
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setTopAnime($0) }
                 .asObservable()
@@ -69,11 +69,10 @@ final class ExploreViewModel: Reactor {
             
         case .sortSelected(let sortOption):
             print("정렬 탭", sortOption.displayName)
-            // topAnime 정렬 후 반환.
-            let sortedTopAnime = currentState.topAnime.shuffled()
+            let newTopAnime = sortTopAnime(sortOption)
             return Observable.merge(
                 Observable.just(Mutation.setSortOptions(sortOption)),
-                Observable.just(Mutation.setTopAnime(sortedTopAnime))
+                newTopAnime
             )
 
         case .animeSelected(let id):
@@ -99,5 +98,13 @@ final class ExploreViewModel: Reactor {
             newState.selectedAnime = id
         }
         return newState
+    }
+    
+    private func sortTopAnime(_ sortOption: SortOption) -> Observable<Mutation> {
+        let newQuery = TopAnimeRequest(filter: sortOption.apiParameter, limit: 10)
+        return AnimeClient.shared.getTopAnime(query: newQuery)
+            .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
+            .map { Mutation.setTopAnime($0) }
+            .asObservable()
     }
 }

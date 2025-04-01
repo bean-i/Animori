@@ -70,7 +70,7 @@ final class ExploreViewController: BaseViewController<ExploreView> {
         configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
             if kind == UICollectionView.elementKindSectionHeader,
                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeaderView.identifier, for: indexPath) as? SectionHeaderView {
-                headerView.configure(with: dataSource[indexPath.section].header ?? "")
+                headerView.configure(with: dataSource[indexPath.section].header)
                 headerView.delegate = self
                 headerView.tag = indexPath.section// tag 설정
                 return headerView
