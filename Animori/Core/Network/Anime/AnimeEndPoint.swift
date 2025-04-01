@@ -9,7 +9,7 @@ import Foundation
 
 enum AnimeEndPoint: EndPoint {
     
-    case topAnime // getTopAnime
+    case topAnime(query: TopAnimeRequest) // getTopAnime
     case seasonNow // getSeasonNow
     case completeAnime // getAnimeSearch
     case movieAnime // getAnimeSearch
@@ -38,8 +38,8 @@ enum AnimeEndPoint: EndPoint {
     
     var parameters: Encodable {
         switch self {
-        case .topAnime:
-            return AnimeRequestDTO.topAnime.queryParameters
+        case .topAnime(let query):
+            return query
         case .seasonNow:
             return AnimeRequestDTO.seasonNow.queryParameters
         case .completeAnime:

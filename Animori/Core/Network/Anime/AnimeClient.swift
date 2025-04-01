@@ -15,8 +15,8 @@ final class AnimeClient {
     
     private init() { }
     
-    func getTopAnime() -> Single<AnimeResponseDTO> {
-        return provider.request(.topAnime)
+    func getTopAnime(query: TopAnimeRequest) -> Single<AnimeResponseDTO> {
+        return provider.request(.topAnime(query: query))
             .catch { error in
                 return Single.just(AnimeResponseDTO.empty)
             }
