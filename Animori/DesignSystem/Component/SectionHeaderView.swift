@@ -39,7 +39,7 @@ final class SectionHeaderView: UICollectionReusableView {
     
     func configureLayout() {
         titleLabel.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(10)
             make.centerY.equalToSuperview()
         }
         arrowButton.snp.makeConstraints { make in
@@ -49,8 +49,8 @@ final class SectionHeaderView: UICollectionReusableView {
     }
     
     func configureView() {
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        titleLabel.textColor = .white
+        titleLabel.font = .am(.titleSemibold)
+        titleLabel.textColor = .am(.base(.white))
         arrowButton.setImage(UIImage(systemName: "chevron.right"), for: .normal)
         arrowButton.tintColor = .am(.base(.white))
         
