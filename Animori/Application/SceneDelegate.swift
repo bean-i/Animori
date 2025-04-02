@@ -15,15 +15,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        let state = ExploreViewModel.State(
-            topAnime: [],
-            seasonAnime: [],
-            completeAnime: [],
-            movieAnime: [],
-            selectedSortOption: .popular
-        )
-        let viewModel = ExploreViewModel(initialState: state)
-        window?.rootViewController = UINavigationController(rootViewController: ExploreViewController(reactor: viewModel))
+//        let vc = AnimeDetailViewController(animeID: 52991)
+        let vc = AnimeDetailViewController(reactor: AnimeDetailViewModel())
+        window?.rootViewController = UINavigationController(rootViewController: vc)
         window?.makeKeyAndVisible()
     }
 

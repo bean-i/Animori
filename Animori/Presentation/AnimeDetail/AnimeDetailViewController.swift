@@ -1,0 +1,88 @@
+//
+//  AnimeDetailViewController.swift
+//  Animori
+//
+//  Created by 이빈 on 4/1/25.
+//
+
+import UIKit
+import ReactorKit
+import RxSwift
+import RxCocoa
+import RxDataSources
+
+final class AnimeDetailViewController: BaseViewController<AnimeDetailView> {
+    
+    var disposeBag = DisposeBag()
+    
+    // MARK: - Initializer
+    init(reactor: AnimeDetailViewModel) {
+        super.init(nibName: nil, bundle: nil)
+        self.reactor = reactor
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.title = "애니메이션 상세"
+    }
+    
+    // RxDataSources: 섹션 모델을 사용
+    private var dataSource = RxCollectionViewSectionedReloadDataSource<AnimeDetailSection>(
+        configureCell: { dataSource, collectionView, indexPath, item in
+            switch item {
+            case .review(let review):
+                print(review)
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewCell.identifier, for: indexPath) as! ReviewCell
+                cell.configureData(review)
+                return cell
+            case .character(let character):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CharacterCell.identifier, for: indexPath) as! CharacterCell
+                cell.configureData(character)
+                return cell
+            case .ott(let ott):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: OTTCell.identifier, for: indexPath) as! OTTCell
+                print(ott)
+                cell.configureData(title: ott.name)
+                return cell
+            case .recommend(let recommend):
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendCollectionViewCell.identifier, for: indexPath) as! RecommendCollectionViewCell
+                cell.configureRecommendData(with: recommend)
+                return cell
+            }
+        },
+        configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+            let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: AnimeDetailSectionView.identifier,
+                for: indexPath
+            ) as! AnimeDetailSectionView
+            let section = dataSource.sectionModels[indexPath.section]
+            header.configure(with: section.header)
+            return header
+        }
+    )
+}
+
+extension AnimeDetailViewController: View {
+    // MARK: - Bind
+    func bind(reactor: AnimeDetailViewModel) {
+        reactor.action.onNext(.load)
+        
+        // 상세정보 바인딩 (상단 정보)
+        reactor.state
+            .map { $0.animeDetail }
+            .compactMap { $0 }
+            .distinctUntilChanged { $0.title == $1.title }
+            .bind(onNext: { [weak self] detail in
+                self?.mainView.configureData(anime: detail)
+            })
+            .disposed(by: disposeBag)
+        
+        // 컬렉션뷰 섹션 데이터 바인딩
+        reactor.state
+            .map { $0.sections }
+            .bind(to: mainView.collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+    }
+}
+
