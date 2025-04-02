@@ -9,6 +9,9 @@ import UIKit
 import SnapKit
 
 final class AnimeDetailView: BaseView {
+    private let scrollView = UIScrollView()
+    private let scrollContainView = UIView()
+    
     private let contentView = UIView()
     private let posterImageView = UIImageView()
     private let gradientView = UIView()
@@ -26,11 +29,14 @@ final class AnimeDetailView: BaseView {
     private let plotLabel = UILabel()
     private let plotMoreButton = UIButton()
     
-    private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+    
+    private var collectionViewHeightConstraint: Constraint?
+    private var lastCollectionViewHeight: CGFloat = 0
     
     override func configureHierarchy() {
         contentView.addSubViews(posterImageView, gradientView)
-        addSubViews(
+        scrollContainView.addSubViews(
             contentView,
             genreStackView,
             ratingLabel,
@@ -43,12 +49,24 @@ final class AnimeDetailView: BaseView {
             plotMoreButton,
             collectionView
         )
+        scrollView.addSubview(scrollContainView)
+        addSubview(scrollView)
     }
     
     override func configureLayout() {
-        contentView.snp.makeConstraints { make in
+        scrollView.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide)
-            make.horizontalEdges.equalToSuperview()
+            make.horizontalEdges.bottom.equalToSuperview()
+        }
+        
+        scrollContainView.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview()
+            make.width.equalTo(scrollView)
+            make.bottom.equalTo(collectionView.snp.bottom)
+        }
+        
+        contentView.snp.makeConstraints { make in
+            make.top.horizontalEdges.equalToSuperview()
             make.height.equalTo(contentView.snp.width).multipliedBy(0.6)
         }
         
@@ -110,9 +128,21 @@ final class AnimeDetailView: BaseView {
         
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(plotLabel.snp.bottom).offset(15)
-            make.horizontalEdges.bottom.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
+            collectionViewHeightConstraint = make.height.equalTo(300).constraint
         }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        gradientLayer.frame = gradientView.bounds
         
+        let newHeight = collectionView.collectionViewLayout.collectionViewContentSize.height
+        if lastCollectionViewHeight != newHeight {
+            lastCollectionViewHeight = newHeight
+            collectionViewHeightConstraint?.update(offset: newHeight)
+            layoutIfNeeded()
+        }
     }
     
     override func configureView() {
@@ -138,7 +168,6 @@ final class AnimeDetailView: BaseView {
         genreStackView.distribution = .fillProportionally
         genreStackView.alignment = .leading
         genreStackView.isLayoutMarginsRelativeArrangement = true
-        genreStackView.layoutMargins = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
         genreStackView.clipsToBounds = true
         
         ratingLabel.font = .am(.titleSemibold)
@@ -156,10 +185,24 @@ final class AnimeDetailView: BaseView {
         plotMoreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
         plotMoreButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         plotMoreButton.tintColor = .am(.base(.white))
+        
+        collectionView.isScrollEnabled = false
+        collectionView.backgroundColor = .am(.base(.black))
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.showsHorizontalScrollIndicator = false
+        
+        collectionView.collectionViewLayout = configureCollectionViewLayout()
+        
+        collectionView.register(ReviewCell.self, forCellWithReuseIdentifier: ReviewCell.identifier)
+        collectionView.register(CharacterCell.self, forCellWithReuseIdentifier: CharacterCell.identifier)
+        collectionView.register(OTTCell.self, forCellWithReuseIdentifier: OTTCell.identifier)
+        collectionView.register(RecommendCollectionViewCell.self, forCellWithReuseIdentifier: RecommendCollectionViewCell.identifier)
+        collectionView.register(AnimeDetailSectionView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: AnimeDetailSectionView.identifier)
     }
     
+    // MARK: - ConfigureData
     func configureData(anime: any AnimeProtocol) {
-        posterImageView.setImage(with: "https://img.youtube.com/vi/ZEkwCGJ3o7M/hqdefault.jpg")
+        posterImageView.setImage(with: "https://picsum.photos/200/300")
         ratingLabel.text = "★ \(anime.rate)"
         configureGenre(genres: anime.genre)
         ageView.configureData(age: AgeRatingView.Age.children)
@@ -167,11 +210,156 @@ final class AnimeDetailView: BaseView {
         plotLabel.text = "Corrupt politicians, frenzied nationalists, and other warmongering forces constantly jeopardize the thin veneer of peace between neighboring countries Ostania and Westalis. In spite of their plots, renowned spy and Corrupt politicians, frenzied nationalists, and other warmongering forces constantly jeopardize the thin veneer of peace between neighboring countries Ostania and Westalis. In spite of their plots, renowned spy and...!!!!!"
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        gradientLayer.frame = gradientView.bounds
+    // MARK: - Compositional Layout
+    private func configureCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+        return UICollectionViewCompositionalLayout { [weak self] sectionIndex, _ in
+            switch sectionIndex {
+            case 0: return self?.configureReviewSectionLayout()
+            case 1: return self?.configureCharacterSectionLayout()
+            case 2: return self?.configureOTTSectionLayout()
+            case 3: return self?.configureRecommendLayout()
+            default: return nil
+            }
+        }
+    }
+
+    // 리뷰 섹션
+    private func configureReviewSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .estimated(100))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.7),
+                                               heightDimension: .estimated(100))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.interGroupSpacing = 10
+        
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(20)
+        )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
+        
+        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20)
+        return section
+    }
+
+    // 캐릭터 섹션
+    private func configureCharacterSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(100),
+                                              heightDimension: .estimated(100))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(100),
+                                               heightDimension: .estimated(100))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.interGroupSpacing = 15
+        
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(20)
+        )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
+        
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20)
+        return section
+    }
+
+    // OTT 바로가기 섹션
+    private func configureOTTSectionLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .estimated(100),
+            heightDimension: .estimated(28)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        // 2. 그룹 크기 및 설정
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .estimated(100),
+            heightDimension: .estimated(28)
+        )
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitems: [item]
+        )
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.interGroupSpacing = 10
+        section.orthogonalScrollingBehavior = .continuous
+        section.contentInsets = NSDirectionalEdgeInsets(
+            top: 10,
+            leading: 20,
+            bottom: 20,
+            trailing: 20
+        )
+
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(20)
+        )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20)
+        
+        return section
+    }
+
+    // 추천 섹션
+    private func configureRecommendLayout() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(
+            widthDimension: .absolute(130),
+            heightDimension: .absolute(220)
+        )
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(
+            widthDimension: .absolute(130),
+            heightDimension: .absolute(220)
+        )
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        group.interItemSpacing = .fixed(10)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.interGroupSpacing = 10
+        
+        let headerSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .estimated(20)
+        )
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: headerSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .top
+        )
+        section.boundarySupplementaryItems = [header]
+        
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 20, trailing: 20)
+        return section
     }
     
+    // MARK: - 장르 나타내기
     private func configureGenre(genres: [String]) {
         print(#function)
         let availableWidth: CGFloat = 200
@@ -194,6 +382,7 @@ final class AnimeDetailView: BaseView {
         }
     }
     
+    // MARK: - 줄거리 더보기
     @objc private func moreButtonTapped() {
         UIView.animate(withDuration: 0.3) { [weak self] in
             if self?.plotLabel.numberOfLines == 0 {
