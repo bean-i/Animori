@@ -98,9 +98,9 @@ final class ReviewCell: BaseCollectionViewCell {
         reviewLabel.lineBreakMode = .byTruncatingTail
     }
     
-    func configureData(username: String, rating: Int, review: String) {
-        usernameLabel.text = username
-        ratingLabel.text = "\(rating)"
-        reviewLabel.text = review
+    func configureData(_ review: any AnimeReviewProtocol) {
+        usernameLabel.text = review.name
+        ratingLabel.text = "\(review.score)"
+        reviewLabel.text = review.review
     }
 }

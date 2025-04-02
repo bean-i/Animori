@@ -45,9 +45,9 @@ final class CharacterCell: BaseCollectionViewCell {
         nameLabel.numberOfLines = 0
     }
     
-    func configureData(image: String, name: String) {
-        imageView.setImage(with: image)
-        nameLabel.text = name
+    func configureData(_ character: any AnimeCharacterProtocol) {
+        imageView.setImage(with: character.image)
+        nameLabel.text = character.name
     }
     
 }
