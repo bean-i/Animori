@@ -36,15 +36,33 @@ final class AgeRatingView: BaseView {
         ageLabel.textAlignment = .center
     }
     
-    func configureData(age: AgeRatingView.Age) {
-        ageLabel.text = age.displayAge
+    func configureData(age: String) {
         switch age {
-        case .all: contentView.backgroundColor = .am(.age(.all))
-        case .children: contentView.backgroundColor = .am(.age(.children))
-        case .lowteen: contentView.backgroundColor = .am(.age(.lowteen))
-        case .highteen: contentView.backgroundColor = .am(.age(.highteen))
-        case .restricted: contentView.backgroundColor = .am(.age(.restricted))
-        case .adult: contentView.backgroundColor = .am(.age(.adult))
+        case AgeRatingView.Age.all.rawValue:
+            ageLabel.text = AgeRatingView.Age.all.displayAge
+            contentView.backgroundColor = .am(.age(.all))
+            
+        case AgeRatingView.Age.children.rawValue:
+            ageLabel.text = AgeRatingView.Age.children.displayAge
+            contentView.backgroundColor = .am(.age(.children))
+            
+        case AgeRatingView.Age.lowteen.rawValue:
+            ageLabel.text = AgeRatingView.Age.lowteen.displayAge
+            contentView.backgroundColor = .am(.age(.lowteen))
+            
+        case AgeRatingView.Age.highteen.rawValue:
+            ageLabel.text = AgeRatingView.Age.highteen.displayAge
+            contentView.backgroundColor = .am(.age(.highteen))
+            
+        case AgeRatingView.Age.restricted.rawValue:
+            ageLabel.text = AgeRatingView.Age.restricted.displayAge
+            contentView.backgroundColor = .am(.age(.restricted))
+            
+        case AgeRatingView.Age.adult.rawValue:
+            ageLabel.text = AgeRatingView.Age.adult.displayAge
+            contentView.backgroundColor = .am(.age(.adult))
+            
+        default: return
         }
     }
 }
