@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+protocol AnimeCharacterProtocol: Equatable {
+    var id: Int { get }
+    var name: String { get }
+    var image: String { get }
+}
