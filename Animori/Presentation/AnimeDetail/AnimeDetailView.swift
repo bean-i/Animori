@@ -201,13 +201,13 @@ final class AnimeDetailView: BaseView {
     }
     
     // MARK: - ConfigureData
-    func configureData(anime: any AnimeProtocol) {
-        posterImageView.setImage(with: "https://picsum.photos/200/300")
+    func configureData(anime: any AnimeDetailProtocol) {
+        posterImageView.setImage(with: anime.image)
         ratingLabel.text = "★ \(anime.rate)"
         configureGenre(genres: anime.genre)
-        ageView.configureData(age: AgeRatingView.Age.children)
-        periodLabel.text = "2022.04.09 ~ 2022.06.25"
-        plotLabel.text = "Corrupt politicians, frenzied nationalists, and other warmongering forces constantly jeopardize the thin veneer of peace between neighboring countries Ostania and Westalis. In spite of their plots, renowned spy and Corrupt politicians, frenzied nationalists, and other warmongering forces constantly jeopardize the thin veneer of peace between neighboring countries Ostania and Westalis. In spite of their plots, renowned spy and...!!!!!"
+        ageView.configureData(age: anime.age)
+        periodLabel.text = anime.airedPeriod
+        plotLabel.text = anime.plot
     }
     
     // MARK: - Compositional Layout
