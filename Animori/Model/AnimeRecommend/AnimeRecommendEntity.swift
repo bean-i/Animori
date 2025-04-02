@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct AnimeRecommendEntity: AnimeRecommendProtocol {
+    let title: String
+    let image: String
+}

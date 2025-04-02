@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+protocol AnimeRecommendProtocol: Equatable {
+    var title: String { get }
+    var image: String { get }
+}
