@@ -101,4 +101,9 @@ final class RecommendCollectionViewCell: BaseCollectionViewCell {
         ratingLabel.text = "★ \(anime.rate)"
     }
     
+    func configureRecommendData(with anime: any AnimeRecommendProtocol) {
+        posterImageView.setImage(with: anime.image)
+        titleLabel.text = anime.title
+    }
+    
 }
