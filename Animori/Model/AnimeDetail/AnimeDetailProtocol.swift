@@ -16,5 +16,5 @@ protocol AnimeDetailProtocol: Equatable {
     var age: String { get }
     var airedPeriod: String { get }
     var plot: String { get }
-    var OTT: [String] { get }
+    var OTT: [AnimeDetailOTT] { get }
 }

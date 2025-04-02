@@ -16,5 +16,5 @@ struct AnimeDetailEntity: AnimeDetailProtocol {
     let age: String
     let airedPeriod: String
     let plot: String
-    let OTT: [String]
+    let OTT: [AnimeDetailOTT]
 }

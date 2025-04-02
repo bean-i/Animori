@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Response
 struct AnimeDetailResponseDTO: Decodable {
-    let data: [AnimeDTO]
+    let data: AnimeDetailDTO
 }
 
 struct AnimeDetailDTO: Decodable {
@@ -46,7 +46,7 @@ struct AnimeDetailAiredDate: Decodable {
     let to: String? // Date ISO8601
 }
 
-struct AnimeDetailOTT: Decodable {
+struct AnimeDetailOTT: Decodable, Equatable {
     let name: String
     let url: String
 }
@@ -54,7 +54,7 @@ struct AnimeDetailOTT: Decodable {
 // MARK: - AnimeDetailResponseDTO Extension: empty data
 extension AnimeDetailResponseDTO {
     static var empty: AnimeDetailResponseDTO {
-        return AnimeDetailResponseDTO(data: [])
+        return AnimeDetailResponseDTO(data: AnimeDetailDTO.empty)
     }
 }
 
@@ -103,9 +103,6 @@ extension AnimeDetailDTO {
         // 시놉시스
         let plot = self.synopsis ?? "줄거리 정보 없음"
         
-        // OTT 플랫폼명
-        let OTT = self.streaming.map { $0.name }
-        
         return AnimeDetailEntity(
             id: self.id,
             title: preferredTitle,
@@ -115,7 +112,7 @@ extension AnimeDetailDTO {
             age: age,
             airedPeriod: airedPeriod,
             plot: plot,
-            OTT: OTT
+            OTT: self.streaming
         )
     }
 }
