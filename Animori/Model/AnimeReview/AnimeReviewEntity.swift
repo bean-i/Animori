@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+struct AnimeReviewEntity: AnimeReviewProtocol {
+    let name: String
+    let score: String
+    let review: String
+}

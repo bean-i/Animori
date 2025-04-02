@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+protocol AnimeReviewProtocol: Equatable {
+    var name: String { get }
+    var score: String { get }
+    var review: String { get }
+}
