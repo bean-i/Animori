@@ -12,7 +12,7 @@ extension DateFormatter {
     static let isoToYMD = { (str: String?) -> String in
         guard let str = str else { return "?" }
         let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        formatter.formatOptions = .withInternetDateTime
         
         guard let date = formatter.date(from: str) else { return "?" }
         
