@@ -52,8 +52,9 @@ final class AnimeDetailViewModel: Reactor {
                 .map { Mutation.setDetail($0.data.toEntity()) }
                 .asObservable()
             
-            let reviewsObs = detailObs.flatMap { _ in
-                AnimeDetailClient.shared.getAnimeReviews(id: self.animeID)
+            let reviewsObs = detailObs.flatMap { [weak self] _ in
+                guard let self else { return Observable.just(Mutation.setReviews([]))}
+                return AnimeDetailClient.shared.getAnimeReviews(id: animeID)
                     .map { Mutation.setReviews($0.data.map { $0.toEntity() }) }
                     .asObservable()
             }
@@ -62,8 +63,9 @@ final class AnimeDetailViewModel: Reactor {
                 .map { Mutation.setCharacters($0.data.map { $0.toEntity() }) }
                 .asObservable()
             
-            let recommendObs = charactersObs.flatMap { _ in
-                AnimeDetailClient.shared.getAnimeRecommendations(id: self.animeID)
+            let recommendObs = charactersObs.flatMap { [weak self] _ in
+                guard let self else { return Observable.just(Mutation.setSimilar([]))}
+                return AnimeDetailClient.shared.getAnimeRecommendations(id: self.animeID)
                     .map { Mutation.setSimilar($0.data.map { $0.toEntity() }) }
                     .asObservable()
             }
