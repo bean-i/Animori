@@ -27,7 +27,8 @@ final class GenreBoxView: BaseView {
     
     override func configureLayout() {
         contentView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.leading.equalToSuperview()
+            make.height.equalTo(22)
         }
         
         genreLabel.snp.makeConstraints { make in
@@ -49,7 +50,7 @@ final class GenreBoxView: BaseView {
 
     override var intrinsicContentSize: CGSize {
         let labelSize = genreLabel.intrinsicContentSize
-        return CGSize(width: labelSize.width + 8, height: labelSize.height + 8)
+        return CGSize(width: labelSize.width + 8, height: 22)
     }
     
 }

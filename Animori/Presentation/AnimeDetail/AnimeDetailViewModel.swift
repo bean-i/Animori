@@ -13,74 +13,77 @@ import RxDataSources
 final class AnimeDetailViewModel: Reactor {
 
     enum Action {
-        case load
+        case loadDetailInfo
+        case ottTapped(String)
     }
     
     enum Mutation {
+        case setLoading(Bool)
         case setDetail(any AnimeDetailProtocol)
         case setReviews([any AnimeReviewProtocol])
         case setCharacters([any AnimeCharacterProtocol])
-        case setOTT([AnimeDetailOTT])
         case setSimilar([any AnimeRecommendProtocol])
-        case setSections([AnimeDetailSection])
+        case setOTTURL(URL?)
     }
 
     struct State {
-        var animeDetail: (any AnimeDetailProtocol)?
+        var animeDetail: (any AnimeDetailProtocol) = AnimeDetailEntity.empty
         var reviews: [any AnimeReviewProtocol] = []
         var characters: [any AnimeCharacterProtocol] = []
-        var ott: [AnimeDetailOTT] = []
         var similarAnime: [any AnimeRecommendProtocol] = []
-        var sections: [AnimeDetailSection] = []
+        var isLoading: Bool = false
+        var ottURL: URL? = nil
     }
     
-    let initialState = State()
+    private let animeID: Int
+    let initialState: State
     
-    // MARK: - mutate
+    init(animeID: Int, initialState: State) {
+        self.animeID = animeID
+        self.initialState = initialState
+    }
+    
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .load:
-            // 실제 데이터 대신 목 데이터 사용 (필요에 따라 네트워크 호출 등으로 대체)
-            let detail: any AnimeDetailProtocol = mockAnimeDetailEntity
-            let reviews: [any AnimeReviewProtocol] = mockReviewEntity
-            let characters: [any AnimeCharacterProtocol] = mockCharacterEntity
-            let similar: [any AnimeRecommendProtocol] = mockRecommendEntities
-            print("============")
-            print(detail.OTT)
-            // 각 섹션 모델 생성: 각 배열을 단일 아이템으로 변환
-            let reviewSection = AnimeDetailSection(
-                header: "리뷰",
-                items: reviews.map { .review($0) }
-            )
-            let characterSection = AnimeDetailSection(
-                header: "캐릭터",
-                items: characters.map { .character($0) }
-            )
-            let ottSection = AnimeDetailSection(
-                header: "OTT 바로가기",
-                items: detail.OTT.map { .ott($0) }
-            )
-            let recommendSection = AnimeDetailSection(
-                header: "비슷한 애니메이션 추천",
-                items: similar.map { .recommend($0) }
-            )
-            let sections = [reviewSection, characterSection, ottSection, recommendSection]
+        case .loadDetailInfo:
+            let startLoading = Observable.just(Mutation.setLoading(true))
             
-            return .concat([
-                .just(.setDetail(detail)),
-                .just(.setReviews(reviews)),
-                .just(.setCharacters(characters)),
-                .just(.setOTT(detail.OTT)),
-                .just(.setSimilar(similar)),
-                .just(.setSections(sections))
+            let detailObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeFullById(id: animeID)
+                .map { Mutation.setDetail($0.data.toEntity()) }
+            
+            let reviewsObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeReviews(id: animeID)
+                .map { Mutation.setReviews($0.data.map { $0.toEntity() }) }
+            
+            let charactersObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeCharacters(id: animeID)
+                .map { Mutation.setCharacters($0.data.map { $0.toEntity() }) }
+            
+            let recommendObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeRecommendations(id: animeID)
+                .delay(.seconds(1), scheduler: MainScheduler.instance)
+                .map { Mutation.setSimilar($0.data.map { $0.toEntity() }) }
+            
+            let allData = Single.zip(detailObs, reviewsObs, charactersObs, recommendObs) { detail, reviews, characters, similar -> [Mutation] in
+                return [detail, reviews, characters, similar]
+            }
+
+            let finishLoading = Observable.just(Mutation.setLoading(false))
+            
+            // startLoading 후 모든 데이터를 순차적으로 방출하고, 마지막에 로딩 false를 방출합니다.
+            return Observable.concat([
+                startLoading,
+                allData.asObservable().flatMap { Observable.from($0) },
+                finishLoading
             ])
+        case .ottTapped(let url):
+            let moveTo = URL(string: url)
+            return Observable.just(Mutation.setOTTURL(moveTo))
         }
     }
     
-    // MARK: - reduce
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
+        case .setLoading(let loading):
+            newState.isLoading = loading
         case .setDetail(let detail):
             newState.animeDetail = detail
         case .setReviews(let reviews):
@@ -89,10 +92,8 @@ final class AnimeDetailViewModel: Reactor {
             newState.characters = characters
         case .setSimilar(let similar):
             newState.similarAnime = similar
-        case .setSections(let sections):
-            newState.sections = sections
-        case .setOTT(let otts):
-            newState.ott = otts
+        case .setOTTURL(let url):
+            newState.ottURL = url
         }
         return newState
     }

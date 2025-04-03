@@ -15,6 +15,7 @@ struct AnimeDetailResponseDTO: Decodable {
 struct AnimeDetailDTO: Decodable {
     let id: Int
     let trailer: AnimeDetailTrailer
+    let images: AnimeImage
     let titles: [AnimeTitle]
     let score: Double?
     let genres: [AnimeGenre]
@@ -25,7 +26,7 @@ struct AnimeDetailDTO: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case id = "mal_id"
-        case trailer, titles, score, genres, rating, aired, synopsis, streaming
+        case trailer, images, titles, score, genres, rating, aired, synopsis, streaming
     }
 }
 
@@ -34,7 +35,7 @@ struct AnimeDetailTrailer: Decodable {
 }
 
 struct AnimeDetailTrailerImage: Decodable {
-    let imageURL: String
+    let imageURL: String?
     
     enum CodingKeys: String, CodingKey {
         case imageURL = "small_image_url"
@@ -64,6 +65,7 @@ extension AnimeDetailDTO {
         return AnimeDetailDTO(
             id: 0,
             trailer: AnimeDetailTrailer(images: AnimeDetailTrailerImage(imageURL: "")),
+            images: AnimeImage(jpg: AnimeJPG(imageURL: "", largeImageURL: "")),
             titles: [],
             score: 0,
             genres: [],
@@ -84,8 +86,11 @@ extension AnimeDetailDTO {
         ?? "제목 없음"
         
         // 대체 불가 이미지 URL
-        let image = self.trailer.images.imageURL
-        
+        var image = self.trailer.images.imageURL
+        if image == nil {
+            image = self.images.jpg.largeImageURL
+        }
+
         // 장르에 해시태그 추가
         let genre = self.genres.map { "#\($0.name)" }
         
@@ -106,7 +111,7 @@ extension AnimeDetailDTO {
         return AnimeDetailEntity(
             id: self.id,
             title: preferredTitle,
-            image: image,
+            image: image ?? "",
             genre: genre,
             rate: rate,
             age: age,

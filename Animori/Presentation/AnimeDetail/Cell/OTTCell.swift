@@ -44,7 +44,7 @@ final class OTTCell: BaseCollectionViewCell {
         titleLabel.font = .am(.bodySemibold)
         titleLabel.textColor = .am(.base(.white))
         titleLabel.textAlignment = .center
-        titleLabel.numberOfLines = 0
+        titleLabel.numberOfLines = 1
         
         iconImageView.image = UIImage(systemName: "link")
         iconImageView.tintColor = .am(.base(.white))

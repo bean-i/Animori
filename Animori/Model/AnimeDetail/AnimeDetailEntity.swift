@@ -18,3 +18,19 @@ struct AnimeDetailEntity: AnimeDetailProtocol {
     let plot: String
     let OTT: [AnimeDetailOTT]
 }
+
+extension AnimeDetailEntity {
+    static var empty: AnimeDetailEntity {
+        return AnimeDetailEntity(
+            id: 0,
+            title: "",
+            image: "",
+            genre: [],
+            rate: "",
+            age: "",
+            airedPeriod: "",
+            plot: "",
+            OTT: []
+        )
+    }
+}
