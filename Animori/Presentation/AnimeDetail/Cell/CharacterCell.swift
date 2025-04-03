@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class CharacterCell: BaseCollectionViewCell {
     
@@ -46,7 +47,10 @@ final class CharacterCell: BaseCollectionViewCell {
     }
     
     func configureData(_ character: any AnimeCharacterProtocol) {
-        imageView.setImage(with: character.image)
+//        imageView.setImage(with: character.image)
+        if let url = URL(string: character.image) {
+            imageView.kf.setImage(with: url)
+        }
         nameLabel.text = character.name
     }
     

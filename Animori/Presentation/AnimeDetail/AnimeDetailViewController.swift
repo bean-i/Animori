@@ -16,18 +16,11 @@ final class AnimeDetailViewController: BaseViewController<AnimeDetailView> {
     private let sectionsRelay = BehaviorRelay<[AnimeDetailSection]>(value: [])
     var disposeBag = DisposeBag()
     
-    // MARK: - Initializer
     init(reactor: AnimeDetailViewModel) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        self.title = "애니메이션 상세"
-    }
-    
-    // RxDataSources: 섹션 모델을 사용
+
     private var dataSource = RxCollectionViewSectionedReloadDataSource<AnimeDetailSection>(
         configureCell: { dataSource, collectionView, indexPath, item in
             switch item {
@@ -66,8 +59,22 @@ final class AnimeDetailViewController: BaseViewController<AnimeDetailView> {
 }
 
 extension AnimeDetailViewController: View {
-    // MARK: - Bind
     func bind(reactor: AnimeDetailViewModel) {
+        // 네트워크 요청 시작 전에 로딩 인디케이터 표시
+        reactor.state
+            .map { $0.isLoading }
+            .distinctUntilChanged()
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self) { owner, isLoading in
+                if isLoading {
+                    Loading.shared.showLoading(in: owner.mainView)
+                } else {
+                    Loading.shared.hideLoading(from: owner.mainView)
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        // 데이터 로드 액션
         reactor.action.onNext(.loadDetailInfo)
         
         // 상세정보 바인딩 (상단 정보)
@@ -77,6 +84,7 @@ extension AnimeDetailViewController: View {
             .observe(on: MainScheduler.instance)
             .bind(onNext: { [weak self] detail in
                 self?.mainView.configureData(anime: detail)
+                self?.navigationItem.title = detail.title
             })
             .disposed(by: disposeBag)
         
@@ -102,15 +110,18 @@ extension AnimeDetailViewController: View {
             .bind(to: mainView.collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
         
-        // 데이터 통신이 끝난 이후, 레이아웃 업데이트
+        // 데이터 통신이 끝난 이후, 레이아웃 업데이트 후 로딩 인디케이터 숨김
         sectionsRelay
             .observe(on: MainScheduler.instance)
             .subscribe(with: self) { owner, _ in
-                let contentHeight = owner.mainView.collectionView.collectionViewLayout.collectionViewContentSize.height
-                owner.mainView.collectionViewHeightConstraint?.update(offset: contentHeight)
-                owner.mainView.collectionView.layoutIfNeeded()
+                DispatchQueue.main.async {
+                    owner.mainView.collectionView.reloadData()
+                    owner.mainView.collectionView.collectionViewLayout.invalidateLayout()
+                    let contentHeight = owner.mainView.collectionView.collectionViewLayout.collectionViewContentSize.height
+                    owner.mainView.collectionViewHeightConstraint?.update(offset: max(contentHeight, 100))
+                    owner.mainView.layoutIfNeeded()
+                }
             }
             .disposed(by: disposeBag)
     }
 }
-

@@ -17,21 +17,20 @@ final class AnimeDetailViewModel: Reactor {
     }
     
     enum Mutation {
+        case setLoading(Bool)
         case setDetail(any AnimeDetailProtocol)
         case setReviews([any AnimeReviewProtocol])
         case setCharacters([any AnimeCharacterProtocol])
-        case setOTT([AnimeDetailOTT])
         case setSimilar([any AnimeRecommendProtocol])
-        case setSections([AnimeDetailSection])
+        // 필요한 경우 setSections, setOTT 등을 추가할 수 있음
     }
 
     struct State {
         var animeDetail: (any AnimeDetailProtocol) = AnimeDetailEntity.empty
         var reviews: [any AnimeReviewProtocol] = []
         var characters: [any AnimeCharacterProtocol] = []
-        var ott: [AnimeDetailOTT] = []
         var similarAnime: [any AnimeRecommendProtocol] = []
-        var sections: [AnimeDetailSection] = []
+        var isLoading: Bool = false
     }
     
     private let animeID: Int
@@ -42,56 +41,41 @@ final class AnimeDetailViewModel: Reactor {
         self.initialState = initialState
     }
     
-    // MARK: - mutate
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadDetailInfo:
-            // 애니메이션 상세 정보
-            let animeDetail = Observable<Mutation>.deferred { [weak self] in
-                guard let self else { return Observable.empty() }
-                return AnimeDetailClient.shared.getAnimeFullById(id: animeID)
-                    .map { Mutation.setDetail($0.data.toEntity()) }
-                    .asObservable()
-            }
+            let startLoading = Observable.just(Mutation.setLoading(true))
             
-            // 애니메이션 리뷰
-            let animeReviews = Observable<Mutation>.deferred {  [weak self] in
-                guard let self else { return Observable.empty() }
-                return AnimeDetailClient.shared.getAnimeReviews(id: self.animeID)
-                    .map { Mutation.setReviews($0.data.map { $0.toEntity() }) }
-                    .asObservable()
-            }
+            let detailObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeFullById(id: animeID)
+                .map { Mutation.setDetail($0.data.toEntity()) }
+            let reviewsObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeReviews(id: animeID)
+                .map { Mutation.setReviews($0.data.map { $0.toEntity() }) }
+            let charactersObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeCharacters(id: animeID)
+                .map { Mutation.setCharacters($0.data.map { $0.toEntity() }) }
+            let recommendObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeRecommendations(id: animeID)
+                .delay(.seconds(1), scheduler: MainScheduler.instance)
+                .map { Mutation.setSimilar($0.data.map { $0.toEntity() }) }
             
-            // 애니메이션 캐릭터
-            let animeCharacters = Observable<Mutation>.deferred { [weak self] in
-                guard let self else { return Observable.empty() }
-                return AnimeDetailClient.shared.getAnimeCharacters(id: self.animeID)
-                    .map { Mutation.setCharacters($0.data.map { $0.toEntity() }) }
-                    .asObservable()
+            let allData = Single.zip(detailObs, reviewsObs, charactersObs, recommendObs) { detail, reviews, characters, similar -> [Mutation] in
+                return [detail, reviews, characters, similar]
             }
+
+            let finishLoading = Observable.just(Mutation.setLoading(false))
             
-            // 애니메이션 추천
-            let animeRecommend = Observable<Mutation>.deferred { [weak self] in
-                guard let self else { return Observable.empty() }
-                return AnimeDetailClient.shared.getAnimeRecommendations(id: self.animeID)
-                    .delay(.seconds(1), scheduler: MainScheduler.instance)
-                    .map { Mutation.setSimilar($0.data.map { $0.toEntity() }) }
-                    .asObservable()
-            }
-            
+            // startLoading 후 모든 데이터를 순차적으로 방출하고, 마지막에 로딩 false를 방출합니다.
             return Observable.concat([
-                animeDetail,
-                animeReviews,
-                animeCharacters,
-                animeRecommend
+                startLoading,
+                allData.asObservable().flatMap { Observable.from($0) },
+                finishLoading
             ])
         }
     }
     
-    // MARK: - reduce
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
+        case .setLoading(let loading):
+            newState.isLoading = loading
         case .setDetail(let detail):
             newState.animeDetail = detail
         case .setReviews(let reviews):
@@ -100,10 +84,6 @@ final class AnimeDetailViewModel: Reactor {
             newState.characters = characters
         case .setSimilar(let similar):
             newState.similarAnime = similar
-        case .setSections(let sections):
-            newState.sections = sections
-        case .setOTT(let otts):
-            newState.ott = otts
         }
         return newState
     }

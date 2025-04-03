@@ -9,8 +9,8 @@ import UIKit
 import SnapKit
 
 final class AnimeDetailView: BaseView {
-    private let scrollView = UIScrollView()
-    private let scrollContainView = UIView()
+    let scrollView = UIScrollView()
+    let scrollContainView = UIView()
     
     private let contentView = UIView()
     private let posterImageView = UIImageView()
@@ -60,22 +60,22 @@ final class AnimeDetailView: BaseView {
         }
         
         scrollContainView.snp.makeConstraints { make in
-            make.verticalEdges.equalToSuperview()
+            make.edges.equalToSuperview()
             make.width.equalTo(scrollView)
-            make.bottom.equalTo(collectionView.snp.bottom)
         }
         
         contentView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalToSuperview()
             make.height.equalTo(contentView.snp.width).multipliedBy(0.6)
         }
-        
         posterImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.top.equalToSuperview().offset(-15)
+            make.horizontalEdges.bottom.equalToSuperview()
         }
         
         gradientView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.horizontalEdges.top.equalToSuperview()
+            make.bottom.equalTo(posterImageView.snp.bottom)
         }
         
         genreStackView.snp.makeConstraints { make in
@@ -113,6 +113,7 @@ final class AnimeDetailView: BaseView {
         plotInfoView.snp.makeConstraints { make in
             make.top.equalTo(periodInfoView.snp.bottom).offset(10)
             make.leading.equalToSuperview().inset(20)
+            make.width.equalTo(40)
         }
         
         plotLabel.snp.makeConstraints { make in
@@ -130,6 +131,7 @@ final class AnimeDetailView: BaseView {
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(plotLabel.snp.bottom).offset(15)
             make.horizontalEdges.equalToSuperview()
+            make.bottom.equalToSuperview().inset(10)
             collectionViewHeightConstraint = make.height.equalTo(300).constraint
         }
     }
@@ -240,7 +242,7 @@ final class AnimeDetailView: BaseView {
         
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(20)
+            heightDimension: .absolute(20)
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
@@ -256,11 +258,11 @@ final class AnimeDetailView: BaseView {
     // 캐릭터 섹션
     private func configureCharacterSectionLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(100),
-                                              heightDimension: .estimated(120))
+                                              heightDimension: .absolute(120))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(100),
-                                               heightDimension: .estimated(120))
+                                               heightDimension: .absolute(120))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
@@ -269,7 +271,7 @@ final class AnimeDetailView: BaseView {
         
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(20)
+            heightDimension: .absolute(20)
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
@@ -313,7 +315,7 @@ final class AnimeDetailView: BaseView {
 
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(20)
+            heightDimension: .absolute(20)
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
@@ -347,7 +349,7 @@ final class AnimeDetailView: BaseView {
         
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(20)
+            heightDimension: .absolute(20)
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
