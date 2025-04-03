@@ -34,7 +34,7 @@ struct AnimeDetailTrailer: Decodable {
 }
 
 struct AnimeDetailTrailerImage: Decodable {
-    let imageURL: String
+    let imageURL: String?
     
     enum CodingKeys: String, CodingKey {
         case imageURL = "small_image_url"
@@ -106,7 +106,7 @@ extension AnimeDetailDTO {
         return AnimeDetailEntity(
             id: self.id,
             title: preferredTitle,
-            image: image,
+            image: image ?? "",
             genre: genre,
             rate: rate,
             age: age,
