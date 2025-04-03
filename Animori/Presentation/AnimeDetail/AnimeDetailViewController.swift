@@ -89,7 +89,9 @@ extension AnimeDetailViewController: View {
             })
             .disposed(by: disposeBag)
         
-        reactor.state.map { state -> [AnimeDetailSection] in
+        reactor.state
+            .observe(on: MainScheduler.instance)
+            .map { state -> [AnimeDetailSection] in
             let reviewSection = AnimeDetailSection(header: "리뷰",
                                                    items: state.reviews.map { .review($0) })
             

@@ -48,29 +48,34 @@ final class AnimeDetailViewModel: Reactor {
         case .loadDetailInfo:
             let startLoading = Observable.just(Mutation.setLoading(true))
             
-            let detailObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeFullById(id: animeID)
+            let detailObs = AnimeDetailClient.shared.getAnimeFullById(id: animeID)
                 .map { Mutation.setDetail($0.data.toEntity()) }
+                .asObservable()
             
-            let reviewsObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeReviews(id: animeID)
-                .map { Mutation.setReviews($0.data.map { $0.toEntity() }) }
-            
-            let charactersObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeCharacters(id: animeID)
-                .map { Mutation.setCharacters($0.data.map { $0.toEntity() }) }
-            
-            let recommendObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeRecommendations(id: animeID)
-                .delay(.seconds(1), scheduler: MainScheduler.instance)
-                .map { Mutation.setSimilar($0.data.map { $0.toEntity() }) }
-            
-            let allData = Single.zip(detailObs, reviewsObs, charactersObs, recommendObs) { detail, reviews, characters, similar -> [Mutation] in
-                return [detail, reviews, characters, similar]
+            let reviewsObs = detailObs.flatMap { _ in
+                AnimeDetailClient.shared.getAnimeReviews(id: self.animeID)
+                    .map { Mutation.setReviews($0.data.map { $0.toEntity() }) }
+                    .asObservable()
             }
-
-            let finishLoading = Observable.just(Mutation.setLoading(false))
             
-            // startLoading 후 모든 데이터를 순차적으로 방출하고, 마지막에 로딩 false를 방출합니다.
+            let charactersObs = AnimeDetailClient.shared.getAnimeCharacters(id: animeID)
+                .map { Mutation.setCharacters($0.data.map { $0.toEntity() }) }
+                .asObservable()
+            
+            let recommendObs = charactersObs.flatMap { _ in
+                AnimeDetailClient.shared.getAnimeRecommendations(id: self.animeID)
+                    .map { Mutation.setSimilar($0.data.map { $0.toEntity() }) }
+                    .asObservable()
+            }
+            
+            let finishLoading = recommendObs.map { _ in Mutation.setLoading(false) }
+            
             return Observable.concat([
                 startLoading,
-                allData.asObservable().flatMap { Observable.from($0) },
+                detailObs,
+                reviewsObs,
+                charactersObs,
+                recommendObs,
                 finishLoading
             ])
         case .ottTapped(let url):
