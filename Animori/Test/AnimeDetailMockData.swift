@@ -15,6 +15,10 @@ let mockAnimeDetailResponse = AnimeDetailResponseDTO(data:
                 imageURL: "https://img.youtube.com/vi/3BYutu3Pf_0/sddefault.jpg"
             )
         ),
+        images: AnimeImage(jpg: AnimeJPG(
+            imageURL: "https://cdn.myanimelist.net/images/anime/1025/147458l.jpg",
+            largeImageURL: "https://cdn.myanimelist.net/images/anime/1025/147458l.jpg"
+        )),
         titles: [
             AnimeTitle(type: "Japanese", title: "薬屋のひとりごと 第2期"),
             AnimeTitle(type: "English", title: "The Apothecary Diaries Season 2")
