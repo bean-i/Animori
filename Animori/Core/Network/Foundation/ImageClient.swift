@@ -33,7 +33,7 @@ final class ImageClient {
     func requestImage(with url: URL) async throws -> Data {
         let request = URLRequest(url: url)
         
-        if let cached = URLCache.shared.cachedResponse(for: request) {
+        if let cached = session.configuration.urlCache?.cachedResponse(for: request) {
             return cached.data
         }
         
