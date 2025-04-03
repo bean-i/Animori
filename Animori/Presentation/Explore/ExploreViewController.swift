@@ -116,7 +116,7 @@ extension ExploreViewController: View {
         mainView.collectionView.rx.modelSelected(ExploreItem.self)
             .subscribe(onNext: { item in
                 switch item {
-                case .seasonAnime(let anime), .completeAnime(let anime):
+                case .seasonAnime(let anime), .completeAnime(let anime), .shortAnime(let anime):
                     reactor.action.onNext(.animeSelected(anime.id))
                 case .sort(let sortOption):
                     print("정렬 선택 옵션!", sortOption)
@@ -129,10 +129,11 @@ extension ExploreViewController: View {
         
         // 애니메이션 상세화면으로 전환
         reactor.pulse(\.$selectedAnime)
+            .compactMap { $0 }
             .bind(with: self) { owner, id in
-                print("애니메이션 상세화면으로 전환")
-                let nextVC = UIViewController()
-                owner.navigationController?.pushViewController(nextVC, animated: true)
+                let animeDetailViewModel = AnimeDetailViewModel(animeID: id, initialState: AnimeDetailViewModel.State())
+                let animeDetailVC = AnimeDetailViewController(reactor: animeDetailViewModel)
+                owner.navigationController?.pushViewController(animeDetailVC, animated: true)
             }
             .disposed(by: disposeBag)
     }
