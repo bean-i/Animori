@@ -14,6 +14,7 @@ final class AnimeDetailViewModel: Reactor {
 
     enum Action {
         case loadDetailInfo
+        case ottTapped(String)
     }
     
     enum Mutation {
@@ -22,7 +23,7 @@ final class AnimeDetailViewModel: Reactor {
         case setReviews([any AnimeReviewProtocol])
         case setCharacters([any AnimeCharacterProtocol])
         case setSimilar([any AnimeRecommendProtocol])
-        // 필요한 경우 setSections, setOTT 등을 추가할 수 있음
+        case setOTTURL(URL?)
     }
 
     struct State {
@@ -31,6 +32,7 @@ final class AnimeDetailViewModel: Reactor {
         var characters: [any AnimeCharacterProtocol] = []
         var similarAnime: [any AnimeRecommendProtocol] = []
         var isLoading: Bool = false
+        var ottURL: URL? = nil
     }
     
     private let animeID: Int
@@ -48,10 +50,13 @@ final class AnimeDetailViewModel: Reactor {
             
             let detailObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeFullById(id: animeID)
                 .map { Mutation.setDetail($0.data.toEntity()) }
+            
             let reviewsObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeReviews(id: animeID)
                 .map { Mutation.setReviews($0.data.map { $0.toEntity() }) }
+            
             let charactersObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeCharacters(id: animeID)
                 .map { Mutation.setCharacters($0.data.map { $0.toEntity() }) }
+            
             let recommendObs: Single<Mutation> = AnimeDetailClient.shared.getAnimeRecommendations(id: animeID)
                 .delay(.seconds(1), scheduler: MainScheduler.instance)
                 .map { Mutation.setSimilar($0.data.map { $0.toEntity() }) }
@@ -68,6 +73,9 @@ final class AnimeDetailViewModel: Reactor {
                 allData.asObservable().flatMap { Observable.from($0) },
                 finishLoading
             ])
+        case .ottTapped(let url):
+            let moveTo = URL(string: url)
+            return Observable.just(Mutation.setOTTURL(moveTo))
         }
     }
     
@@ -84,6 +92,8 @@ final class AnimeDetailViewModel: Reactor {
             newState.characters = characters
         case .setSimilar(let similar):
             newState.similarAnime = similar
+        case .setOTTURL(let url):
+            newState.ottURL = url
         }
         return newState
     }

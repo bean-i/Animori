@@ -10,6 +10,7 @@ import ReactorKit
 import RxSwift
 import RxCocoa
 import RxDataSources
+import SafariServices
 
 final class AnimeDetailViewController: BaseViewController<AnimeDetailView> {
     
@@ -121,6 +122,28 @@ extension AnimeDetailViewController: View {
                     owner.mainView.collectionViewHeightConstraint?.update(offset: max(contentHeight, 100))
                     owner.mainView.layoutIfNeeded()
                 }
+            }
+            .disposed(by: disposeBag)
+        
+        // OTT 셀 탭 액션
+        mainView.collectionView.rx.modelSelected(AnimeDetailSectionItem.self)
+            .subscribe(onNext: { item in
+                switch item {
+                case .ott(let ott):
+                    print("\(ott.name)선택!!!, \(ott.url)로 이동 ㄱㄱ")
+                    reactor.action.onNext(.ottTapped(ott.url))
+                default: break
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        // OTT 셀 탭 -> 사파리 화면 띄우기
+        reactor.state
+            .map { $0.ottURL }
+            .compactMap { $0 }
+            .bind(with: self) { owner, url in
+                let safariVC = SFSafariViewController(url: url)
+                owner.present(safariVC, animated: true, completion: nil)
             }
             .disposed(by: disposeBag)
     }
