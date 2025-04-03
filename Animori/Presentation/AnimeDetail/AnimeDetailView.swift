@@ -31,7 +31,7 @@ final class AnimeDetailView: BaseView {
     
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     
-    private var collectionViewHeightConstraint: Constraint?
+    var collectionViewHeightConstraint: Constraint?
     private var lastCollectionViewHeight: CGFloat = 0
     
     override func configureHierarchy() {
@@ -52,7 +52,7 @@ final class AnimeDetailView: BaseView {
         scrollView.addSubview(scrollContainView)
         addSubview(scrollView)
     }
-    
+
     override func configureLayout() {
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide)
@@ -82,6 +82,7 @@ final class AnimeDetailView: BaseView {
             make.top.equalTo(contentView.snp.bottom).offset(10)
             make.leading.equalToSuperview().inset(20)
             make.trailing.lessThanOrEqualTo(ratingLabel.snp.trailing)
+            make.height.equalTo(22)
         }
         
         ratingLabel.snp.makeConstraints { make in
@@ -255,11 +256,11 @@ final class AnimeDetailView: BaseView {
     // 캐릭터 섹션
     private func configureCharacterSectionLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(100),
-                                              heightDimension: .estimated(100))
+                                              heightDimension: .estimated(120))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(100),
-                                               heightDimension: .estimated(100))
+                                               heightDimension: .estimated(120))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
@@ -285,14 +286,14 @@ final class AnimeDetailView: BaseView {
     private func configureOTTSectionLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .estimated(100),
-            heightDimension: .estimated(28)
+            heightDimension: .absolute(28)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         // 2. 그룹 크기 및 설정
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .estimated(100),
-            heightDimension: .estimated(28)
+            heightDimension: .absolute(28)
         )
         
         let group = NSCollectionLayoutGroup.horizontal(
@@ -361,14 +362,12 @@ final class AnimeDetailView: BaseView {
     
     // MARK: - 장르 나타내기
     private func configureGenre(genres: [String]) {
-        print(#function)
         let availableWidth: CGFloat = 200
         var currentWidth: CGFloat = 0
         
         genreStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         for tag in genres {
-            print(tag)
             let genreBox = GenreBoxView(genre: tag)
             genreBox.layoutIfNeeded()
             let boxWidth = genreBox.intrinsicContentSize.width

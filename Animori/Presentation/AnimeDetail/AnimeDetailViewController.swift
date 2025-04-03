@@ -101,6 +101,16 @@ extension AnimeDetailViewController: View {
         sectionsRelay
             .bind(to: mainView.collectionView.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+        
+        // 데이터 통신이 끝난 이후, 레이아웃 업데이트
+        sectionsRelay
+            .observe(on: MainScheduler.instance)
+            .subscribe(with: self) { owner, _ in
+                let contentHeight = owner.mainView.collectionView.collectionViewLayout.collectionViewContentSize.height
+                owner.mainView.collectionViewHeightConstraint?.update(offset: contentHeight)
+                owner.mainView.collectionView.layoutIfNeeded()
+            }
+            .disposed(by: disposeBag)
     }
 }
 
