@@ -226,11 +226,11 @@ final class AnimeDetailView: BaseView {
     // 리뷰 섹션
     private func configureReviewSectionLayout() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .estimated(100))
+                                              heightDimension: .absolute(120))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.7),
-                                               heightDimension: .estimated(100))
+                                               heightDimension: .absolute(120))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
@@ -247,7 +247,7 @@ final class AnimeDetailView: BaseView {
             alignment: .top
         )
         section.boundarySupplementaryItems = [header]
-        
+        section.orthogonalScrollingBehavior = .groupPaging
         section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 20, bottom: 20, trailing: 20)
         return section
     }

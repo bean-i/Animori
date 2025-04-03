@@ -13,7 +13,7 @@ import RxDataSources
 final class AnimeDetailViewModel: Reactor {
 
     enum Action {
-        case load
+        case loadDetailInfo
     }
     
     enum Mutation {
@@ -26,7 +26,7 @@ final class AnimeDetailViewModel: Reactor {
     }
 
     struct State {
-        var animeDetail: (any AnimeDetailProtocol)?
+        var animeDetail: (any AnimeDetailProtocol) = AnimeDetailEntity.empty
         var reviews: [any AnimeReviewProtocol] = []
         var characters: [any AnimeCharacterProtocol] = []
         var ott: [AnimeDetailOTT] = []
@@ -34,45 +34,56 @@ final class AnimeDetailViewModel: Reactor {
         var sections: [AnimeDetailSection] = []
     }
     
-    let initialState = State()
+    private let animeID: Int
+    let initialState: State
+    
+    init(animeID: Int, initialState: State) {
+        self.animeID = animeID
+        self.initialState = initialState
+    }
     
     // MARK: - mutate
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .load:
-            // 실제 데이터 대신 목 데이터 사용 (필요에 따라 네트워크 호출 등으로 대체)
-            let detail: any AnimeDetailProtocol = mockAnimeDetailEntity
-            let reviews: [any AnimeReviewProtocol] = mockReviewEntity
-            let characters: [any AnimeCharacterProtocol] = mockCharacterEntity
-            let similar: [any AnimeRecommendProtocol] = mockRecommendEntities
-            print("============")
-            print(detail.OTT)
-            // 각 섹션 모델 생성: 각 배열을 단일 아이템으로 변환
-            let reviewSection = AnimeDetailSection(
-                header: "리뷰",
-                items: reviews.map { .review($0) }
-            )
-            let characterSection = AnimeDetailSection(
-                header: "캐릭터",
-                items: characters.map { .character($0) }
-            )
-            let ottSection = AnimeDetailSection(
-                header: "OTT 바로가기",
-                items: detail.OTT.map { .ott($0) }
-            )
-            let recommendSection = AnimeDetailSection(
-                header: "비슷한 애니메이션 추천",
-                items: similar.map { .recommend($0) }
-            )
-            let sections = [reviewSection, characterSection, ottSection, recommendSection]
+        case .loadDetailInfo:
+            // 애니메이션 상세 정보
+            let animeDetail = Observable<Mutation>.deferred { [weak self] in
+                guard let self else { return Observable.empty() }
+                return AnimeDetailClient.shared.getAnimeFullById(id: animeID)
+                    .map { Mutation.setDetail($0.data.toEntity()) }
+                    .asObservable()
+            }
             
-            return .concat([
-                .just(.setDetail(detail)),
-                .just(.setReviews(reviews)),
-                .just(.setCharacters(characters)),
-                .just(.setOTT(detail.OTT)),
-                .just(.setSimilar(similar)),
-                .just(.setSections(sections))
+            // 애니메이션 리뷰
+            let animeReviews = Observable<Mutation>.deferred {  [weak self] in
+                guard let self else { return Observable.empty() }
+                return AnimeDetailClient.shared.getAnimeReviews(id: self.animeID)
+                    .map { Mutation.setReviews($0.data.map { $0.toEntity() }) }
+                    .asObservable()
+            }
+            
+            // 애니메이션 캐릭터
+            let animeCharacters = Observable<Mutation>.deferred { [weak self] in
+                guard let self else { return Observable.empty() }
+                return AnimeDetailClient.shared.getAnimeCharacters(id: self.animeID)
+                    .map { Mutation.setCharacters($0.data.map { $0.toEntity() }) }
+                    .asObservable()
+            }
+            
+            // 애니메이션 추천
+            let animeRecommend = Observable<Mutation>.deferred { [weak self] in
+                guard let self else { return Observable.empty() }
+                return AnimeDetailClient.shared.getAnimeRecommendations(id: self.animeID)
+                    .delay(.seconds(1), scheduler: MainScheduler.instance)
+                    .map { Mutation.setSimilar($0.data.map { $0.toEntity() }) }
+                    .asObservable()
+            }
+            
+            return Observable.concat([
+                animeDetail,
+                animeReviews,
+                animeCharacters,
+                animeRecommend
             ])
         }
     }
