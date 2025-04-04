@@ -150,11 +150,21 @@ extension ExploreViewController: TrendCollectionViewCellDelegate {
 extension ExploreViewController: SectionHeaderViewDelegate {
     func sectionHeaderViewTapped(_ headerView: SectionHeaderView) {
         let sectionIndex = headerView.tag
-        // 다음 화면에 섹션 넘겨주기
-        if sectionIndex >= 2 { // 예: "이번 시즌 애니메이션" 섹션일 때
-            print("섹션 상세화면으로 전환")
-            let nextVC = UIViewController()
-            self.navigationController?.pushViewController(nextVC, animated: true)
+        if sectionIndex >= 2 {
+            let state = AnimeListViewModel.State(animeList: [])
+            let model = AnimeListViewModel(initialState: state)
+            let animeListVC = AnimeListViewController(reactor: model)
+            
+            switch sectionIndex {
+            case 2:
+                model.action.onNext(.loadAnimeList(.seasonNow))
+            case 3:
+                model.action.onNext(.loadAnimeList(.completeAnime))
+            case 4:
+                model.action.onNext(.loadAnimeList(.movieAnime))
+            default: break
+            }
+            navigationController?.pushViewController(animeListVC, animated: true)
         }
     }
 }
