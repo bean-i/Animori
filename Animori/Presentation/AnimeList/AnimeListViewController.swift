@@ -24,8 +24,6 @@ extension AnimeListViewController: View {
     
     func bind(reactor: AnimeListViewModel) {
         
-        reactor.action.onNext(.loadAnimeList(.completeAnime))
-        
         // 타이틀
         reactor.state
             .map { $0.title }
