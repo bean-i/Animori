@@ -39,7 +39,7 @@ final class RecommendCollectionViewCell: BaseCollectionViewCell {
     override func configureLayout() {
         shadowContainerView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalToSuperview()
-            make.height.equalTo(200)
+            make.bottom.equalTo(titleLabel.snp.top).offset(-5)
         }
         
         containView.snp.makeConstraints { make in
@@ -54,13 +54,14 @@ final class RecommendCollectionViewCell: BaseCollectionViewCell {
             make.edges.equalToSuperview()
         }
         
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(posterImageView.snp.bottom).offset(5)
-            make.horizontalEdges.equalToSuperview()
-        }
-        
         ratingLabel.snp.makeConstraints { make in
             make.trailing.bottom.equalToSuperview().inset(5)
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(12)
         }
     }
     

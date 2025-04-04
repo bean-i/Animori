@@ -23,6 +23,8 @@ let mockAnimeResponseDTO = AnimeResponseDTO(data: [
             AnimeTitle(type: "English", title: "Solo Leveling Season 2: Arise from the Shadow")
         ],
         score: 8.87,
+        popularity: nil,
+        favorites: nil,
         genres: [
             AnimeGenre(id: 1, name: "Action"),
             AnimeGenre(id: 2, name: "Adventure"),
@@ -45,6 +47,8 @@ let mockAnimeResponseDTO = AnimeResponseDTO(data: [
             AnimeTitle(type: "English", title: "The Apothecary Diaries Season 2")
         ],
         score: 8.8,
+        popularity: nil,
+        favorites: nil,
         genres: [
             AnimeGenre(id: 8, name: "Drama"),
             AnimeGenre(id: 7, name: "Mystery")
@@ -64,6 +68,8 @@ let mockAnimeResponseDTO = AnimeResponseDTO(data: [
             AnimeTitle(type: "English", title: "Alien Stage")
         ],
         score: 8.79,
+        popularity: nil,
+        favorites: nil,
         genres: [
             AnimeGenre(id: 8, name: "Drama"),
             AnimeGenre(id: 24, name: "Sci-Fi"),
@@ -85,6 +91,8 @@ let mockAnimeResponseDTO = AnimeResponseDTO(data: [
             AnimeTitle(type: "English", title: "One Piece")
         ],
         score: 8.73,
+        popularity: nil,
+        favorites: nil,
         genres: [
             AnimeGenre(id: 1, name: "Action"),
             AnimeGenre(id: 2, name: "Adventure"),
@@ -105,6 +113,8 @@ let mockAnimeResponseDTO = AnimeResponseDTO(data: [
             AnimeTitle(type: "English", title: "Heaven Official's Blessing Short Film")
         ],
         score: 8.49,
+        popularity: nil,
+        favorites: nil,
         genres: [
             AnimeGenre(id: 1, name: "Action"),
             AnimeGenre(id: 2, name: "Adventure"),
@@ -127,6 +137,8 @@ let mockAnimeResponseDTO = AnimeResponseDTO(data: [
             AnimeTitle(type: "Japanese", title: "斗破苍穹年番")
         ],
         score: 8.45,
+        popularity: nil,
+        favorites: nil,
         genres: [
             AnimeGenre(id: 1, name: "Action"),
             AnimeGenre(id: 2, name: "Adventure"),
@@ -147,6 +159,8 @@ let mockAnimeResponseDTO = AnimeResponseDTO(data: [
             AnimeTitle(type: "English", title: "Swallowed Star 4th Season")
         ],
         score: 8.37,
+        popularity: nil,
+        favorites: nil,
         genres: [
             AnimeGenre(id: 1, name: "Action"),
             AnimeGenre(id: 2, name: "Adventure"),
@@ -168,6 +182,8 @@ let mockAnimeResponseDTO = AnimeResponseDTO(data: [
             AnimeTitle(type: "English", title: "Renegade Immortal")
         ],
         score: 8.33,
+        popularity: nil,
+        favorites: nil,
         genres: [
             AnimeGenre(id: 1, name: "Action"),
             AnimeGenre(id: 2, name: "Adventure"),
@@ -190,6 +206,8 @@ let mockAnimeResponseDTO = AnimeResponseDTO(data: [
             AnimeTitle(type: "English", title: "Shangri-La Frontier Season 2")
         ],
         score: 8.29,
+        popularity: nil,
+        favorites: nil,
         genres: [
             AnimeGenre(id: 1, name: "Action"),
             AnimeGenre(id: 2, name: "Adventure"),

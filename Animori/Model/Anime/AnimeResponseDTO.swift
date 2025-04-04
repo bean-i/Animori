@@ -17,11 +17,13 @@ struct AnimeDTO: Decodable {
     let images: AnimeImage
     let titles: [AnimeTitle]
     let score: Double?
+    let popularity: Int?
+    let favorites: Int?
     let genres: [AnimeGenre]
     
     enum CodingKeys: String, CodingKey {
         case id = "mal_id"
-        case images, titles, score, genres
+        case images, titles, score, popularity, favorites, genres
     }
 }
 
@@ -62,6 +64,8 @@ extension AnimeDTO {
             images: AnimeImage(jpg: AnimeJPG(imageURL: nil, largeImageURL: nil)),
             titles: [],
             score: 0.0,
+            popularity: 0,
+            favorites: 0,
             genres: []
         )
     }
@@ -80,7 +84,9 @@ extension AnimeDTO {
             title: preferredTitle,
             image: image,
             genre: genre,
-            rate: rate
+            rate: rate,
+            popularity: popularity ?? 0,
+            favorites: favorites ?? 0
         )
     }
 }
