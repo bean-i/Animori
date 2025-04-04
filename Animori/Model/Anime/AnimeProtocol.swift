@@ -13,4 +13,6 @@ protocol AnimeProtocol: Equatable {
     var image: String { get }
     var genre: [String] { get }
     var rate: String { get }
+    var popularity: Int { get }
+    var favorites: Int { get }
 }

@@ -13,4 +13,6 @@ struct Anime: AnimeProtocol {
     let image: String
     let genre: [String]
     let rate: String
+    let popularity: Int
+    let favorites: Int
 }
