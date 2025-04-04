@@ -21,7 +21,7 @@ final class AnimeListView: BaseView {
         sortButtonCollectionView.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(34)
+            make.height.equalTo(35)
         }
         
         animeListCollectionView.snp.makeConstraints { make in
@@ -55,7 +55,7 @@ final class AnimeListView: BaseView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 10
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.estimatedItemSize = CGSize(width: 50, height: 35)
         layout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         return layout
     }
