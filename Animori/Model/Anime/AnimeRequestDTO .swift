@@ -15,6 +15,7 @@ enum AnimeRequestDTO {
     case seasonNow
     case completeAnime
     case movieAnime
+    case search(String)
     
     var queryParameters: Encodable {
         switch self {
@@ -26,6 +27,8 @@ enum AnimeRequestDTO {
             return AnimeSearchRequest.completeBasic
         case .movieAnime:
             return AnimeSearchRequest.movieBasic
+        case .search(let query):
+            return AnimeSearchRequest(q: query, type: nil, status: nil, order_by: "popularity", sort: "desc")
         }
     }
     
@@ -44,6 +47,7 @@ struct TopAnimeRequest: Encodable {
 
 // MARK: - CompleteAnime (완결 명작, 극장판)
 struct AnimeSearchRequest: Encodable {
+    let q: String?
     let type: String?
     let status: String?
     let order_by: String?
@@ -51,11 +55,11 @@ struct AnimeSearchRequest: Encodable {
     let sfw: Bool = true
     
     static var completeBasic: AnimeSearchRequest {
-        return AnimeSearchRequest(type: nil, status: "complete", order_by: "score", sort: "desc")
+        return AnimeSearchRequest(q: nil, type: nil, status: "complete", order_by: "score", sort: "desc")
     }
     
     static var movieBasic: AnimeSearchRequest {
-        return AnimeSearchRequest(type: "movie", status: nil, order_by: "popularity", sort: "desc")
+        return AnimeSearchRequest(q: nil, type: "movie", status: nil, order_by: "popularity", sort: "desc")
     }
     
 }

@@ -43,4 +43,11 @@ final class AnimeClient {
             }
     }
     
+    func getAnimeSearch(query: String) -> Single<AnimeResponseDTO> {
+        return provider.request(.animeSearch(query))
+            .catch { error in
+                return Single.just(AnimeResponseDTO.empty)
+            }
+    }
+    
 }

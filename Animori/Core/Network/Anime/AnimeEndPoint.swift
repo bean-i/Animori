@@ -13,13 +13,14 @@ enum AnimeEndPoint: EndPoint {
     case seasonNow // getSeasonNow
     case completeAnime // getAnimeSearch
     case movieAnime // getAnimeSearch
+    case animeSearch(String) // getAnimeSearch
     
     var baseURL: String? { return Bundle.main.baseURL }
     var path: String {
         switch self {
         case .topAnime: return "/top/anime"
         case .seasonNow: return "/seasons/now"
-        case .completeAnime, .movieAnime: return "/anime"
+        case .completeAnime, .movieAnime, .animeSearch: return "/anime"
         }
     }
     
@@ -29,6 +30,7 @@ enum AnimeEndPoint: EndPoint {
         case .seasonNow: return .get
         case .completeAnime: return .get
         case .movieAnime: return .get
+        case .animeSearch: return .get
         }
     }
     
@@ -46,6 +48,8 @@ enum AnimeEndPoint: EndPoint {
             return AnimeRequestDTO.completeAnime.queryParameters
         case .movieAnime:
             return AnimeRequestDTO.movieAnime.queryParameters
+        case .animeSearch(let query):
+            return AnimeRequestDTO.search(query).queryParameters
         }
     }
     
