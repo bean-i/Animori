@@ -13,8 +13,8 @@ let mockAnimeCharacterResponse = AnimeCharacterResponseDTO(data: [
             characterId: 101,
             images: AnimeImage(
                 jpg: AnimeJPG(
-                    imageURL: "https://cdn.myanimelist.net/images/characters/10/101.jpg",
-                    largeImageURL: "https://cdn.myanimelist.net/images/characters/10/101l.jpg"
+                    imageURL: "https://picsum.photos/200/300",
+                    largeImageURL: "https://static.nocookie.net/naruto/images/3/37/Sakura_Haruno.png"
                 )
             ),
             name: "Sakura Haruno"
@@ -25,8 +25,8 @@ let mockAnimeCharacterResponse = AnimeCharacterResponseDTO(data: [
             characterId: 102,
             images: AnimeImage(
                 jpg: AnimeJPG(
-                    imageURL: "https://cdn.myanimelist.net/images/characters/10/102.jpg",
-                    largeImageURL: "https://cdn.myanimelist.net/images/characters/10/102l.jpg"
+                    imageURL: "https://picsum.photos/200/300",
+                    largeImageURL: "https://static.nocookie.net/naruto/images/2/27/Naruto_Uzumaki.png"
                 )
             ),
             name: "Naruto Uzumaki"
@@ -37,8 +37,8 @@ let mockAnimeCharacterResponse = AnimeCharacterResponseDTO(data: [
             characterId: 103,
             images: AnimeImage(
                 jpg: AnimeJPG(
-                    imageURL: "https://cdn.myanimelist.net/images/characters/10/103.jpg",
-                    largeImageURL: "https://cdn.myanimelist.net/images/characters/10/103l.jpg"
+                    imageURL: "https://picsum.photos/200/300",
+                    largeImageURL: "https://static.nocookie.net/naruto/images/4/4d/Sasuke_Uchiha.png"
                 )
             ),
             name: "Sasuke Uchiha"
@@ -49,8 +49,8 @@ let mockAnimeCharacterResponse = AnimeCharacterResponseDTO(data: [
             characterId: 104,
             images: AnimeImage(
                 jpg: AnimeJPG(
-                    imageURL: "https://cdn.myanimelist.net/images/characters/10/104.jpg",
-                    largeImageURL: "https://cdn.myanimelist.net/images/characters/10/104l.jpg"
+                    imageURL: "https://picsum.photos/200/300",
+                    largeImageURL: "https://static.nocookie.net/naruto/images/7/7a/Kakashi_Hatake.png"
                 )
             ),
             name: "Kakashi Hatake"
@@ -61,8 +61,8 @@ let mockAnimeCharacterResponse = AnimeCharacterResponseDTO(data: [
             characterId: 105,
             images: AnimeImage(
                 jpg: AnimeJPG(
-                    imageURL: "https://cdn.myanimelist.net/images/characters/10/105.jpg",
-                    largeImageURL: "https://cdn.myanimelist.net/images/characters/10/105l.jpg"
+                    imageURL: "https://picsum.photos/200/300",
+                    largeImageURL: "https://static.nocookie.net/naruto/images/9/9f/Hinata_Hyuga.png"
                 )
             ),
             name: "Hinata Hyuga"
@@ -73,8 +73,8 @@ let mockAnimeCharacterResponse = AnimeCharacterResponseDTO(data: [
             characterId: 106,
             images: AnimeImage(
                 jpg: AnimeJPG(
-                    imageURL: "https://cdn.myanimelist.net/images/characters/10/106.jpg",
-                    largeImageURL: "https://cdn.myanimelist.net/images/characters/10/106l.jpg"
+                    imageURL: "https://picsum.photos/200/300",
+                    largeImageURL: "https://static.nocookie.net/naruto/images/8/8a/Itachi_Uchiha.png"
                 )
             ),
             name: "Itachi Uchiha"
@@ -85,8 +85,8 @@ let mockAnimeCharacterResponse = AnimeCharacterResponseDTO(data: [
             characterId: 107,
             images: AnimeImage(
                 jpg: AnimeJPG(
-                    imageURL: "https://cdn.myanimelist.net/images/characters/10/107.jpg",
-                    largeImageURL: "https://cdn.myanimelist.net/images/characters/10/107l.jpg"
+                    imageURL: "https://picsum.photos/200/300",
+                    largeImageURL: "https://static.nocookie.net/naruto/images/5/52/Shikamaru_Nara.png"
                 )
             ),
             name: "Shikamaru Nara"
@@ -95,3 +95,4 @@ let mockAnimeCharacterResponse = AnimeCharacterResponseDTO(data: [
 ])
 
 let mockCharacterEntity = mockAnimeCharacterResponse.data.map { $0.toEntity() }
+
