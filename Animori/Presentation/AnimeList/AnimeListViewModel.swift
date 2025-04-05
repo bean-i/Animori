@@ -78,6 +78,17 @@ final class AnimeListViewModel: Reactor {
                     movieAnime,
                     Observable.just(Mutation.setTitle(TitleOption.movie.displayName))
                 )
+            
+            case .animeSearch(let query):
+                let searchAnime = AnimeClient.shared.getAnimeSearch(query: query)
+                    .map { $0.data.map { $0.toEntity() } }
+                    .map { Mutation.setAnimeList($0) }
+                    .asObservable()
+                
+                return Observable.merge(
+                    searchAnime,
+                    Observable.just(Mutation.setTitle(query))
+                )
                 
             default:
                 return Observable.just(Mutation.setAnimeList([]))
