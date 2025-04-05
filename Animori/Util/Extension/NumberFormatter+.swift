@@ -6,3 +6,16 @@
 //
 
 import Foundation
+
+extension NumberFormatter {
+    
+    static let formatted = { (value: Int) -> String in
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        guard let result = formatter.string(from: value as NSNumber) else {
+            return "0"
+        }
+        return result
+    }
+    
+}
