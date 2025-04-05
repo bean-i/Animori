@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+protocol AnimeGenreProtocol {
+    var id: Int { get }
+    var name: String { get }
+}

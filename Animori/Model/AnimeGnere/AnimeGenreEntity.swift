@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct AnimeGenreEntity: AnimeGenreProtocol {
+    let id: Int
+    let name: String
+}
