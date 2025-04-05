@@ -13,6 +13,7 @@ final class AnimeSearchViewModel: Reactor {
     
     enum Action {
         case loadInfo // 최근 검색어, 장르, 탑애니메이션, 탑캐릭터 다 로드
+//        case search(String)
     }
     
     enum Mutation {

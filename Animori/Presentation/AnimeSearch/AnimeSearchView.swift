@@ -12,6 +12,7 @@ final class AnimeSearchView: BaseView {
     
     let searchBar = UISearchBar()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
+    let tapGesture = UITapGestureRecognizer()
     
     override func configureHierarchy() {
         addSubViews(searchBar, collectionView)
@@ -20,7 +21,7 @@ final class AnimeSearchView: BaseView {
     override func configureLayout() {
         searchBar.snp.makeConstraints { make in
             make.top.equalTo(safeAreaLayoutGuide).offset(10)
-            make.horizontalEdges.equalToSuperview().inset(20)
+            make.horizontalEdges.equalToSuperview().inset(10)
             make.height.equalTo(44)
         }
         
@@ -31,6 +32,9 @@ final class AnimeSearchView: BaseView {
     }
     
     override func configureView() {
+        tapGesture.cancelsTouchesInView = false
+        addGestureRecognizer(tapGesture)
+        
         backgroundColor = .am(.base(.black))
         
         searchBar.searchBarStyle = .minimal

@@ -59,6 +59,7 @@ extension AnimeSearchViewController: View {
         // 데이터 로드
         reactor.action.onNext(.loadInfo)
         
+        // 섹션 구성
         reactor.state
             .map { state -> [AnimeSearchSection] in
                 let keywordSection = AnimeSearchSection(header: "최근 검색어",
@@ -78,8 +79,31 @@ extension AnimeSearchViewController: View {
             .bind(to: sectionRelay)
             .disposed(by: disposeBag)
         
+        // 섹션 적용
         sectionRelay
             .bind(to: mainView.collectionView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        // 키보드 내리기
+        Observable.merge(
+            mainView.tapGesture.rx.event.map { _ in },
+            mainView.collectionView.rx.didScroll.map { _ in }
+        )
+        .bind(with: self, onNext: { owner, _ in
+            owner.view.endEditing(true)
+        })
+        .disposed(by: disposeBag)
+
+        // 검색
+        mainView.searchBar.rx.searchButtonClicked
+            .withLatestFrom(mainView.searchBar.rx.text.orEmpty)
+            .bind(with: self) { owner, keyword in
+                let state = AnimeListViewModel.State(animeList: [])
+                let model = AnimeListViewModel(initialState: state)
+                let vc = AnimeListViewController(reactor: model)
+                model.action.onNext(.loadAnimeList(.animeSearch(keyword)))
+                owner.navigationController?.pushViewController(vc, animated: true)
+            }
             .disposed(by: disposeBag)
     }
     
