@@ -28,11 +28,12 @@ final class AnimeListViewModel: Reactor {
         var title: String = ""
         @Pulse var sort: [ListSortOption] = ListSortOption.allCases
         @Pulse var animeList: [any AnimeProtocol]
-        @Pulse var selectedSortOption: ListSortOption = .popularity
+        @Pulse var selectedSortOption: ListSortOption = .scoredBy
         @Pulse var selectedAnime: Int?
     }
     
     let initialState: State
+    private var currentEndpoint: AnimeEndPoint?
     
     init(initialState: State) {
         self.initialState = initialState
@@ -41,63 +42,20 @@ final class AnimeListViewModel: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadAnimeList(let query):
-            switch query {
-            case .seasonNow:
-                let seasonAnime = AnimeClient.shared.getSeasonNow()
-                    .map { $0.data.map { $0.toEntity() } }
-                    .map { [weak self] in self?.sortAnimeByPopularity($0) } // 시즌 애니메이션 인기순 정렬 디폴트
-                    .compactMap { $0 }
-                    .map { Mutation.setAnimeList($0) }
-                    .asObservable()
-                
-                return Observable.merge(
-                    seasonAnime,
-                    Observable.just(Mutation.setTitle(TitleOption.seasonNow.displayName))
-                )
-                
-            case .completeAnime:
-                let completeAnime = AnimeClient.shared.getCompleteAnime()
-                    .map { $0.data.map { $0.toEntity() } }
-                    .map { [weak self] in self?.sortAnimeByPopularity($0) } // 완결 애니메이션 인기순 정렬 디폴트
-                    .compactMap { $0 }
-                    .map { Mutation.setAnimeList($0) }
-                    .asObservable()
-                
-                return Observable.merge(
-                    completeAnime,
-                    Observable.just(Mutation.setTitle(TitleOption.complete.displayName))
-                )
-
-            case .movieAnime:
-                let movieAnime = AnimeClient.shared.getMovieAnime()
-                    .map { $0.data.map { $0.toEntity() } }
-                    .map { Mutation.setAnimeList($0) }
-                    .asObservable()
-                
-                return Observable.merge(
-                    movieAnime,
-                    Observable.just(Mutation.setTitle(TitleOption.movie.displayName))
-                )
-            
-            case .animeSearch(let query):
-                let searchAnime = AnimeClient.shared.getAnimeSearch(query: query)
-                    .map { $0.data.map { $0.toEntity() } }
-                    .map { Mutation.setAnimeList($0) }
-                    .asObservable()
-                
-                return Observable.merge(
-                    searchAnime,
-                    Observable.just(Mutation.setTitle(query))
-                )
-                
-            default:
-                return Observable.just(Mutation.setAnimeList([]))
-            }
+            // 현재 Endpoint 저장
+            currentEndpoint = query
+            return requestAnimeList(endpoint: query)
             
         case .sortSelected(let sortOption):
+            guard let endpoint = currentEndpoint else {
+                return Observable.empty()
+            }
+            
+            let newAnimeList = requestAnimeList(endpoint: endpoint, sortBy: sortOption)
+            
             return Observable.merge(
                 Observable.just(Mutation.setSortOptions(sortOption)),
-                Observable.just(Mutation.setAnimeList(sortAnimeList(sortOption)))
+                newAnimeList
             )
 
         case .animeSelected(let id):
@@ -119,11 +77,76 @@ final class AnimeListViewModel: Reactor {
         }
         return newState
     }
+    
+    // 네트워크 통신
+    private func requestAnimeList(endpoint: AnimeEndPoint, sortBy: ListSortOption = .scoredBy) -> Observable<Mutation> {
+        switch endpoint {
+        case .seasonNow:
+            let seasonAnime = AnimeClient.shared.getSeasonNow()
+                .map { $0.data.map { $0.toEntity() } }
+                .map { [weak self] in self?.sortAnimeByPopularity($0) } // 시즌 애니메이션 인기순 정렬 디폴트
+                .compactMap { $0 }
+                .map { Mutation.setAnimeList($0) }
+                .asObservable()
+            
+            return Observable.merge(
+                seasonAnime,
+                Observable.just(Mutation.setTitle(TitleOption.seasonNow.displayName))
+            )
+            
+        case .completeAnime:
+            let completeAnime = AnimeClient.shared.getCompleteAnime(sortBy: sortBy)
+                .map { $0.data.map { $0.toEntity() } }
+                .map { Mutation.setAnimeList($0) }
+                .asObservable()
+            
+            return Observable.merge(
+                completeAnime,
+                Observable.just(Mutation.setTitle(TitleOption.complete.displayName))
+            )
+
+        case .movieAnime:
+            let movieAnime = AnimeClient.shared.getMovieAnime(sortBy: sortBy)
+                .map { $0.data.map { $0.toEntity() } }
+                .map { Mutation.setAnimeList($0) }
+                .asObservable()
+            
+            return Observable.merge(
+                movieAnime,
+                Observable.just(Mutation.setTitle(TitleOption.movie.displayName))
+            )
+        
+        case .animeSearch(let query, _):
+            let searchAnime = AnimeClient.shared.getAnimeSearch(query: query, sortBy: sortBy)
+                .map { $0.data.map { $0.toEntity() } }
+                .map { Mutation.setAnimeList($0) }
+                .asObservable()
+            
+            return Observable.merge(
+                searchAnime,
+                Observable.just(Mutation.setTitle(query))
+            )
+            
+        case .animeByGenre(let genreID, _):
+            let genreAnime = AnimeClient.shared.getAnimeGenre(genreID: genreID, sortBy: sortBy)
+                .map { $0.data.map { $0.toEntity() } }
+                .map { Mutation.setAnimeList($0) }
+                .asObservable()
+            
+            return Observable.merge(
+                genreAnime,
+                Observable.just(Mutation.setTitle("장르"))
+            )
+            
+        default:
+            return Observable.just(Mutation.setAnimeList([]))
+        }
+    }
 
     private func sortAnimeList(_ sortOption: ListSortOption) -> [any AnimeProtocol] {
         switch sortOption {
-        case .popularity:
-            return currentState.animeList.sorted { $0.popularity > $1.popularity }
+        case .scoredBy:
+            return currentState.animeList.sorted { $0.scoredBy > $1.scoredBy }
         case .favorites:
             return currentState.animeList.sorted { $0.favorites > $1.favorites }
         case .score:
@@ -132,7 +155,7 @@ final class AnimeListViewModel: Reactor {
     }
     
     private func sortAnimeByPopularity(_ anime: [any AnimeProtocol]) -> [any AnimeProtocol] {
-        return anime.sorted { $0.popularity > $1.popularity }
+        return anime.sorted { $0.scoredBy > $1.scoredBy }
     }
     
 }
