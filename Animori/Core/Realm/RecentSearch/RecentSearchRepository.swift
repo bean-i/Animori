@@ -20,7 +20,7 @@ final class RecentSearchRepository: RecentSearchService {
     private let realm = try! Realm()
 
     func getFileURL() {
-        print("Realm DB 경로: \(realm.configuration.fileURL!)")
+//        print("Realm DB 경로: \(realm.configuration.fileURL!)")
     }
 
     func fetchAll() -> [RecentSearchTable] {
@@ -35,7 +35,7 @@ final class RecentSearchRepository: RecentSearchService {
                 realm.add(data)
             }
         } catch {
-            print("⚠️ Realm Create Error: \(error.localizedDescription)")
+//            print("⚠️ Realm Create Error: \(error.localizedDescription)")
         }
     }
     
@@ -43,15 +43,15 @@ final class RecentSearchRepository: RecentSearchService {
         do {
             guard let objectId = try? ObjectId(string: id),
                   let target = realm.object(ofType: RecentSearchTable.self, forPrimaryKey: objectId) else {
-                print("⚠️ 올바른 ObjectId가 아님 또는 데이터가 없음")
+//                print("⚠️ 올바른 ObjectId가 아님 또는 데이터가 없음")
                 return
             }
             try realm.write {
                 realm.delete(target)
             }
-            print("✅ 삭제 성공")
+//            print("✅ 삭제 성공")
         } catch {
-            print("⚠️ Realm 삭제 중 오류: \(error.localizedDescription)")
+//            print("⚠️ Realm 삭제 중 오류: \(error.localizedDescription)")
         }
     }
 
