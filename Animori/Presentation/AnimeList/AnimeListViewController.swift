@@ -55,7 +55,9 @@ extension AnimeListViewController: View {
         // 정렬 버튼 탭
         mainView.sortButtonCollectionView.rx.modelSelected(ListSortOption.self)
             .bind(with: self) { owner, option in
-                owner.mainView.animeListCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+                if owner.mainView.animeListCollectionView.numberOfItems(inSection: 0) > 0 {
+                    owner.mainView.animeListCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+                }
                 reactor.action.onNext(.sortSelected(option))
             }
             .disposed(by: disposeBag)
@@ -72,8 +74,7 @@ extension AnimeListViewController: View {
         reactor.pulse(\.$selectedAnime)
             .compactMap { $0 }
             .bind(with: self) { owner, id in
-                let animeDetailViewModel = AnimeDetailViewModel(animeID: id, initialState: AnimeDetailViewModel.State())
-                let animeDetailVC = AnimeDetailViewController(reactor: animeDetailViewModel)
+                let animeDetailVC = DIContainer.shared.makeAnimeDetailVC(id: id)
                 owner.navigationController?.pushViewController(animeDetailVC, animated: true)
             }
             .disposed(by: disposeBag)
@@ -88,6 +89,18 @@ extension AnimeListViewController: View {
                 } else {
                     owner.mainView.sortButtonCollectionView.isHidden = false
                 }
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.pulse(\.$error)
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, _ in
+                let alert = DIContainer.shared.makeAlert(retryAction: {
+                    if let endpoint = reactor.currentState.currentEndpoint {
+                        owner.reactor?.action.onNext(.loadAnimeList(endpoint))
+                    }
+                })
+                owner.present(alert, animated: true)
             }
             .disposed(by: disposeBag)
     }

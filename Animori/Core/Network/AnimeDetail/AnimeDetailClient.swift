@@ -18,28 +18,28 @@ final class AnimeDetailClient {
     func getAnimeFullById(id: Int) -> Single<AnimeDetailResponseDTO> {
         return provider.request(.fullAnimeInfo(id))
             .catch { error in
-                return Single.just(AnimeDetailResponseDTO.empty)
+                return Single.error(error)
             }
     }
     
     func getAnimeReviews(id: Int) -> Single<AnimeReviewResponseDTO> {
         return provider.request(.animeReviews(id))
             .catch { error in
-                return Single.just(AnimeReviewResponseDTO.empty)
+                return Single.error(error)
             }
     }
     
     func getAnimeRecommendations(id: Int) -> Single<AnimeRecommendResponseDTO> {
         return provider.request(.animeRecommendations(id))
             .catch { error in
-                return Single.just(AnimeRecommendResponseDTO.empty)
+                return Single.error(error)
             }
     }
     
     func getAnimeCharacters(id: Int) -> Single<AnimeCharacterResponseDTO> {
         return provider.request(.animeCharacters(id))
             .catch { error in
-                return Single.just(AnimeCharacterResponseDTO.empty)
+                return Single.error(error)
             }
     }
     

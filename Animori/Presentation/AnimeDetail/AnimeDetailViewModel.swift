@@ -24,6 +24,7 @@ final class AnimeDetailViewModel: Reactor {
         case setCharacters([any AnimeCharacterProtocol])
         case setSimilar([any AnimeRecommendProtocol])
         case setOTTURL(URL?)
+        case setError(Error)
     }
 
     struct State {
@@ -33,6 +34,7 @@ final class AnimeDetailViewModel: Reactor {
         var similarAnime: [any AnimeRecommendProtocol] = []
         var isLoading: Bool = false
         var ottURL: URL? = nil
+        @Pulse var error: Error? = nil
     }
     
     private let animeID: Int
@@ -50,23 +52,35 @@ final class AnimeDetailViewModel: Reactor {
             
             let detailObs = AnimeDetailClient.shared.getAnimeFullById(id: animeID)
                 .map { Mutation.setDetail($0.data.toEntity()) }
+                .catch { error in
+                    return Single.just(Mutation.setError(error))
+                }
                 .asObservable()
             
             let reviewsObs = detailObs.flatMap { [weak self] _ in
                 guard let self else { return Observable.just(Mutation.setReviews([]))}
                 return AnimeDetailClient.shared.getAnimeReviews(id: animeID)
                     .map { Mutation.setReviews($0.data.map { $0.toEntity() }) }
+                    .catch { error in
+                        return Single.just(Mutation.setError(error))
+                    }
                     .asObservable()
             }
             
             let charactersObs = AnimeDetailClient.shared.getAnimeCharacters(id: animeID)
                 .map { Mutation.setCharacters($0.data.map { $0.toEntity() }) }
+                .catch { error in
+                    return Single.just(Mutation.setError(error))
+                }
                 .asObservable()
             
             let recommendObs = charactersObs.flatMap { [weak self] _ in
                 guard let self else { return Observable.just(Mutation.setSimilar([]))}
                 return AnimeDetailClient.shared.getAnimeRecommendations(id: self.animeID)
                     .map { Mutation.setSimilar($0.data.map { $0.toEntity() }) }
+                    .catch { error in
+                        return Single.just(Mutation.setError(error))
+                    }
                     .asObservable()
             }
             
@@ -101,6 +115,8 @@ final class AnimeDetailViewModel: Reactor {
             newState.similarAnime = similar
         case .setOTTURL(let url):
             newState.ottURL = url
+        case .setError(let error):
+            newState.error = error
         }
         return newState
     }

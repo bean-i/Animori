@@ -16,6 +16,7 @@ final class AnimeSearchViewModel: Reactor {
         case search(String)
         case genreSelected(any AnimeGenreProtocol)
         case removeRecentSearch(String, String)
+        case animeSelected(Int)
     }
     
     enum Mutation {
@@ -25,6 +26,8 @@ final class AnimeSearchViewModel: Reactor {
         case setTopAnimes([any AnimeProtocol])
         case setTopCharacters([any TopCharacterProtocol])
         case setGenreSelected(any AnimeGenreProtocol)
+        case setSelectedAnime(Int)
+        case setError(Error)
     }
     
     struct State {
@@ -34,6 +37,8 @@ final class AnimeSearchViewModel: Reactor {
         var topAnimes: [any AnimeProtocol] = []
         var topCharacters: [any TopCharacterProtocol] = []
         @Pulse var selectedGenre: AnimeGenreProtocol? = nil
+        @Pulse var selectedAnime: Int?
+        @Pulse var error: Error? = nil
     }
     
     private let recentSearchRepository = RecentSearchRepository()
@@ -48,21 +53,30 @@ final class AnimeSearchViewModel: Reactor {
             let topAnime = AnimeClient.shared.getTopAnime(query: TopAnimeRequest.basic)
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setTopAnimes($0) }
+                .catch { error in
+                    return Single.just(Mutation.setError(error))
+                }
                 .asObservable()
 
             let topCharacters = AnimeCharacterClient.shared.getTopCharacters()
                 .map { $0.data.map { $0.toEntity() } }
                 .map { Mutation.setTopCharacters($0) }
+                .catch { error in
+                    return Single.just(Mutation.setError(error))
+                }
                 .asObservable()
 
             let genres = AnimeGenreClient.shared.getAnimeGenres()
                 .map { $0.data.map { $0.toEntity() } }
                 .map { Mutation.setGenres($0) }
+                .catch { error in
+                    return Single.just(Mutation.setError(error))
+                }
                 .asObservable()
 
             let keywords = Array(recentSearchRepository.fetchAll())
 
-            return Observable.merge(
+            return Observable.concat(
                 Observable.just(Mutation.setRecentKeywords(keywords)),
                 genres,
                 topAnime,
@@ -74,7 +88,7 @@ final class AnimeSearchViewModel: Reactor {
             recentSearchRepository.create(data: table)
             return Observable.merge(
                 Observable.just(Mutation.setRecentKeywords(recentSearchRepository.fetchAll())),
-                Observable.just(Mutation.setSearchedKeyword(keyword))  // 새 mutation 추가
+                Observable.just(Mutation.setSearchedKeyword(keyword))
             )
 
         case .removeRecentSearch(let id, _):
@@ -83,6 +97,9 @@ final class AnimeSearchViewModel: Reactor {
 
         case .genreSelected(let genre):
             return Observable.just(Mutation.setGenreSelected(genre))
+            
+        case .animeSelected(let id):
+            return Observable.just(Mutation.setSelectedAnime(id))
         }
     }
     
@@ -101,6 +118,10 @@ final class AnimeSearchViewModel: Reactor {
             newState.selectedGenre = genreID
         case .setSearchedKeyword(let keyword):
             newState.searchedKeyword = keyword
+        case .setError(let error):
+            newState.error = error
+        case .setSelectedAnime(let id):
+            newState.selectedAnime = id
         }
         return newState
     }

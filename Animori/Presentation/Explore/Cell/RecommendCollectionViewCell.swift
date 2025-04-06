@@ -21,6 +21,14 @@ final class RecommendCollectionViewCell: BaseCollectionViewCell {
     
     private let gradientLayer = CAGradientLayer()
     
+    private var currentTask: Task<Void, Never>?
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        posterImageView.image = nil
+        currentTask?.cancel()
+    }
+    
     override func configureHierarchy() {
         containView.addSubViews(
             posterImageView,
@@ -97,13 +105,17 @@ final class RecommendCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configureData(with anime: any AnimeProtocol) {
-        posterImageView.setImage(with: anime.image)
+        currentTask?.cancel()
+        currentTask = posterImageView.setImage(from: anime.image)
+
         titleLabel.text = anime.title
         ratingLabel.text = "★ \(anime.rate)"
     }
     
     func configureRecommendData(with anime: any AnimeRecommendProtocol) {
-        posterImageView.setImage(with: anime.image)
+        currentTask?.cancel()
+        currentTask = posterImageView.setImage(from: anime.image)
+        
         titleLabel.text = anime.title
     }
     

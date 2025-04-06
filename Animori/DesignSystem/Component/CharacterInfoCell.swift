@@ -18,6 +18,14 @@ final class CharacterInfoCell: BaseCollectionViewCell {
     private let nameLabel = UILabel()
     private let subTitleLabel = UILabel()
     
+    private var currentTask: Task<Void, Never>?
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        characterImageView.image = nil
+        currentTask?.cancel()
+    }
+    
     override func configureHierarchy() {
         contentView.addSubViews(
             characterImageView,
@@ -76,7 +84,8 @@ final class CharacterInfoCell: BaseCollectionViewCell {
     }
     
     func configureData(with character: any TopCharacterProtocol) {
-        characterImageView.setImage(with: character.image)
+        currentTask?.cancel()
+        currentTask = characterImageView.setImage(from: character.image)
         
         nameLabel.text = character.name
         subTitleLabel.text = character.favorites

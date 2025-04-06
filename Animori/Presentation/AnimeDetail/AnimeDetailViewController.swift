@@ -132,7 +132,6 @@ extension AnimeDetailViewController: View {
             .subscribe(onNext: { item in
                 switch item {
                 case .ott(let ott):
-                    print("\(ott.name)선택!!!, \(ott.url)로 이동 ㄱㄱ")
                     reactor.action.onNext(.ottTapped(ott.url))
                 default: break
                 }
@@ -146,6 +145,16 @@ extension AnimeDetailViewController: View {
             .bind(with: self) { owner, url in
                 let safariVC = SFSafariViewController(url: url)
                 owner.present(safariVC, animated: true, completion: nil)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.pulse(\.$error)
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, _ in
+                let alert = DIContainer.shared.makeAlert(retryAction: {
+                    owner.reactor?.action.onNext(.loadDetailInfo)
+                })
+                owner.present(alert, animated: true)
             }
             .disposed(by: disposeBag)
     }

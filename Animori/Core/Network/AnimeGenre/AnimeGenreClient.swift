@@ -18,7 +18,7 @@ final class AnimeGenreClient {
     func getAnimeGenres() -> Single<AnimeGenreResponseDTO> {
         return provider.request(.genres)
             .catch { error in
-                return Single.just(AnimeGenreResponseDTO.empty)
+                return Single.error(error)
             }
     }
     

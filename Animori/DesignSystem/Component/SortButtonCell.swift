@@ -12,47 +12,52 @@ final class SortButtonCell: BaseCollectionViewCell {
     
     static let identifier = "SortButtonCell"
     
-    private let button = UIButton()
-    private var config = UIButton.Configuration.filled()
-    private var titleContainer = AttributeContainer()
+    private let label = UILabel()
     
     override var isSelected: Bool {
         didSet {
-            configureButton()
+            configureLabel()
         }
     }
     
     override func configureHierarchy() {
-        contentView.addSubview(button)
+        contentView.addSubview(label)
     }
     
     override func configureLayout() {
-        button.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        label.snp.makeConstraints { make in
+            make.verticalEdges.equalToSuperview().inset(5)
+            make.horizontalEdges.equalToSuperview().inset(10)
         }
     }
     
     override func configureView() {
-        config.cornerStyle = .capsule
-        config.baseBackgroundColor = .am(.base(.black))
-        config.baseForegroundColor = .am(.base(.white))
-        config.background.strokeColor = .am(.base(.white))
-        config.background.strokeWidth = 0.6
-        config.background.cornerRadius = 15
-        button.configuration = config
-        button.isUserInteractionEnabled = false
-        titleContainer.font = .am(.subtitleMedium)
+        contentView.layer.cornerRadius = 15
+        contentView.layer.borderWidth = 0.6
+        contentView.layer.borderColor = UIColor.am(.base(.white)).cgColor
+        
+        label.textAlignment = .center
+        label.font = .am(.subtitleMedium)
+        label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
+        
+        configureLabel()
     }
     
     func configureData(title: String) {
-        config.attributedTitle = AttributedString(title, attributes: titleContainer)
-        configureButton()
+        label.text = title
+        configureLabel()
     }
     
-    private func configureButton() {
-        config.baseBackgroundColor = isSelected ? .am(.base(.white)) : .am(.base(.black))
-        config.baseForegroundColor = isSelected ? .am(.base(.black)) : .am(.base(.white))
-        button.configuration = config
+    private func configureLabel() {
+        contentView.backgroundColor = isSelected ? .am(.base(.white)) : .am(.base(.black))
+        label.textColor = isSelected ? .am(.base(.black)) : .am(.base(.white))
     }
-
+    
+    // 셀 크기를 레이블에 맞게 동적으로 조정
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        let size = label.systemLayoutSizeFitting(layoutAttributes.size)
+        layoutAttributes.frame.size = CGSize(width: size.width + 20, height: 35) // 좌우 여백 10씩 추가
+        return layoutAttributes
+    }
 }

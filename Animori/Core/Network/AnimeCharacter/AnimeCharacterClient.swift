@@ -18,7 +18,7 @@ final class AnimeCharacterClient {
     func getTopCharacters() -> Single<TopCharacterResponseDTO> {
         return provider.request(.topCharacter)
             .catch { error in
-                return Single.just(TopCharacterResponseDTO.empty)
+                return Single.error(error)
             }
     }
     

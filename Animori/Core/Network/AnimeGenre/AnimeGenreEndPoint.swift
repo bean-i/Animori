@@ -35,7 +35,7 @@ enum AnimeGenreEndPoint: EndPoint {
     }
     
     func error(_ statusCode: Int?, data: Data) -> any Error {
-        return URLError(.unknown) // 임시
+        return URLError(.unknown)
     }
     
 }

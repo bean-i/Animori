@@ -19,7 +19,7 @@ enum RecommendOption: String, CaseIterable {
         case .complete:
             return LocalizedStrings.RecommendOption.complete
         case .short:
-            return LocalizedStrings.RecommendOption.short
+            return LocalizedStrings.RecommendOption.movie
         }
     }
 }

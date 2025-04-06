@@ -15,9 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        let state = ExploreViewModel.State(topAnime: [], seasonAnime: [], completeAnime: [], movieAnime: [])
-        let vc = ExploreViewController(reactor: ExploreViewModel(initialState: state))
-        window?.rootViewController = UINavigationController(rootViewController: vc)
+        window?.rootViewController = DIContainer.shared.makeTabBarVC()
         window?.makeKeyAndVisible()
     }
 

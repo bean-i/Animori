@@ -98,6 +98,14 @@ final class TrendPagerViewCell: BaseFSPagerViewCell {
     private var totalGenreStackViewWidth: CGFloat = 0
     private var genreStackViewWidth: CGFloat = 0
     
+    private var currentTask: Task<Void, Never>?
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        posterImageView.image = nil
+        currentTask?.cancel()
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         totalGenreStackViewWidth = containView.frame.width - 20
@@ -156,6 +164,7 @@ final class TrendPagerViewCell: BaseFSPagerViewCell {
         posterImageView.tintColor = .am(.base(.gray))
         posterImageView.contentMode = .scaleAspectFill
         posterImageView.clipsToBounds = true
+        posterImageView.backgroundColor = .amGray
         
         lineView.backgroundColor = .am(.base(.white))
         
@@ -182,7 +191,9 @@ final class TrendPagerViewCell: BaseFSPagerViewCell {
     
     
     func configureData(data: any AnimeProtocol) {
-        posterImageView.setImage(with: data.image)
+        currentTask?.cancel()
+        currentTask = posterImageView.setImage(from: data.image)
+        
         titleLabel.text = data.title
         ratingLabel.text = "★ \(data.rate)"
         

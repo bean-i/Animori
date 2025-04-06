@@ -19,6 +19,7 @@ final class AnimeSearchViewController: BaseViewController<AnimeSearchView> {
     init(reactor: AnimeSearchViewModel) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
+        self.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "magnifyingglass"), tag: 1)
     }
     
     override func configureNavigation() { title = "검색" }
@@ -133,21 +134,41 @@ extension AnimeSearchViewController: View {
             }
             .disposed(by: disposeBag)
         
+        // 애니메이션 상세화면으로 전환
+        reactor.pulse(\.$selectedAnime)
+            .compactMap { $0 }
+            .bind(with: self) { owner, id in
+                let animeDetailVC = DIContainer.shared.makeAnimeDetailVC(id: id)
+                owner.navigationController?.pushViewController(animeDetailVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         // 장르 탭
         mainView.collectionView.rx.modelSelected(AnimeSearchSectionItem.self)
             .subscribe(with: self) { owner, item in
                 switch item {
-                case .recentSearch(let id, let keyword):
+                case .recentSearch(_, let keyword):
                     reactor.action.onNext(.search(keyword))
                 case .genreSearch(let genre):
                     reactor.action.onNext(.genreSelected(genre))
                 case .topAnime(let anime):
-                    print("애니 선택", anime.title)
+                    reactor.action.onNext(.animeSelected(anime.id))
                 case .topCharacter(let character):
                     print("캐릭터 선택", character.name)
                 }
             }
             .disposed(by: disposeBag)
+        
+        reactor.pulse(\.$error)
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, _ in
+                let alert = DIContainer.shared.makeAlert(retryAction: {
+                    owner.reactor?.action.onNext(.loadInfo)
+                })
+                owner.present(alert, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
     }
     
 }
