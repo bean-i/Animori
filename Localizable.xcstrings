@@ -49,6 +49,30 @@
         }
       }
     },
+    "movie_anime" : {
+      "comment" : "애니메이션 영화",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Top Anime Movies"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "人気アニメ映画"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "인기 애니메이션 영화"
+          }
+        }
+      }
+    },
     "new_season_anime" : {
       "comment" : "이번 시즌 애니메이션",
       "extractionState" : "manual",
@@ -69,30 +93,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이번 시즌! 신작 애니메이션"
-          }
-        }
-      }
-    },
-    "short_anime_for_busy_people" : {
-      "comment" : "짧은 애니메이션",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Short Anime for Your Busy Schedule"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "忙しいあなたにぴったりの短編アニメ"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "시간이 없는 당신을 위한 짧은 애니메이션"
           }
         }
       }
