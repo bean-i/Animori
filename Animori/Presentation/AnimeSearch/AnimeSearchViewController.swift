@@ -153,7 +153,8 @@ extension AnimeSearchViewController: View {
                     reactor.action.onNext(.genreSelected(genre))
                 case .topAnime(let anime):
                     reactor.action.onNext(.animeSelected(anime.id))
-                case .topCharacter(let character):
+                case .topCharacter(_):
+                    break
 //                    print("캐릭터 선택", character.name)
                 }
             }
