@@ -9,7 +9,7 @@ import Foundation
 import RxDataSources
 
 enum AnimeSearchSectionItem {
-    case recentSearch(String)
+    case recentSearch(String, String)
     case genreSearch(any AnimeGenreProtocol)
     case topAnime(any AnimeProtocol)
     case topCharacter(any TopCharacterProtocol)
