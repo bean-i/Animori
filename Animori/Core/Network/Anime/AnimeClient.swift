@@ -18,42 +18,42 @@ final class AnimeClient {
     func getTopAnime(query: TopAnimeRequest) -> Single<AnimeResponseDTO> {
         return provider.request(.topAnime(query: query))
             .catch { error in
-                return Single.just(AnimeResponseDTO.empty)
+                return Single.error(error)
             }
     }
     
     func getSeasonNow() -> Single<AnimeResponseDTO> {
         return provider.request(.seasonNow)
             .catch { error in
-                return Single.just(AnimeResponseDTO.empty)
+                return Single.error(error)
             }
     }
     
     func getCompleteAnime(sortBy: ListSortOption) -> Single<AnimeResponseDTO> {
         return provider.request(.completeAnime(sortBy))
             .catch { error in
-                return Single.just(AnimeResponseDTO.empty)
+                return Single.error(error)
             }
     }
     
     func getMovieAnime(sortBy: ListSortOption) -> Single<AnimeResponseDTO> {
         return provider.request(.movieAnime(sortBy))
             .catch { error in
-                return Single.just(AnimeResponseDTO.empty)
+                return Single.error(error)
             }
     }
     
     func getAnimeSearch(query: String, sortBy: ListSortOption) -> Single<AnimeResponseDTO> {
         return provider.request(.animeSearch(query, sortBy))
             .catch { error in
-                return Single.just(AnimeResponseDTO.empty)
+                return Single.error(error)
             }
     }
     
     func getAnimeGenre(genre: AnimeGenreProtocol, sortBy: ListSortOption) -> Single<AnimeResponseDTO> {
         return provider.request(.animeByGenre(genre, sortBy))
             .catch { error in
-                return Single.just(AnimeResponseDTO.empty)
+                return Single.error(error)
             }
     }
     

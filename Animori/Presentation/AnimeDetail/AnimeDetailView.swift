@@ -205,7 +205,8 @@ final class AnimeDetailView: BaseView {
     
     // MARK: - ConfigureData
     func configureData(anime: any AnimeDetailProtocol) {
-        posterImageView.setImage(with: anime.image)
+        
+        posterImageView.setImage(from: anime.image)
         ratingLabel.text = "★ \(anime.rate)"
         configureGenre(genres: anime.genre)
         ageView.configureData(age: anime.age)

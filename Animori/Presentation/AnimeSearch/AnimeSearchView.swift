@@ -32,6 +32,8 @@ final class AnimeSearchView: BaseView {
     }
     
     override func configureView() {
+        backgroundColor = .am(.base(.black))
+        
         tapGesture.cancelsTouchesInView = false
         addGestureRecognizer(tapGesture)
         

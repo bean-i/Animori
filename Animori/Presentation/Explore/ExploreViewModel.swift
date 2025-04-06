@@ -24,6 +24,7 @@ final class ExploreViewModel: Reactor {
         case setCompleteAnime(([any AnimeProtocol]))
         case setMovieAnime(([any AnimeProtocol]))
         case setSelectedAnime(Int)
+        case setError(Error)
     }
     
     struct State {
@@ -34,8 +35,10 @@ final class ExploreViewModel: Reactor {
         @Pulse var movieAnime: [any AnimeProtocol] // 영화 애니메이션
         var selectedSortOption: SortOption = .popular
         @Pulse var selectedAnime: Int?
+        @Pulse var error: Error? = nil
     }
     
+    var isLoading = false
     let initialState: State
     
     init(initialState: State) {
@@ -45,30 +48,44 @@ final class ExploreViewModel: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadAnime:
+            if isLoading { return Observable.empty() } // 중복 요청 방지
+            isLoading = true
             let topAnime = AnimeClient.shared.getTopAnime(query: TopAnimeRequest.basic)
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setTopAnime($0) }
+                .catch { error in
+                    return Single.just(Mutation.setError(error))
+                }
                 .asObservable()
             
             let seasonAnime = AnimeClient.shared.getSeasonNow()
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setSeasonAnime($0) }
+                .catch { error in
+                    return Single.just(Mutation.setError(error))
+                }
                 .asObservable()
             
             let completeAnime = AnimeClient.shared.getCompleteAnime(sortBy: .scoredBy)
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setCompleteAnime($0) }
+                .catch { error in
+                    return Single.just(Mutation.setError(error))
+                }
                 .asObservable()
             
             let movieAnime = AnimeClient.shared.getMovieAnime(sortBy: .scoredBy)
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setMovieAnime($0) }
+                .catch { error in
+                    return Single.just(Mutation.setError(error))
+                }
                 .asObservable()
-             
+            
             return Observable.concat(topAnime, seasonAnime, completeAnime, movieAnime)
+                .do(onCompleted: { [weak self] in self?.isLoading = false })
             
         case .sortSelected(let sortOption):
-            print("정렬 탭", sortOption.displayName)
             let newTopAnime = sortTopAnime(sortOption)
             return Observable.merge(
                 Observable.just(Mutation.setSortOptions(sortOption)),
@@ -76,7 +93,6 @@ final class ExploreViewModel: Reactor {
             )
 
         case .animeSelected(let id):
-            print("선택 됨", id)
             return Observable.just(Mutation.setSelectedAnime(id))
         }
     }
@@ -96,6 +112,8 @@ final class ExploreViewModel: Reactor {
             newState.movieAnime = anime
         case .setSelectedAnime(let id):
             newState.selectedAnime = id
+        case .setError(let error):
+            newState.error = error
         }
         return newState
     }
@@ -105,6 +123,9 @@ final class ExploreViewModel: Reactor {
         return AnimeClient.shared.getTopAnime(query: newQuery)
             .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
             .map { Mutation.setTopAnime($0) }
+            .catch { error in
+                return Single.just(Mutation.setError(error))
+            }
             .asObservable()
     }
 }

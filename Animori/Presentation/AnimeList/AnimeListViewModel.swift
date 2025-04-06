@@ -23,6 +23,7 @@ final class AnimeListViewModel: Reactor {
         case setSortOptions(ListSortOption)
         case setAnimeList([any AnimeProtocol])
         case setSelectedAnime(Int)
+        case setError(Error)
     }
     
     struct State {
@@ -32,6 +33,7 @@ final class AnimeListViewModel: Reactor {
         @Pulse var animeList: [any AnimeProtocol]
         @Pulse var selectedSortOption: ListSortOption = .scoredBy
         @Pulse var selectedAnime: Int?
+        @Pulse var error: Error? = nil
     }
     
     let initialState: State
@@ -81,6 +83,8 @@ final class AnimeListViewModel: Reactor {
             newState.animeList = animeList
         case .setSelectedAnime(let id):
             newState.selectedAnime = id
+        case .setError(let error):
+            newState.error = error
         }
         return newState
     }
@@ -95,6 +99,9 @@ final class AnimeListViewModel: Reactor {
                 .compactMap { $0 }
                 .map { Mutation.setAnimeList($0) }
                 .asObservable()
+                .catch { error -> Observable<Mutation> in
+                    return Observable.just(Mutation.setError(error))
+                }
             
             return Observable.merge(
                 seasonAnime,
@@ -105,6 +112,9 @@ final class AnimeListViewModel: Reactor {
             let completeAnime = AnimeClient.shared.getCompleteAnime(sortBy: sortBy)
                 .map { $0.data.map { $0.toEntity() } }
                 .map { Mutation.setAnimeList($0) }
+                .catch { error in
+                    return Single.just(Mutation.setError(error))
+                }
                 .asObservable()
             
             return Observable.merge(
@@ -116,6 +126,9 @@ final class AnimeListViewModel: Reactor {
             let movieAnime = AnimeClient.shared.getMovieAnime(sortBy: sortBy)
                 .map { $0.data.map { $0.toEntity() } }
                 .map { Mutation.setAnimeList($0) }
+                .catch { error in
+                    return Single.just(Mutation.setError(error))
+                }
                 .asObservable()
             
             return Observable.merge(
@@ -127,6 +140,9 @@ final class AnimeListViewModel: Reactor {
             let searchAnime = AnimeClient.shared.getAnimeSearch(query: query, sortBy: sortBy)
                 .map { $0.data.map { $0.toEntity() } }
                 .map { Mutation.setAnimeList($0) }
+                .catch { error in
+                    return Single.just(Mutation.setError(error))
+                }
                 .asObservable()
             
             return Observable.merge(
@@ -138,6 +154,9 @@ final class AnimeListViewModel: Reactor {
             let genreAnime = AnimeClient.shared.getAnimeGenre(genre: genre, sortBy: sortBy)
                 .map { $0.data.map { $0.toEntity() } }
                 .map { Mutation.setAnimeList($0) }
+                .catch { error in
+                    return Single.just(Mutation.setError(error))
+                }
                 .asObservable()
             
             return Observable.merge(

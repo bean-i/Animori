@@ -19,6 +19,7 @@ final class AnimeSearchViewController: BaseViewController<AnimeSearchView> {
     init(reactor: AnimeSearchViewModel) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
+        self.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "magnifyingglass"), tag: 1)
     }
     
     override func configureNavigation() { title = "검색" }
@@ -137,7 +138,7 @@ extension AnimeSearchViewController: View {
         mainView.collectionView.rx.modelSelected(AnimeSearchSectionItem.self)
             .subscribe(with: self) { owner, item in
                 switch item {
-                case .recentSearch(let id, let keyword):
+                case .recentSearch(_, let keyword):
                     reactor.action.onNext(.search(keyword))
                 case .genreSearch(let genre):
                     reactor.action.onNext(.genreSelected(genre))
@@ -148,6 +149,17 @@ extension AnimeSearchViewController: View {
                 }
             }
             .disposed(by: disposeBag)
+        
+        reactor.pulse(\.$error)
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, _ in
+                let alert = DIContainer.shared.makeAlert(retryAction: {
+                    owner.reactor?.action.onNext(.loadInfo)
+                })
+                owner.present(alert, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
     }
     
 }

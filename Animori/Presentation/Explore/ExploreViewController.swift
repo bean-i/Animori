@@ -21,11 +21,15 @@ final class ExploreViewController: BaseViewController<ExploreView> {
     init(reactor: ExploreViewModel) {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
+        self.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "house.fill"), tag: 0)
     }
     
     // 밑 컬렉션뷰 2개에서 화면 전환하면, 정렬 탭 UI가 초기화되는 버그..
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if !(reactor?.isLoading ?? false) { // 요청 중이 아니면 다시 시도
+            reactor?.action.onNext(.loadAnime)
+        }
         if let selectedSort = reactor?.currentState.selectedSortOption {
             let indexPath = IndexPath(item: selectedSort.rawValue, section: 0)
             mainView.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
@@ -39,9 +43,6 @@ final class ExploreViewController: BaseViewController<ExploreView> {
             switch item {
             case .sort(let sortOption):
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SortButtonCell.identifier, for: indexPath) as! SortButtonCell
-                if indexPath.item == self.reactor?.currentState.selectedSortOption.rawValue {
-                    self.mainView.collectionView.selectItem(at: IndexPath(item: indexPath.item, section: 0), animated: false, scrollPosition: [])
-                }
                 cell.configureData(title: sortOption.displayName)
                 return cell
                 
@@ -104,6 +105,7 @@ extension ExploreViewController: View {
             
             return [section0, section1, section2, section3, section4]
         }
+        .observe(on: MainScheduler.instance)
         .bind(to: sectionsRelay)
         .disposed(by: disposeBag)
         
@@ -131,9 +133,18 @@ extension ExploreViewController: View {
         reactor.pulse(\.$selectedAnime)
             .compactMap { $0 }
             .bind(with: self) { owner, id in
-                let animeDetailViewModel = AnimeDetailViewModel(animeID: id, initialState: AnimeDetailViewModel.State())
-                let animeDetailVC = AnimeDetailViewController(reactor: animeDetailViewModel)
+                let animeDetailVC = DIContainer.shared.makeAnimeDetailVC(id: id)
                 owner.navigationController?.pushViewController(animeDetailVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
+        reactor.pulse(\.$error)
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, _ in
+                let alert = DIContainer.shared.makeAlert(retryAction: {
+                    owner.reactor?.action.onNext(.loadAnime)
+                })
+                owner.present(alert, animated: true)
             }
             .disposed(by: disposeBag)
     }

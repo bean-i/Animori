@@ -7,7 +7,6 @@
 
 import UIKit
 import SnapKit
-import Kingfisher
 
 final class CharacterCell: BaseCollectionViewCell {
     
@@ -15,6 +14,14 @@ final class CharacterCell: BaseCollectionViewCell {
     
     private let imageView = UIImageView()
     private let nameLabel = UILabel()
+    
+    private var currentTask: Task<Void, Never>?
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        imageView.image = nil
+        currentTask?.cancel()
+    }
     
     override func configureHierarchy() {
         contentView.addSubViews(imageView, nameLabel)
@@ -47,10 +54,10 @@ final class CharacterCell: BaseCollectionViewCell {
     }
     
     func configureData(_ character: any AnimeCharacterProtocol) {
-//        imageView.setImage(with: character.image)
-        if let url = URL(string: character.image) {
-            imageView.kf.setImage(with: url)
-        }
+        
+        currentTask?.cancel()
+        currentTask = imageView.setImage(from: character.image)
+        
         nameLabel.text = character.name
     }
     

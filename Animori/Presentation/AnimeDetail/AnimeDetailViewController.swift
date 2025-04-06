@@ -148,5 +148,15 @@ extension AnimeDetailViewController: View {
                 owner.present(safariVC, animated: true, completion: nil)
             }
             .disposed(by: disposeBag)
+        
+        reactor.pulse(\.$error)
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, _ in
+                let alert = DIContainer.shared.makeAlert(retryAction: {
+                    owner.reactor?.action.onNext(.loadDetailInfo)
+                })
+                owner.present(alert, animated: true)
+            }
+            .disposed(by: disposeBag)
     }
 }
