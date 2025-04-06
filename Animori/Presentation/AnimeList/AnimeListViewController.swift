@@ -84,9 +84,10 @@ extension AnimeListViewController: View {
             .map { $0.currentEndpoint }
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, endpoint in
-                if case .animeSearch = endpoint {
+                switch endpoint {
+                case .animeSearch, .seasonNow:
                     owner.mainView.sortButtonCollectionView.isHidden = true
-                } else {
+                default:
                     owner.mainView.sortButtonCollectionView.isHidden = false
                 }
             }
