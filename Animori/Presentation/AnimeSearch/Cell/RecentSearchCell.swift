@@ -15,6 +15,11 @@ final class RecentSearchCell: BaseCollectionViewCell {
     private let titleLabel = UILabel()
     private let removeButton = UIButton()
     
+    private var id: String = ""
+    private var keyword: String = ""
+    
+    var onRemoveTapped: ((String, String) -> Void)?
+    
     override func configureHierarchy() {
         contentView.addSubViews(titleLabel, removeButton)
     }
@@ -25,15 +30,15 @@ final class RecentSearchCell: BaseCollectionViewCell {
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(6)
+            make.leading.equalToSuperview().offset(10)
             make.centerY.equalToSuperview()
         }
         
         removeButton.snp.makeConstraints { make in
-            make.leading.equalTo(titleLabel.snp.trailing).offset(3)
-            make.trailing.equalToSuperview().inset(6)
+            make.leading.equalTo(titleLabel.snp.trailing).offset(10)
+            make.trailing.equalToSuperview().inset(10)
             make.centerY.equalToSuperview()
-            make.size.equalTo(10)
+            make.size.equalTo(14)
         }
     }
     
@@ -43,7 +48,7 @@ final class RecentSearchCell: BaseCollectionViewCell {
         contentView.clipsToBounds = true
 
         titleLabel.textColor = .am(.base(.white))
-        titleLabel.font = .am(.bodyMedium)
+        titleLabel.font = .am(.titleMedium)
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
 
@@ -52,11 +57,14 @@ final class RecentSearchCell: BaseCollectionViewCell {
         removeButton.addTarget(self, action: #selector(didTapRemoveButton), for: .touchUpInside)
     }
     
-    func configureData(with text: String) {
-        titleLabel.text = text
+    func configureData(with id: String, keyword: String) {
+        self.id = id
+        self.keyword = keyword
+        titleLabel.text = keyword
     }
     
     @objc private func didTapRemoveButton() {
-        print("Remove button tapped: \(titleLabel.text ?? "")")
+        onRemoveTapped?(id, keyword)
     }
+    
 }
