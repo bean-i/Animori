@@ -9,16 +9,25 @@ import UIKit
 
 extension UIImageView {
     
-    func setImage(with url: String?) {
-        guard let url,
-              let imageUrl = URL(string: url) else { return }
+    func setImage(from urlString: String, placeholder: UIImage? = nil) -> Task<Void, Never>? {
+        self.image = placeholder
         
-        Task {
+        guard let imageUrl = URL(string: urlString) else {
+            self.image = UIImage(systemName: "arrow.down.app.dashed.trianglebadge.exclamationmark")
+            return nil
+        }
+        
+        return Task { [weak self] in
             do {
                 let data = try await ImageClient.shared.requestImage(with: imageUrl)
-                self.image = UIImage(data: data)
+                let image = UIImage(data: data)
+                DispatchQueue.main.async {
+                    self?.image = image
+                }
             } catch {
-                self.image = UIImage(systemName: "arrow.down.app.dashed.trianglebadge.exclamationmark")
+                DispatchQueue.main.async {
+                    self?.image = UIImage(systemName: "arrow.down.app.dashed.trianglebadge.exclamationmark")
+                }
             }
         }
     }
