@@ -39,8 +39,7 @@ final class SectionHeaderView: UICollectionReusableView {
     
     func configureLayout() {
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(10)
-            make.centerY.equalToSuperview()
+            make.leading.centerY.equalToSuperview()
         }
         arrowButton.snp.makeConstraints { make in
             make.leading.equalTo(titleLabel.snp.trailing).offset(5)
@@ -60,6 +59,12 @@ final class SectionHeaderView: UICollectionReusableView {
 
     func configure(with title: String) {
         titleLabel.text = title
+        arrowButton.isHidden = false
+    }
+    
+    func configureWithoutArrow(with title: String) {
+        titleLabel.text = title
+        arrowButton.isHidden = true
     }
     
     @objc private func headerTapped() {

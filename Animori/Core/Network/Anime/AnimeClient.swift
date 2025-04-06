@@ -29,15 +29,29 @@ final class AnimeClient {
             }
     }
     
-    func getCompleteAnime() -> Single<AnimeResponseDTO> {
-        return provider.request(.completeAnime)
+    func getCompleteAnime(sortBy: ListSortOption) -> Single<AnimeResponseDTO> {
+        return provider.request(.completeAnime(sortBy))
             .catch { error in
                 return Single.just(AnimeResponseDTO.empty)
             }
     }
     
-    func getMovieAnime() -> Single<AnimeResponseDTO> {
-        return provider.request(.movieAnime)
+    func getMovieAnime(sortBy: ListSortOption) -> Single<AnimeResponseDTO> {
+        return provider.request(.movieAnime(sortBy))
+            .catch { error in
+                return Single.just(AnimeResponseDTO.empty)
+            }
+    }
+    
+    func getAnimeSearch(query: String, sortBy: ListSortOption) -> Single<AnimeResponseDTO> {
+        return provider.request(.animeSearch(query, sortBy))
+            .catch { error in
+                return Single.just(AnimeResponseDTO.empty)
+            }
+    }
+    
+    func getAnimeGenre(genre: AnimeGenreProtocol, sortBy: ListSortOption) -> Single<AnimeResponseDTO> {
+        return provider.request(.animeByGenre(genre, sortBy))
             .catch { error in
                 return Single.just(AnimeResponseDTO.empty)
             }

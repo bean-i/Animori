@@ -9,13 +9,13 @@ import Foundation
 
 enum ListSortOption: Int, CaseIterable {
     
-    case popularity
+    case scoredBy
     case favorites
     case score
 
     var displayName: String {
         switch self {
-        case .popularity: return "인기순"
+        case .scoredBy: return "인기순"
         case .favorites: return "좋아요순"
         case .score: return "별점순"
         }
@@ -23,7 +23,7 @@ enum ListSortOption: Int, CaseIterable {
 
     var apiParameter: String {
         switch self {
-        case .popularity: return "popularity"
+        case .scoredBy: return "scored_by"
         case .favorites: return "favorites"
         case .score: return "score"
         }

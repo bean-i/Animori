@@ -11,15 +11,17 @@ enum AnimeEndPoint: EndPoint {
     
     case topAnime(query: TopAnimeRequest) // getTopAnime
     case seasonNow // getSeasonNow
-    case completeAnime // getAnimeSearch
-    case movieAnime // getAnimeSearch
+    case completeAnime(ListSortOption) // getAnimeSearch
+    case movieAnime(ListSortOption) // getAnimeSearch
+    case animeSearch(String, ListSortOption) // getAnimeSearch
+    case animeByGenre(AnimeGenreProtocol, ListSortOption) // getAnimeSearch
     
     var baseURL: String? { return Bundle.main.baseURL }
     var path: String {
         switch self {
         case .topAnime: return "/top/anime"
         case .seasonNow: return "/seasons/now"
-        case .completeAnime, .movieAnime: return "/anime"
+        case .completeAnime, .movieAnime, .animeSearch, .animeByGenre: return "/anime"
         }
     }
     
@@ -29,6 +31,8 @@ enum AnimeEndPoint: EndPoint {
         case .seasonNow: return .get
         case .completeAnime: return .get
         case .movieAnime: return .get
+        case .animeSearch: return .get
+        case .animeByGenre: return .get
         }
     }
     
@@ -42,10 +46,14 @@ enum AnimeEndPoint: EndPoint {
             return query
         case .seasonNow:
             return AnimeRequestDTO.seasonNow.queryParameters
-        case .completeAnime:
-            return AnimeRequestDTO.completeAnime.queryParameters
-        case .movieAnime:
-            return AnimeRequestDTO.movieAnime.queryParameters
+        case .completeAnime(let sortOption):
+            return AnimeRequestDTO.completeAnime(sortOption: sortOption).queryParameters
+        case .movieAnime(let sortOption):
+            return AnimeRequestDTO.movieAnime(sortOption: sortOption).queryParameters
+        case .animeSearch(let query, let sortOption):
+            return AnimeRequestDTO.search(query, sortOption: sortOption).queryParameters
+        case .animeByGenre(let genre, let sortOption):
+            return AnimeRequestDTO.genre(String(genre.id), sortOption: sortOption).queryParameters
         }
     }
     

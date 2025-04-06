@@ -55,12 +55,12 @@ final class ExploreViewModel: Reactor {
                 .map { Mutation.setSeasonAnime($0) }
                 .asObservable()
             
-            let completeAnime = AnimeClient.shared.getCompleteAnime()
+            let completeAnime = AnimeClient.shared.getCompleteAnime(sortBy: .scoredBy)
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setCompleteAnime($0) }
                 .asObservable()
             
-            let movieAnime = AnimeClient.shared.getMovieAnime()
+            let movieAnime = AnimeClient.shared.getMovieAnime(sortBy: .scoredBy)
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setMovieAnime($0) }
                 .asObservable()
