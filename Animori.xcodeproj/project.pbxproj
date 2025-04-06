@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EA2D91042DA2FBB000F351A5 /* Pods_Animori.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAFD610C0CC52B7F9B52A38F /* Pods_Animori.framework */; };
+		EA2D91052DA2FBB000F351A5 /* Pods_Animori.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AAFD610C0CC52B7F9B52A38F /* Pods_Animori.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EA7521292D983F56006C1DCC /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = EA7521282D983F56006C1DCC /* RxDataSources */; };
 		EAB5F7AD2D981352000D1B38 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = EAB5F7AC2D981352000D1B38 /* Localizable.xcstrings */; };
-		EAB722942D9B04F70066E803 /* Pods_Animori.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17B662409F57C97A942D0B04 /* Pods_Animori.framework */; };
-		EAB722952D9B04F70066E803 /* Pods_Animori.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 17B662409F57C97A942D0B04 /* Pods_Animori.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EAB722972D9B04F90066E803 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = EAF70C962D95637B00ED7696 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		EAF70B742D95388400ED7696 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = EAF70B732D95388400ED7696 /* .gitignore */; };
 		EAF70BA72D95628C00ED7696 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BA62D95628C00ED7696 /* SnapKit */; };
@@ -27,8 +27,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				EA2D91052DA2FBB000F351A5 /* Pods_Animori.framework in Embed Frameworks */,
 				EAB722972D9B04F90066E803 /* RealmSwift in Embed Frameworks */,
-				EAB722952D9B04F70066E803 /* Pods_Animori.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -36,9 +36,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		17B662409F57C97A942D0B04 /* Pods_Animori.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Animori.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		1E2C75104FD3AC4FB0B9C810 /* Pods-Animori.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Animori.release.xcconfig"; path = "Pods/Target Support Files/Pods-Animori/Pods-Animori.release.xcconfig"; sourceTree = "<group>"; };
-		816F3E1C243D7A470109C4D3 /* Pods-Animori.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Animori.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Animori/Pods-Animori.debug.xcconfig"; sourceTree = "<group>"; };
+		AAFD610C0CC52B7F9B52A38F /* Pods_Animori.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Animori.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAB5F7AC2D981352000D1B38 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		EAB71EA52D9A8A630066E803 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		EAB71EA62D9A8A630066E803 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
@@ -77,8 +75,8 @@
 				EAF70BB52D9562DC00ED7696 /* ReactorKit in Frameworks */,
 				EA7521292D983F56006C1DCC /* RxDataSources in Frameworks */,
 				EAF70BAF2D9562B600ED7696 /* RxSwift in Frameworks */,
+				EA2D91042DA2FBB000F351A5 /* Pods_Animori.framework in Frameworks */,
 				EAF70BAD2D9562B600ED7696 /* RxCocoa in Frameworks */,
-				EAB722942D9B04F70066E803 /* Pods_Animori.framework in Frameworks */,
 				EAF70BA72D95628C00ED7696 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,19 +84,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		57488E5ABF22B67F30A00563 /* Pods */ = {
+		636A9DBE4DFE174328CFC311 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				816F3E1C243D7A470109C4D3 /* Pods-Animori.debug.xcconfig */,
-				1E2C75104FD3AC4FB0B9C810 /* Pods-Animori.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		ABCDD886DECDAE2C944E8331 /* Frameworks */ = {
+		920A7D028342AA688A0DA042 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				17B662409F57C97A942D0B04 /* Pods_Animori.framework */,
+				AAFD610C0CC52B7F9B52A38F /* Pods_Animori.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -113,8 +109,8 @@
 				EAF70B732D95388400ED7696 /* .gitignore */,
 				EAF70B4D2D9537CB00ED7696 /* Animori */,
 				EAF70B4C2D9537CB00ED7696 /* Products */,
-				57488E5ABF22B67F30A00563 /* Pods */,
-				ABCDD886DECDAE2C944E8331 /* Frameworks */,
+				636A9DBE4DFE174328CFC311 /* Pods */,
+				920A7D028342AA688A0DA042 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -133,13 +129,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = EAF70B5E2D9537CC00ED7696 /* Build configuration list for PBXNativeTarget "Animori" */;
 			buildPhases = (
-				51DCC3FB8743F6676A8CFEB9 /* [CP] Check Pods Manifest.lock */,
+				C546AFF471DCE52C43DB1C54 /* [CP] Check Pods Manifest.lock */,
 				EAF70B472D9537CB00ED7696 /* Sources */,
 				EAF70B482D9537CB00ED7696 /* Frameworks */,
 				EAF70B492D9537CB00ED7696 /* Resources */,
-				20D0F2109BF85C0D601BD272 /* [CP] Embed Pods Frameworks */,
-				6E422919BEF2134D9596923A /* [CP] Copy Pods Resources */,
 				EAB722962D9B04F70066E803 /* Embed Frameworks */,
+				302B00713091668F80CA15DA /* [CP] Embed Pods Frameworks */,
+				758F9C38C6A783B3854BEDF0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -209,7 +205,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		20D0F2109BF85C0D601BD272 /* [CP] Embed Pods Frameworks */ = {
+		302B00713091668F80CA15DA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -217,21 +213,37 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-Animori/Pods-Animori-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/FSPagerView/FSPagerView.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FSPagerView.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Animori/Pods-Animori-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		51DCC3FB8743F6676A8CFEB9 /* [CP] Check Pods Manifest.lock */ = {
+		758F9C38C6A783B3854BEDF0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Animori/Pods-Animori-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C546AFF471DCE52C43DB1C54 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -251,25 +263,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6E422919BEF2134D9596923A /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Animori/Pods-Animori-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
