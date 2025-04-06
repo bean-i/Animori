@@ -59,6 +59,7 @@ final class SectionHeaderView: UICollectionReusableView {
 
     func configure(with title: String) {
         titleLabel.text = title
+        arrowButton.isHidden = false
     }
     
     func configureWithoutArrow(with title: String) {
