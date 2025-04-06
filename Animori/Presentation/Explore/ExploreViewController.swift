@@ -159,9 +159,9 @@ extension ExploreViewController: SectionHeaderViewDelegate {
             case 2:
                 model.action.onNext(.loadAnimeList(.seasonNow))
             case 3:
-                model.action.onNext(.loadAnimeList(.completeAnime))
+                model.action.onNext(.loadAnimeList(.completeAnime(.scoredBy)))
             case 4:
-                model.action.onNext(.loadAnimeList(.movieAnime))
+                model.action.onNext(.loadAnimeList(.movieAnime(.scoredBy)))
             default: break
             }
             navigationController?.pushViewController(animeListVC, animated: true)

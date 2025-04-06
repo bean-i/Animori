@@ -13,9 +13,10 @@ struct EmptyParameters: Encodable { }
 enum AnimeRequestDTO {
     case topAnime
     case seasonNow
-    case completeAnime
-    case movieAnime
-    case search(String)
+    case completeAnime(sortOption: ListSortOption)
+    case movieAnime(sortOption: ListSortOption)
+    case search(String, sortOption: ListSortOption)
+    case genre(String, sortOption: ListSortOption)
     
     var queryParameters: Encodable {
         switch self {
@@ -23,12 +24,17 @@ enum AnimeRequestDTO {
             return TopAnimeRequest.basic
         case .seasonNow:
             return EmptyParameters()
-        case .completeAnime:
-            return AnimeSearchRequest.completeBasic
-        case .movieAnime:
-            return AnimeSearchRequest.movieBasic
-        case .search(let query):
-            return AnimeSearchRequest(q: query, type: nil, status: nil, order_by: "popularity", sort: "desc")
+        case .completeAnime(let sortOption):
+            return AnimeSearchRequest(q: nil, type: nil, status: "complete", order_by: sortOption.apiParameter, sort: "desc", genres: nil)
+
+        case .movieAnime(let sortOption):
+            return AnimeSearchRequest(q: nil, type: "movie", status: nil, order_by: sortOption.apiParameter, sort: "desc", genres: nil)
+
+        case .search(let query, let sortOption):
+            return AnimeSearchRequest(q: query, type: nil, status: nil, order_by: sortOption.apiParameter, sort: "desc", genres: nil)
+            
+        case .genre(let genreID, let sortOption):
+            return AnimeSearchRequest(q: nil, type: nil, status: nil, order_by: sortOption.apiParameter, sort: "desc", genres: genreID)
         }
     }
     
@@ -53,13 +59,14 @@ struct AnimeSearchRequest: Encodable {
     let order_by: String?
     let sort: String?
     let sfw: Bool = true
+    let genres: String?
     
     static var completeBasic: AnimeSearchRequest {
-        return AnimeSearchRequest(q: nil, type: nil, status: "complete", order_by: "score", sort: "desc")
+        return AnimeSearchRequest(q: nil, type: nil, status: "complete", order_by: "score", sort: "desc", genres: nil)
     }
     
     static var movieBasic: AnimeSearchRequest {
-        return AnimeSearchRequest(q: nil, type: "movie", status: nil, order_by: "popularity", sort: "desc")
+        return AnimeSearchRequest(q: nil, type: "movie", status: nil, order_by: "popularity", sort: "desc", genres: nil)
     }
     
 }
