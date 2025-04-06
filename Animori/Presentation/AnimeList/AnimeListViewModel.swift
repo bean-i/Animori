@@ -53,7 +53,6 @@ final class AnimeListViewModel: Reactor {
             )
             
         case .sortSelected(let sortOption):
-            print("정렬 새로 선택됨", sortOption)
             guard let endpoint = currentEndpoint else {
                 return Observable.empty()
             }

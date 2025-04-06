@@ -132,7 +132,6 @@ extension AnimeDetailViewController: View {
             .subscribe(onNext: { item in
                 switch item {
                 case .ott(let ott):
-                    print("\(ott.name)선택!!!, \(ott.url)로 이동 ㄱㄱ")
                     reactor.action.onNext(.ottTapped(ott.url))
                 default: break
                 }

@@ -134,6 +134,15 @@ extension AnimeSearchViewController: View {
             }
             .disposed(by: disposeBag)
         
+        // 애니메이션 상세화면으로 전환
+        reactor.pulse(\.$selectedAnime)
+            .compactMap { $0 }
+            .bind(with: self) { owner, id in
+                let animeDetailVC = DIContainer.shared.makeAnimeDetailVC(id: id)
+                owner.navigationController?.pushViewController(animeDetailVC, animated: true)
+            }
+            .disposed(by: disposeBag)
+        
         // 장르 탭
         mainView.collectionView.rx.modelSelected(AnimeSearchSectionItem.self)
             .subscribe(with: self) { owner, item in
@@ -143,7 +152,7 @@ extension AnimeSearchViewController: View {
                 case .genreSearch(let genre):
                     reactor.action.onNext(.genreSelected(genre))
                 case .topAnime(let anime):
-                    print("애니 선택", anime.title)
+                    reactor.action.onNext(.animeSelected(anime.id))
                 case .topCharacter(let character):
                     print("캐릭터 선택", character.name)
                 }

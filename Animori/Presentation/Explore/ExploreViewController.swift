@@ -121,7 +121,6 @@ extension ExploreViewController: View {
                 case .seasonAnime(let anime), .completeAnime(let anime), .shortAnime(let anime):
                     reactor.action.onNext(.animeSelected(anime.id))
                 case .sort(let sortOption):
-                    print("정렬 선택 옵션!", sortOption)
                     reactor.action.onNext(.sortSelected(sortOption))
                 default:
                     break

@@ -16,6 +16,7 @@ final class AnimeSearchViewModel: Reactor {
         case search(String)
         case genreSelected(any AnimeGenreProtocol)
         case removeRecentSearch(String, String)
+        case animeSelected(Int)
     }
     
     enum Mutation {
@@ -25,6 +26,7 @@ final class AnimeSearchViewModel: Reactor {
         case setTopAnimes([any AnimeProtocol])
         case setTopCharacters([any TopCharacterProtocol])
         case setGenreSelected(any AnimeGenreProtocol)
+        case setSelectedAnime(Int)
         case setError(Error)
     }
     
@@ -35,6 +37,7 @@ final class AnimeSearchViewModel: Reactor {
         var topAnimes: [any AnimeProtocol] = []
         var topCharacters: [any TopCharacterProtocol] = []
         @Pulse var selectedGenre: AnimeGenreProtocol? = nil
+        @Pulse var selectedAnime: Int?
         @Pulse var error: Error? = nil
     }
     
@@ -94,6 +97,9 @@ final class AnimeSearchViewModel: Reactor {
 
         case .genreSelected(let genre):
             return Observable.just(Mutation.setGenreSelected(genre))
+            
+        case .animeSelected(let id):
+            return Observable.just(Mutation.setSelectedAnime(id))
         }
     }
     
@@ -114,6 +120,8 @@ final class AnimeSearchViewModel: Reactor {
             newState.searchedKeyword = keyword
         case .setError(let error):
             newState.error = error
+        case .setSelectedAnime(let id):
+            newState.selectedAnime = id
         }
         return newState
     }
