@@ -14,7 +14,7 @@ enum AnimeEndPoint: EndPoint {
     case completeAnime(ListSortOption) // getAnimeSearch
     case movieAnime(ListSortOption) // getAnimeSearch
     case animeSearch(String, ListSortOption) // getAnimeSearch
-    case animeByGenre(String, ListSortOption) // getAnimeSearch
+    case animeByGenre(AnimeGenreProtocol, ListSortOption) // getAnimeSearch
     
     var baseURL: String? { return Bundle.main.baseURL }
     var path: String {
@@ -52,8 +52,8 @@ enum AnimeEndPoint: EndPoint {
             return AnimeRequestDTO.movieAnime(sortOption: sortOption).queryParameters
         case .animeSearch(let query, let sortOption):
             return AnimeRequestDTO.search(query, sortOption: sortOption).queryParameters
-        case .animeByGenre(let id, let sortOption):
-            return AnimeRequestDTO.genre(id, sortOption: sortOption).queryParameters
+        case .animeByGenre(let genre, let sortOption):
+            return AnimeRequestDTO.genre(String(genre.id), sortOption: sortOption).queryParameters
         }
     }
     

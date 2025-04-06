@@ -14,7 +14,7 @@ final class AnimeSearchViewModel: Reactor {
     enum Action {
         case loadInfo // 최근 검색어, 장르, 탑애니메이션, 탑캐릭터 다 로드
         case search(String)
-        case genreSelected(Int)
+        case genreSelected(any AnimeGenreProtocol)
         case removeRecentSearch(String, String)
     }
     
@@ -24,7 +24,7 @@ final class AnimeSearchViewModel: Reactor {
         case setGenres([any AnimeGenreProtocol])
         case setTopAnimes([any AnimeProtocol])
         case setTopCharacters([any TopCharacterProtocol])
-        case setGenreSelected(Int)
+        case setGenreSelected(any AnimeGenreProtocol)
     }
     
     struct State {
@@ -33,7 +33,7 @@ final class AnimeSearchViewModel: Reactor {
         var genres: [any AnimeGenreProtocol] = []
         var topAnimes: [any AnimeProtocol] = []
         var topCharacters: [any TopCharacterProtocol] = []
-        @Pulse var selectedGenre: Int?
+        @Pulse var selectedGenre: AnimeGenreProtocol? = nil
     }
     
     private let recentSearchRepository = RecentSearchRepository()
@@ -81,8 +81,8 @@ final class AnimeSearchViewModel: Reactor {
             recentSearchRepository.delete(id: id)
             return Observable.just(Mutation.setRecentKeywords(recentSearchRepository.fetchAll()))
 
-        case .genreSelected(let genreID):
-            return Observable.just(Mutation.setGenreSelected(genreID))
+        case .genreSelected(let genre):
+            return Observable.just(Mutation.setGenreSelected(genre))
         }
     }
     

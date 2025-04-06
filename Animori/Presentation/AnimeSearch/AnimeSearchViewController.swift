@@ -124,11 +124,11 @@ extension AnimeSearchViewController: View {
         
         reactor.pulse(\.$selectedGenre)
             .compactMap { $0 }
-            .bind(with: self) { owner, genreID in
+            .bind(with: self) { owner, genre in
                 let state = AnimeListViewModel.State(animeList: [])
                 let model = AnimeListViewModel(initialState: state)
                 let vc = AnimeListViewController(reactor: model)
-                model.action.onNext(.loadAnimeList(.animeByGenre(String(genreID), .scoredBy)))
+                model.action.onNext(.loadAnimeList(.animeByGenre(genre, .scoredBy)))
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
@@ -140,7 +140,7 @@ extension AnimeSearchViewController: View {
                 case .recentSearch(let id, let keyword):
                     reactor.action.onNext(.search(keyword))
                 case .genreSearch(let genre):
-                    reactor.action.onNext(.genreSelected(genre.id))
+                    reactor.action.onNext(.genreSelected(genre))
                 case .topAnime(let anime):
                     print("애니 선택", anime.title)
                 case .topCharacter(let character):
@@ -151,3 +151,4 @@ extension AnimeSearchViewController: View {
     }
     
 }
+

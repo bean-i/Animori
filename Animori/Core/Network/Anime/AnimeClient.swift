@@ -50,8 +50,8 @@ final class AnimeClient {
             }
     }
     
-    func getAnimeGenre(genreID: String, sortBy: ListSortOption) -> Single<AnimeResponseDTO> {
-        return provider.request(.animeByGenre(genreID, sortBy))
+    func getAnimeGenre(genre: AnimeGenreProtocol, sortBy: ListSortOption) -> Single<AnimeResponseDTO> {
+        return provider.request(.animeByGenre(genre, sortBy))
             .catch { error in
                 return Single.just(AnimeResponseDTO.empty)
             }

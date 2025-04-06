@@ -17,7 +17,6 @@ final class AnimeListViewController: BaseViewController<AnimeListView> {
         super.init(nibName: nil, bundle: nil)
         self.reactor = reactor
     }
-    
 }
 
 extension AnimeListViewController: View {
@@ -29,7 +28,6 @@ extension AnimeListViewController: View {
             .map { $0.title }
             .bind(to: navigationItem.rx.title)
             .disposed(by: disposeBag)
-
         
         // 정렬버튼 나타내기
         reactor.pulse(\.$sort)
@@ -79,6 +77,18 @@ extension AnimeListViewController: View {
                 owner.navigationController?.pushViewController(animeDetailVC, animated: true)
             }
             .disposed(by: disposeBag)
+        
+        // sortButtonCollectionView 숨기기/보이기
+        reactor.state
+            .map { $0.currentEndpoint }
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, endpoint in
+                if case .animeSearch = endpoint {
+                    owner.mainView.sortButtonCollectionView.isHidden = true
+                } else {
+                    owner.mainView.sortButtonCollectionView.isHidden = false
+                }
+            }
+            .disposed(by: disposeBag)
     }
-    
 }
