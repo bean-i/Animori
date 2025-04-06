@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EA3AE2BF2D9EC0970018390F /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = EA3AE2BE2D9EC0970018390F /* Kingfisher */; };
 		EA7521292D983F56006C1DCC /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = EA7521282D983F56006C1DCC /* RxDataSources */; };
 		EAB5F7AD2D981352000D1B38 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = EAB5F7AC2D981352000D1B38 /* Localizable.xcstrings */; };
 		EAB722942D9B04F70066E803 /* Pods_Animori.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17B662409F57C97A942D0B04 /* Pods_Animori.framework */; };
@@ -17,11 +16,8 @@
 		EAF70BA72D95628C00ED7696 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BA62D95628C00ED7696 /* SnapKit */; };
 		EAF70BAD2D9562B600ED7696 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BAC2D9562B600ED7696 /* RxCocoa */; };
 		EAF70BAF2D9562B600ED7696 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BAE2D9562B600ED7696 /* RxSwift */; };
-		EAF70BB22D9562BF00ED7696 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BB12D9562BF00ED7696 /* RxFlow */; };
 		EAF70BB52D9562DC00ED7696 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BB42D9562DC00ED7696 /* ReactorKit */; };
 		EAF70C972D95637B00ED7696 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70C962D95637B00ED7696 /* RealmSwift */; };
-		EAF70C9A2D9563AF00ED7696 /* SkeletonView in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70C992D9563AF00ED7696 /* SkeletonView */; };
-		EAF70C9D2D9563C600ED7696 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70C9C2D9563C600ED7696 /* Toast */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -78,15 +74,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				EAF70C972D95637B00ED7696 /* RealmSwift in Frameworks */,
-				EAF70BB22D9562BF00ED7696 /* RxFlow in Frameworks */,
 				EAF70BB52D9562DC00ED7696 /* ReactorKit in Frameworks */,
 				EA7521292D983F56006C1DCC /* RxDataSources in Frameworks */,
 				EAF70BAF2D9562B600ED7696 /* RxSwift in Frameworks */,
 				EAF70BAD2D9562B600ED7696 /* RxCocoa in Frameworks */,
 				EAB722942D9B04F70066E803 /* Pods_Animori.framework in Frameworks */,
-				EAF70C9A2D9563AF00ED7696 /* SkeletonView in Frameworks */,
-				EA3AE2BF2D9EC0970018390F /* Kingfisher in Frameworks */,
-				EAF70C9D2D9563C600ED7696 /* Toast in Frameworks */,
 				EAF70BA72D95628C00ED7696 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -190,13 +182,9 @@
 			packageReferences = (
 				EAF70BA52D95628C00ED7696 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				EAF70BAB2D9562B600ED7696 /* XCRemoteSwiftPackageReference "RxSwift" */,
-				EAF70BB02D9562BF00ED7696 /* XCRemoteSwiftPackageReference "RxFlow" */,
 				EAF70BB32D9562DC00ED7696 /* XCRemoteSwiftPackageReference "ReactorKit" */,
 				EAF70C952D95637A00ED7696 /* XCRemoteSwiftPackageReference "realm-swift" */,
-				EAF70C982D9563AF00ED7696 /* XCRemoteSwiftPackageReference "SkeletonView" */,
-				EAF70C9B2D9563C600ED7696 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				EA7521272D983F56006C1DCC /* XCRemoteSwiftPackageReference "RxDataSources" */,
-				EA3AE2BD2D9EC0970018390F /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EAF70B4C2D9537CB00ED7696 /* Products */;
@@ -514,14 +502,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		EA3AE2BD2D9EC0970018390F /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.3.1;
-			};
-		};
 		EA7521272D983F56006C1DCC /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
@@ -546,14 +526,6 @@
 				minimumVersion = 6.9.0;
 			};
 		};
-		EAF70BB02D9562BF00ED7696 /* XCRemoteSwiftPackageReference "RxFlow" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/RxSwiftCommunity/RxFlow.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.13.1;
-			};
-		};
 		EAF70BB32D9562DC00ED7696 /* XCRemoteSwiftPackageReference "ReactorKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactorKit/ReactorKit.git";
@@ -570,30 +542,9 @@
 				version = 10.54.3;
 			};
 		};
-		EAF70C982D9563AF00ED7696 /* XCRemoteSwiftPackageReference "SkeletonView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Juanpe/SkeletonView.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.31.0;
-			};
-		};
-		EAF70C9B2D9563C600ED7696 /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.1.1;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		EA3AE2BE2D9EC0970018390F /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EA3AE2BD2D9EC0970018390F /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
 		EA7521282D983F56006C1DCC /* RxDataSources */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EA7521272D983F56006C1DCC /* XCRemoteSwiftPackageReference "RxDataSources" */;
@@ -614,11 +565,6 @@
 			package = EAF70BAB2D9562B600ED7696 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
 		};
-		EAF70BB12D9562BF00ED7696 /* RxFlow */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EAF70BB02D9562BF00ED7696 /* XCRemoteSwiftPackageReference "RxFlow" */;
-			productName = RxFlow;
-		};
 		EAF70BB42D9562DC00ED7696 /* ReactorKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EAF70BB32D9562DC00ED7696 /* XCRemoteSwiftPackageReference "ReactorKit" */;
@@ -628,16 +574,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EAF70C952D95637A00ED7696 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
-		};
-		EAF70C992D9563AF00ED7696 /* SkeletonView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EAF70C982D9563AF00ED7696 /* XCRemoteSwiftPackageReference "SkeletonView" */;
-			productName = SkeletonView;
-		};
-		EAF70C9C2D9563C600ED7696 /* Toast */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EAF70C9B2D9563C600ED7696 /* XCRemoteSwiftPackageReference "Toast-Swift" */;
-			productName = Toast;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
