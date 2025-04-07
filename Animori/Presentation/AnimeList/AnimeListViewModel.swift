@@ -160,7 +160,7 @@ final class AnimeListViewModel: Reactor {
             
             return Observable.merge(
                 genreAnime,
-                Observable.just(Mutation.setTitle("\(genre.name) 애니메이션"))
+                Observable.just(Mutation.setTitle("\(genre.name) \(LocalizedStrings.AnimeList.anime)"))
             )
             
         default:

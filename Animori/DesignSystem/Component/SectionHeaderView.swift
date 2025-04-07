@@ -44,6 +44,7 @@ final class SectionHeaderView: UICollectionReusableView {
         arrowButton.snp.makeConstraints { make in
             make.leading.equalTo(titleLabel.snp.trailing).offset(5)
             make.centerY.equalToSuperview()
+            make.trailing.lessThanOrEqualToSuperview().inset(20)
         }
     }
     

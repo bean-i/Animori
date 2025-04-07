@@ -19,13 +19,13 @@ final class AnimeDetailView: BaseView {
     private let genreStackView = UIStackView()
     private let ratingLabel = UILabel()
     
-    private let ageInfoView = AnimeInfoTitle(title: "이용가 |")
+    private let ageInfoView = AnimeInfoTitle(title: "\(LocalizedStrings.AnimeDetail.rating) |")
     private let ageView = AgeRatingView()
     
-    private let periodInfoView = AnimeInfoTitle(title: "방영기간 |")
+    private let periodInfoView = AnimeInfoTitle(title: "\(LocalizedStrings.AnimeDetail.aired) |")
     private let periodLabel = UILabel()
     
-    private let plotInfoView = AnimeInfoTitle(title: "줄거리 |")
+    private let plotInfoView = AnimeInfoTitle(title: "\(LocalizedStrings.AnimeDetail.synopsis) |")
     private let plotLabel = UILabel()
     private let plotMoreButton = UIButton()
     

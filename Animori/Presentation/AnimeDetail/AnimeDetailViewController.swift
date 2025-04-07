@@ -92,16 +92,16 @@ extension AnimeDetailViewController: View {
         reactor.state
             .observe(on: MainScheduler.instance)
             .map { state -> [AnimeDetailSection] in
-            let reviewSection = AnimeDetailSection(header: "리뷰",
+                let reviewSection = AnimeDetailSection(header: LocalizedStrings.AnimeDetail.review,
                                                    items: state.reviews.map { .review($0) })
             
-            let characterSection = AnimeDetailSection(header: "캐릭터",
+                let characterSection = AnimeDetailSection(header: LocalizedStrings.AnimeDetail.character,
                                                       items: state.characters.map { .character($0) })
             
-            let ottSection = AnimeDetailSection(header: "OTT 바로가기",
+                let ottSection = AnimeDetailSection(header: LocalizedStrings.AnimeDetail.ott,
                                                 items: state.animeDetail.OTT.map { .ott($0) })
             
-            let recommendSection = AnimeDetailSection(header: "비슷한 애니메이션 추천",
+                let recommendSection = AnimeDetailSection(header: LocalizedStrings.AnimeDetail.recommend,
                                                       items: state.similarAnime.map { .recommend($0) })
             
             return [reviewSection, characterSection, ottSection, recommendSection]

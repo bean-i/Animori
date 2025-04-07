@@ -15,9 +15,9 @@ enum TitleOption {
     
     var displayName: String {
         switch self {
-        case .seasonNow: return "이번 시즌 애니메이션"
-        case .complete: return "완결 애니메이션"
-        case .movie: return "극장판 애니메이션"
+        case .seasonNow: return LocalizedStrings.AnimeList.seasonTitle
+        case .complete: return LocalizedStrings.AnimeList.completeTitle
+        case .movie: return LocalizedStrings.AnimeList.movieTitle
         case .search(let searchKeyword): return searchKeyword
         }
     }

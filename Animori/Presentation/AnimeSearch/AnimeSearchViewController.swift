@@ -22,7 +22,7 @@ final class AnimeSearchViewController: BaseViewController<AnimeSearchView> {
         self.tabBarItem = UITabBarItem(title: nil, image: UIImage(systemName: "magnifyingglass"), tag: 1)
     }
     
-    override func configureNavigation() { title = "검색" }
+    override func configureNavigation() { title = LocalizedStrings.AnimeSearch.title }
 
     private lazy var dataSource = RxCollectionViewSectionedReloadDataSource<AnimeSearchSection> { dataSource, collectionView, indexPath, item in
         switch item {
@@ -71,16 +71,16 @@ extension AnimeSearchViewController: View {
         // 섹션 구성
         reactor.state
             .map { state -> [AnimeSearchSection] in
-                let keywordSection = AnimeSearchSection(header: "최근 검색어",
+                let keywordSection = AnimeSearchSection(header: LocalizedStrings.AnimeSearch.recentSearch,
                                                         items: state.recentKeywords.map { .recentSearch($0.id.stringValue, $0.keyword) })
                 
-                let genreSection = AnimeSearchSection(header: "장르 바로가기",
+                let genreSection = AnimeSearchSection(header: LocalizedStrings.AnimeSearch.genre,
                                                       items: state.genres.map { .genreSearch($0) })
                 
-                let topAnimeSection = AnimeSearchSection(header: "Top 애니메이션",
+                let topAnimeSection = AnimeSearchSection(header: LocalizedStrings.AnimeSearch.topAnime,
                                                          items: state.topAnimes.map { .topAnime($0) })
                 
-                let topCharacterSection = AnimeSearchSection(header: "Top 캐릭터",
+                let topCharacterSection = AnimeSearchSection(header: LocalizedStrings.AnimeSearch.topCharacter,
                                                              items: state.topCharacters.map { .topCharacter($0) })
                 
                 return [keywordSection, genreSection, topAnimeSection, topCharacterSection]

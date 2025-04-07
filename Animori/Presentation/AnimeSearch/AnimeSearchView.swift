@@ -50,7 +50,7 @@ final class AnimeSearchView: BaseView {
         searchBar.searchTextField.font = .am(.subtitleMedium)
         searchBar.searchTextField.textColor = .am(.base(.white))
         searchBar.searchTextField.attributedPlaceholder = NSAttributedString(
-            string: "애니메이션을 검색해 보세요.",
+            string: LocalizedStrings.AnimeSearch.placeholder,
             attributes: [
                 .foregroundColor: UIColor.am(.base(.white)).withAlphaComponent(0.7),
                 .font: UIFont.am(.subtitleMedium)

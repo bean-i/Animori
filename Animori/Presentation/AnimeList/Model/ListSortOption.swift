@@ -15,9 +15,9 @@ enum ListSortOption: Int, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .scoredBy: return "인기순"
-        case .favorites: return "좋아요순"
-        case .score: return "별점순"
+        case .scoredBy: return LocalizedStrings.Sort.popular
+        case .favorites: return LocalizedStrings.Sort.liked
+        case .score: return LocalizedStrings.Sort.rating
         }
     }
 
