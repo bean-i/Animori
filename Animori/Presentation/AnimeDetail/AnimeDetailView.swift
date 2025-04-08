@@ -26,7 +26,7 @@ final class AnimeDetailView: BaseView {
     private let periodLabel = UILabel()
     
     private let plotInfoView = AnimeInfoTitle(title: "\(LocalizedStrings.AnimeDetail.synopsis) |")
-    private let plotLabel = UILabel()
+    private let plotLabelView = TranslationView(reactor: TranslationViewModel())
     private let plotMoreButton = UIButton()
     
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
@@ -44,8 +44,8 @@ final class AnimeDetailView: BaseView {
             ageView,
             periodInfoView,
             periodLabel,
+            plotLabelView,
             plotInfoView,
-            plotLabel,
             plotMoreButton,
             collectionView
         )
@@ -116,20 +116,21 @@ final class AnimeDetailView: BaseView {
             make.width.equalTo(40)
         }
         
-        plotLabel.snp.makeConstraints { make in
+        plotLabelView.snp.makeConstraints { make in
             make.top.equalTo(plotInfoView.snp.top)
-            make.leading.equalTo(plotInfoView.snp.trailing).offset(8)
+            make.leading.equalTo(plotInfoView.snp.trailing)
             make.trailing.equalTo(plotMoreButton.snp.leading)
+            make.height.greaterThanOrEqualTo(60)
         }
         
         plotMoreButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(20)
-            make.bottom.equalTo(plotLabel.snp.bottom)
+            make.bottom.equalTo(plotLabelView.snp.bottom)
             make.size.equalTo(24)
         }
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(plotLabel.snp.bottom).offset(15)
+            make.top.equalTo(plotLabelView.snp.bottom).offset(15)
             make.horizontalEdges.equalToSuperview()
             make.bottom.equalToSuperview().inset(10)
             collectionViewHeightConstraint = make.height.equalTo(300).constraint
@@ -180,11 +181,6 @@ final class AnimeDetailView: BaseView {
         periodLabel.textColor = .am(.base(.white))
         periodLabel.textAlignment = .left
         
-        plotLabel.font = .am(.bodyRegular)
-        plotLabel.textColor = .am(.base(.white))
-        plotLabel.textAlignment = .left
-        plotLabel.numberOfLines = 4
-        
         plotMoreButton.addTarget(self, action: #selector(moreButtonTapped), for: .touchUpInside)
         plotMoreButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         plotMoreButton.tintColor = .am(.base(.white))
@@ -211,7 +207,7 @@ final class AnimeDetailView: BaseView {
         configureGenre(genres: anime.genre)
         ageView.configureData(age: anime.age)
         periodLabel.text = anime.airedPeriod
-        plotLabel.text = anime.plot
+        plotLabelView.setText(anime.plot)
     }
     
     // MARK: - Compositional Layout
@@ -386,15 +382,16 @@ final class AnimeDetailView: BaseView {
     
     // MARK: - 줄거리 더보기
     @objc private func moreButtonTapped() {
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            if self?.plotLabel.numberOfLines == 0 {
-                self?.plotMoreButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-                self?.plotLabel.numberOfLines = 4
-            } else {
-                self?.plotMoreButton.setImage(UIImage(systemName: "chevron.up"), for: .normal)
-                self?.plotLabel.numberOfLines = 0
-            }
-            self?.layoutIfNeeded()
+        plotLabelView.toggleExpand()
+
+        // 아이콘 토글
+        let isExpandedNow = plotLabelView.isExpanded
+        let iconName = isExpandedNow ? "chevron.up" : "chevron.down"
+        plotMoreButton.setImage(UIImage(systemName: iconName), for: .normal)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.layoutIfNeeded()
         }
     }
+
 }
