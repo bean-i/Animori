@@ -8,86 +8,61 @@
 import Foundation
 import RxSwift
 
+// MARK: - NetworkProvider
 struct NetworkProvider<E: EndPoint>: Sendable {
     private let queue: OperationQueue
     private let session: URLSession
+    private let rateLimiter: RateLimiter
     
-    init(maxConcurrentRequests: Int = 3, timeoutInterval: TimeInterval = 30) {
+    init(maxConcurrentRequests: Int = 2,
+         timeoutInterval: TimeInterval = 30,
+         rateLimiter: RateLimiter) {
+        
         queue = OperationQueue()
         queue.maxConcurrentOperationCount = maxConcurrentRequests
         
         let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = timeoutInterval // 30초 타임아웃
+        configuration.timeoutIntervalForRequest = timeoutInterval
         session = URLSession(configuration: configuration)
+        
+        self.rateLimiter = rateLimiter
+        print("[NetworkProvider] 초기화 완료.")
     }
     
     func request<T: Decodable>(_ endPoint: E) -> Single<T> {
         return Single.create { single in
             let operation = AsyncOperation { taskCompletion in
                 Task {
+                    // 네트워크 요청 시작 전에 RateLimiter를 통해 토큰 획득
+                    print("[NetworkProvider] 요청 전 RateLimiter.acquire() 호출 - Endpoint: \(endPoint)")
+                    await self.rateLimiter.acquire()
+                    print("[NetworkProvider] RateLimiter.acquire() 완료. 요청 시작 - Endpoint: \(endPoint)")
+                    
                     do {
                         let request = try endPoint.asURLRequest()
-                        let (data, response) = try await session.data(for: request)
+                        print("[NetworkProvider] URLRequest 생성: \(request)")
+                        let (data, response) = try await self.session.data(for: request)
+                        
                         guard let httpResponse = response as? HTTPURLResponse,
                               (200..<300).contains(httpResponse.statusCode) else {
+                            print("[NetworkProvider] HTTP 에러 응답: \(response)")
                             single(.failure(endPoint.error((response as? HTTPURLResponse)?.statusCode, data: data)))
                             taskCompletion()
                             return
                         }
                         
                         let decodedData = try endPoint.decoder.decode(T.self, from: data)
+                        print("[NetworkProvider] 성공적으로 디코딩 완료 - Endpoint: \(endPoint)")
                         single(.success(decodedData))
-                        taskCompletion()
                     } catch {
+                        print("[NetworkProvider] 요청 실패 - Endpoint: \(endPoint), 에러: \(error)")
                         single(.failure(error))
-                        taskCompletion()
                     }
+                    taskCompletion()
                 }
             }
             self.queue.addOperation(operation)
             return Disposables.create { operation.cancel() }
         }
-        .delay(.seconds(1), scheduler: MainScheduler.instance)
-    }
-}
-
-class AsyncOperation: Operation {
-    private let task: (@escaping () -> Void) -> Void
-    private var _isExecuting = false
-    private var _isFinished = false
-    
-    init(task: @escaping (@escaping () -> Void) -> Void) {
-        self.task = task
-    }
-    
-    override var isExecuting: Bool {
-        get { _isExecuting }
-        set {
-            willChangeValue(forKey: "isExecuting")
-            _isExecuting = newValue
-            didChangeValue(forKey: "isExecuting")
-        }
-    }
-    
-    override var isFinished: Bool {
-        get { _isFinished }
-        set {
-            willChangeValue(forKey: "isFinished")
-            _isFinished = newValue
-            didChangeValue(forKey: "isFinished")
-        }
-    }
-    
-    override func start() {
-        if isCancelled { return }
-        isExecuting = true
-        task { [weak self] in
-            self?.finish()
-        }
-    }
-    
-    func finish() {
-        isExecuting = false
-        isFinished = true
     }
 }
