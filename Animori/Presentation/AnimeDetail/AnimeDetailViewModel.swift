@@ -49,51 +49,45 @@ final class AnimeDetailViewModel: Reactor {
         switch action {
         case .loadDetailInfo:
             let startLoading = Observable.just(Mutation.setLoading(true))
-            
+
             let detailObs = AnimeDetailClient.shared.getAnimeFullById(id: animeID)
                 .map { Mutation.setDetail($0.data.toEntity()) }
                 .catch { error in
-                    return Single.just(Mutation.setError(error))
+                    Single.just(Mutation.setError(error))
                 }
                 .asObservable()
-            
-            let reviewsObs = detailObs.flatMap { [weak self] _ in
-                guard let self else { return Observable.just(Mutation.setReviews([]))}
-                return AnimeDetailClient.shared.getAnimeReviews(id: animeID)
-                    .map { Mutation.setReviews($0.data.map { $0.toEntity() }) }
-                    .catch { error in
-                        return Single.just(Mutation.setError(error))
-                    }
-                    .asObservable()
-            }
-            
+
+            let reviewsObs = AnimeDetailClient.shared.getAnimeReviews(id: animeID)
+                .map { Mutation.setReviews($0.data.map { $0.toEntity() }) }
+                .catch { error in
+                    Single.just(Mutation.setError(error))
+                }
+                .asObservable()
+
             let charactersObs = AnimeDetailClient.shared.getAnimeCharacters(id: animeID)
                 .map { Mutation.setCharacters($0.data.map { $0.toEntity() }) }
                 .catch { error in
-                    return Single.just(Mutation.setError(error))
+                    Single.just(Mutation.setError(error))
                 }
                 .asObservable()
+
+            let recommendObs = AnimeDetailClient.shared.getAnimeRecommendations(id: animeID)
+                .map { Mutation.setSimilar($0.data.map { $0.toEntity() }) }
+                .catch { error in
+                    Single.just(Mutation.setError(error))
+                }
+                .asObservable()
+
+            let networkRequests = Observable.merge(detailObs, reviewsObs, charactersObs, recommendObs)
             
-            let recommendObs = charactersObs.flatMap { [weak self] _ in
-                guard let self else { return Observable.just(Mutation.setSimilar([]))}
-                return AnimeDetailClient.shared.getAnimeRecommendations(id: self.animeID)
-                    .map { Mutation.setSimilar($0.data.map { $0.toEntity() }) }
-                    .catch { error in
-                        return Single.just(Mutation.setError(error))
-                    }
-                    .asObservable()
-            }
-            
-            let finishLoading = recommendObs.map { _ in Mutation.setLoading(false) }
-            
+            let finishLoading = Observable.just(Mutation.setLoading(false))
+
             return Observable.concat([
                 startLoading,
-                detailObs,
-                reviewsObs,
-                charactersObs,
-                recommendObs,
+                networkRequests,
                 finishLoading
             ])
+
         case .ottTapped(let url):
             let moveTo = URL(string: url)
             return Observable.just(Mutation.setOTTURL(moveTo))

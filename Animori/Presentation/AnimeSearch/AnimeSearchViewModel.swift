@@ -76,7 +76,7 @@ final class AnimeSearchViewModel: Reactor {
 
             let keywords = Array(recentSearchRepository.fetchAll())
 
-            return Observable.concat(
+            return Observable.merge(
                 Observable.just(Mutation.setRecentKeywords(keywords)),
                 genres,
                 topAnime,

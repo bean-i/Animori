@@ -149,6 +149,7 @@ extension AnimeDetailViewController: View {
             .disposed(by: disposeBag)
         
         reactor.pulse(\.$error)
+            .compactMap { $0 }
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, _ in
                 let alert = DIContainer.shared.makeAlert(retryAction: {

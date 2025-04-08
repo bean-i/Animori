@@ -48,13 +48,14 @@ final class ExploreViewModel: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadAnime:
-            if isLoading { return Observable.empty() } // 중복 요청 방지
+            if isLoading { return Observable.empty() }
             isLoading = true
+            
             let topAnime = AnimeClient.shared.getTopAnime(query: TopAnimeRequest.basic)
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setTopAnime($0) }
                 .catch { error in
-                    return Single.just(Mutation.setError(error))
+                    Single.just(Mutation.setError(error))
                 }
                 .asObservable()
             
@@ -62,7 +63,7 @@ final class ExploreViewModel: Reactor {
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setSeasonAnime($0) }
                 .catch { error in
-                    return Single.just(Mutation.setError(error))
+                    Single.just(Mutation.setError(error))
                 }
                 .asObservable()
             
@@ -70,7 +71,7 @@ final class ExploreViewModel: Reactor {
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setCompleteAnime($0) }
                 .catch { error in
-                    return Single.just(Mutation.setError(error))
+                    Single.just(Mutation.setError(error))
                 }
                 .asObservable()
             
@@ -78,11 +79,11 @@ final class ExploreViewModel: Reactor {
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setMovieAnime($0) }
                 .catch { error in
-                    return Single.just(Mutation.setError(error))
+                    Single.just(Mutation.setError(error))
                 }
                 .asObservable()
             
-            return Observable.concat(topAnime, seasonAnime, completeAnime, movieAnime)
+            return Observable.merge(topAnime, seasonAnime, completeAnime, movieAnime)
                 .do(onCompleted: { [weak self] in self?.isLoading = false })
             
         case .sortSelected(let sortOption):
