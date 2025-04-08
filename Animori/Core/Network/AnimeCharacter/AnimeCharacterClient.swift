@@ -11,7 +11,7 @@ import RxSwift
 final class AnimeCharacterClient {
     
     static let shared = AnimeCharacterClient()
-    private let provider = NetworkProvider<AnimeCharacterEndPoint>()
+    private let provider = NetworkProvider<AnimeCharacterEndPoint>(rateLimiter: GlobalRateLimiter)
     
     private init() { }
     

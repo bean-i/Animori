@@ -11,7 +11,7 @@ import RxSwift
 final class AnimeClient {
     
     static let shared = AnimeClient()
-    private let provider = NetworkProvider<AnimeEndPoint>()
+    private let provider = NetworkProvider<AnimeEndPoint>(rateLimiter: GlobalRateLimiter)
     
     private init() { }
     
