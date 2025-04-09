@@ -12,7 +12,7 @@ struct AnimeDetailResponseDTO: Decodable {
     let data: AnimeDetailDTO
 }
 
-struct AnimeDetailDTO: Decodable {
+struct AnimeDetailDTO: Decodable, TitleSelectable {
     let id: Int
     let trailer: AnimeDetailTrailer
     let images: AnimeImage
@@ -80,10 +80,7 @@ extension AnimeDetailDTO {
 // MARK: - AnimeDetailDTO Extension: toEntity
 extension AnimeDetailDTO {
     func toEntity() -> AnimeDetailEntity {
-        // 제목 우선순위: Japanese → 첫 번째 타이틀
-        let preferredTitle = self.titles.first(where: { $0.type == "Japanese" })?.title
-        ?? self.titles.first?.title
-        ?? "제목 없음"
+        let preferredTitle = self.preferredTitle()
         
         // 대체 불가 이미지 URL
         var image = self.trailer.images.imageURL

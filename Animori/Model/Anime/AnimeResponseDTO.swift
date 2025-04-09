@@ -12,7 +12,7 @@ struct AnimeResponseDTO: Decodable {
     let data: [AnimeDTO]
 }
 
-struct AnimeDTO: Decodable {
+struct AnimeDTO: Decodable, TitleSelectable {
     let id: Int
     let images: AnimeImage
     let titles: [AnimeTitle]
@@ -75,7 +75,7 @@ extension AnimeDTO {
 // MARK: - AnimeDTO Extension: toEntity
 extension AnimeDTO {
     func toEntity() -> Anime {
-        let preferredTitle = self.titles.first(where: { $0.type == "Japanese" })?.title ?? self.titles.first?.title ?? ""
+        let preferredTitle = self.preferredTitle()
         let image = self.images.jpg.largeImageURL ?? ""
         let genre = self.genres.map { "#\($0.name)" }
         let rate = self.score.map { String($0) } ?? "N/A"
