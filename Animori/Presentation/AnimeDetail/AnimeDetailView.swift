@@ -118,7 +118,7 @@ final class AnimeDetailView: BaseView {
         
         plotLabelView.snp.makeConstraints { make in
             make.top.equalTo(plotInfoView.snp.top)
-            make.leading.equalTo(plotInfoView.snp.trailing)
+            make.leading.equalTo(plotInfoView.snp.trailing).offset(8)
             make.trailing.equalTo(plotMoreButton.snp.leading)
             make.height.greaterThanOrEqualTo(60)
         }
