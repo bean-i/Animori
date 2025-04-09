@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+struct AnimeCharacterVoiceActorsEntity: AnimeCharacterVoiceActorsProtocol {
+    let language: String
+    let name: String
+    let image: String
+}

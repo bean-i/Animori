@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+protocol AnimeCharacterVoiceActorsProtocol {
+    var language: String { get }
+    var name: String { get }
+    var image: String { get }
+}
