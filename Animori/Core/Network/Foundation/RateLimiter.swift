@@ -7,7 +7,7 @@
 
 import Foundation
 // MARK: - 전역 공유 RateLimiter
-let GlobalRateLimiter = RateLimiter(maxRequests: 2, interval: 1.5)
+let GlobalRateLimiter = RateLimiter(maxRequests: 1, interval: 0.7)
 
 // MARK: - Actor 기반 RateLimiter
 actor RateLimiter {
