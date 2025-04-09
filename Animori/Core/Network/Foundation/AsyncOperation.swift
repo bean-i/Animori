@@ -8,43 +8,86 @@
 import Foundation
 
 // MARK: - AsyncOperation
-final class AsyncOperation: Operation {
-    private let task: (@escaping () -> Void) -> Void
-    private var _isExecuting: Bool = false
-    private var _isFinished: Bool = false
+class AsyncOperation: Operation {
+    
+    // MARK: - Operation State Enum
+    enum State: String {
+        case ready, executing, finished
+        
+        fileprivate var keyPath: String { "is" + rawValue.capitalized }
+    }
+    
+    // MARK: - Thread-safe State Management
+    private let stateQueue = DispatchQueue(label: "com.animori.asyncoperation.state", attributes: .concurrent)
+    private var _state: State = .ready
+    
+    private var state: State {
+        get {
+            return stateQueue.sync { _state }
+        }
+        set {
+            willChangeValue(forKey: newValue.keyPath)
+            willChangeValue(forKey: state.keyPath)
+            stateQueue.sync(flags: .barrier) {
+                _state = newValue
+            }
+            didChangeValue(forKey: state.keyPath)
+            didChangeValue(forKey: newValue.keyPath)
+        }
+    }
+    
+    // MARK: - Overrides
+    override var isAsynchronous: Bool { true }
+    override var isReady: Bool { super.isReady && state == .ready }
+    override var isExecuting: Bool { state == .executing }
+    override var isFinished: Bool { state == .finished }
+    
+    private var internalTask: Task<Void, Never>?
+    
+    // MARK: - Task Logic
+    private let operationTask: (@escaping () -> Void) -> Void
     
     init(task: @escaping (@escaping () -> Void) -> Void) {
-        self.task = task
+        self.operationTask = task
+        super.init()
     }
-    
-    override var isExecuting: Bool {
-        get { _isExecuting }
-        set {
-            willChangeValue(forKey: "isExecuting")
-            _isExecuting = newValue
-            didChangeValue(forKey: "isExecuting")
-        }
-    }
-    
-    override var isFinished: Bool {
-        get { _isFinished }
-        set {
-            willChangeValue(forKey: "isFinished")
-            _isFinished = newValue
-            didChangeValue(forKey: "isFinished")
-        }
-    }
-    
+
     override func start() {
-        if isCancelled { return }
-        isExecuting = true
-        task { [weak self] in
-            self?.finish()
+        if isCancelled {
+            print("[AsyncOperation] start 전에 이미 취소됨 → finish()")
+            finish()
+            return
+        }
+        
+        state = .executing
+        
+        internalTask = Task {
+            if Task.isCancelled {
+                print("[AsyncOperation] Task 시작 전 취소됨")
+                finish()
+                return
+            }
+
+            await withCheckedContinuation { continuation in
+                self.operationTask {
+                    continuation.resume()
+                }
+            }
+
+            finish()
         }
     }
     
+    override func cancel() {
+        super.cancel()
+        print("[AsyncOperation] cancel() 호출됨")
+        internalTask?.cancel()
+        finish()
+    }
+
     func finish() {
-        isExecuting = false
-        isFinished = true
+        if !isFinished {
+            state = .finished
+        }
     }
 }

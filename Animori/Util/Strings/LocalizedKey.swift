@@ -49,4 +49,16 @@ enum LocalizedKey {
         static let movieTitle = "anime_list_title_movie"
     }
     
+    enum Alert {
+        static let title = "alert_networkError_title"
+        static let message = "alert_networkError_message"
+        static let cancel = "alert_networkError_cancel"
+        static let retry = "alert_networkError_retry"
+    }
+    
+    enum Phrase {
+        static let loading = "phrase_loading"
+        static let translating = "phrase_translating"
+    }
+    
 }
