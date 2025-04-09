@@ -27,9 +27,9 @@ final class ExploreViewController: BaseViewController<ExploreView> {
     // 밑 컬렉션뷰 2개에서 화면 전환하면, 정렬 탭 UI가 초기화되는 버그..
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if !(reactor?.isLoading ?? false) { // 요청 중이 아니면 다시 시도
-            reactor?.action.onNext(.loadAnime)
-        }
+//        if !(reactor?.isLoading ?? false) { // 요청 중이 아니면 다시 시도
+//            reactor?.action.onNext(.loadAnime)
+//        }
         if let selectedSort = reactor?.currentState.selectedSortOption {
             let indexPath = IndexPath(item: selectedSort.rawValue, section: 0)
             mainView.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])

@@ -51,15 +51,15 @@ final class DIContainer {
     
     func makeAlert(retryAction: (() -> Void)? = nil) -> UIAlertController {
         let alert = UIAlertController(
-            title: "네트워크 오류 발생",
-            message: "네트워크 오류가 발생했습니다. 다시 시도해 주세요.",
+            title: LocalizedStrings.Alert.title,
+            message: LocalizedStrings.Alert.message,
             preferredStyle: .alert
         )
         
-        alert.addAction(UIAlertAction(title: "취소", style: .default))
+        alert.addAction(UIAlertAction(title: LocalizedStrings.Alert.cancel, style: .default))
         
         if let retryAction = retryAction {
-            alert.addAction(UIAlertAction(title: "다시 시도", style: .default) { _ in
+            alert.addAction(UIAlertAction(title: LocalizedStrings.Alert.retry, style: .default) { _ in
                 retryAction()
             })
         }

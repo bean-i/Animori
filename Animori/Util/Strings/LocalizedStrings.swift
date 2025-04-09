@@ -49,4 +49,16 @@ enum LocalizedStrings {
         static let movieTitle = NSLocalizedString(LocalizedKey.AnimeList.movieTitle, comment: "")
     }
     
+    enum Alert {
+        static let title = NSLocalizedString(LocalizedKey.Alert.title, comment: "")
+        static let message = NSLocalizedString(LocalizedKey.Alert.message, comment: "")
+        static let cancel = NSLocalizedString(LocalizedKey.Alert.cancel, comment: "")
+        static let retry = NSLocalizedString(LocalizedKey.Alert.retry, comment: "")
+    }
+    
+    enum Phrase {
+        static let loading = NSLocalizedString(LocalizedKey.Phrase.loading, comment: "")
+        static let translating = NSLocalizedString(LocalizedKey.Phrase.translating, comment: "")
+    }
+    
 }
