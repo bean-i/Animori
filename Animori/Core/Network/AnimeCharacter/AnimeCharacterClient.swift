@@ -22,4 +22,25 @@ final class AnimeCharacterClient {
             }
     }
     
+    func getCharacterPictures(id: Int) -> Single<AnimeCharacterPicturesResponseDTO> {
+        return provider.request(.characterPictures(id))
+            .catch { error in
+                return Single.error(error)
+            }
+    }
+    
+    func getCharacterById(id: Int) -> Single<AnimeCharacterInfoResponseDTO> {
+        return provider.request(.characterInfo(id))
+            .catch { error in
+                return Single.error(error)
+            }
+    }
+    
+    func getCharacterVoiceActors(id: Int) -> Single<AnimeCharacterVoiceActorsResponseDTO> {
+        return provider.request(.characterVoiceActors(id))
+            .catch { error in
+                return Single.error(error)
+            }
+    }
+    
 }
