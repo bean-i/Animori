@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 // MARK: - 전역 공유 RateLimiter
 let GlobalRateLimiter = RateLimiter(maxRequests: 1, interval: 0.7)
 
@@ -23,27 +24,33 @@ actor RateLimiter {
         self.lastRefill = Date()
         print("[RateLimiter] 초기화 - maxRequests: \(maxRequests), interval: \(interval)")
     }
-    
+
     func acquire() async {
         while true {
             refillIfNeeded()
+
+            if Task.isCancelled {
+                print("[RateLimiter] 취소된 요청. acquire 중단")
+                return
+            }
+
             if available > 0 {
                 available -= 1
                 print("[RateLimiter] 토큰 소비. 남은 토큰: \(available)")
                 return
-            } else {
-                print("[RateLimiter] 토큰 부족. 대기 중...")
             }
-            // 토큰이 없으면 interval만큼 대기 후 다시 시도
+
+            print("[RateLimiter] 토큰 부족. 대기 중...")
+
             do {
                 try await Task.sleep(nanoseconds: UInt64(interval * 1_000_000_000))
             } catch {
-                print("[RateLimiter] Task.sleep 에러: \(error)")
+                print("[RateLimiter] sleep 중 취소됨 → acquire 중단")
                 return
             }
         }
     }
-    
+
     private func refillIfNeeded() {
         let now = Date()
         let elapsed = now.timeIntervalSince(lastRefill)
