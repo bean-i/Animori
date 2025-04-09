@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+struct AnimeCharacterPicturesEntity: AnimeCharacterPicturesProtocol {
+    let image: String
+}

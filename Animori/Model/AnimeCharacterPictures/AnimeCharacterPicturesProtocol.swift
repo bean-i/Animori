@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+protocol AnimeCharacterPicturesProtocol {
+    var image: String { get }
+}
