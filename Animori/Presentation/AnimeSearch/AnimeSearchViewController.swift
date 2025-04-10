@@ -117,7 +117,7 @@ extension AnimeSearchViewController: View {
             .compactMap { $0 }
             .filter { !$0.isEmpty }
             .bind(with: self) { owner, keyword in
-                let endpoint = AnimeEndPoint.animeSearch(keyword, .scoredBy)
+                let endpoint = AnimeEndPoint.animeSearch(query: keyword, sortOption: .scoredBy, page: 1)
                 let vc = DIContainer.shared.makeAnimeListVC(endpoint: endpoint, mode: .anime)
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
@@ -126,7 +126,7 @@ extension AnimeSearchViewController: View {
         reactor.pulse(\.$selectedGenre)
             .compactMap { $0 }
             .bind(with: self) { owner, genre in
-                let endpoint = AnimeEndPoint.animeByGenre(genre, .scoredBy)
+                let endpoint = AnimeEndPoint.animeByGenre(genre: genre, sortOption: .scoredBy)
                 let vc = DIContainer.shared.makeAnimeListVC(endpoint: endpoint, mode: .anime)
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
@@ -182,7 +182,7 @@ extension AnimeSearchViewController: SectionHeaderViewDelegate {
         case 1: // 장르 바로가기
             return // 추후 추가..
         case 2: // Top 애니메이션
-            vc = DIContainer.shared.makeAnimeListVC(endpoint: .topAnime(query: TopAnimeRequest.page), mode: .top)
+            vc = DIContainer.shared.makeAnimeListVC(endpoint: .topAnime(sortOption: .popular, page: 1), mode: .top)
             
         case 3: // Top 캐릭터
             vc = DIContainer.shared.makeAnimeCharacterListVC(mode: .top)

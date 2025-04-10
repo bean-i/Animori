@@ -15,46 +15,45 @@ final class AnimeClient {
     
     private init() { }
     
-    func getTopAnime(query: TopAnimeRequest) -> Single<AnimeResponseDTO> {
-        return provider.request(.topAnime(query: query))
+    func getTopAnime(sortOption: SortOption, page: Int) -> Single<AnimeResponseDTO> {
+        return provider.request(.topAnime(sortOption: sortOption, page: page))
             .catch { error in
                 return Single.error(error)
             }
     }
     
-    func getSeasonNow() -> Single<AnimeResponseDTO> {
-        return provider.request(.seasonNow)
+    func getSeasonNow(page: Int) -> Single<AnimeResponseDTO> {
+        return provider.request(.seasonNow(page: page))
             .catch { error in
                 return Single.error(error)
             }
     }
     
-    func getCompleteAnime(sortBy: ListSortOption) -> Single<AnimeResponseDTO> {
-        return provider.request(.completeAnime(sortBy))
+    func getCompleteAnime(sortBy: ListSortOption, page: Int) -> Single<AnimeResponseDTO> {
+        return provider.request(.completeAnime(sortOption: sortBy, page: page))
             .catch { error in
                 return Single.error(error)
             }
     }
     
-    func getMovieAnime(sortBy: ListSortOption) -> Single<AnimeResponseDTO> {
-        return provider.request(.movieAnime(sortBy))
+    func getMovieAnime(sortBy: ListSortOption, page: Int) -> Single<AnimeResponseDTO> {
+        return provider.request(.movieAnime(sortOption: sortBy, page: page))
             .catch { error in
                 return Single.error(error)
             }
     }
     
-    func getAnimeSearch(query: String, sortBy: ListSortOption) -> Single<AnimeResponseDTO> {
-        return provider.request(.animeSearch(query, sortBy))
+    func getAnimeSearch(query: String, sortBy: ListSortOption, page: Int) -> Single<AnimeResponseDTO> {
+        return provider.request(.animeSearch(query: query, sortOption: sortBy, page: page))
             .catch { error in
                 return Single.error(error)
             }
     }
     
     func getAnimeGenre(genre: AnimeGenreProtocol, sortBy: ListSortOption) -> Single<AnimeResponseDTO> {
-        return provider.request(.animeByGenre(genre, sortBy))
+        return provider.request(.animeByGenre(genre: genre, sortOption: sortBy))
             .catch { error in
                 return Single.error(error)
             }
     }
-    
 }

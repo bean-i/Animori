@@ -161,11 +161,11 @@ extension ExploreViewController: SectionHeaderViewDelegate {
         if sectionIndex >= 2 {
             switch sectionIndex {
             case 2:
-                endpoint = .seasonNow
+                endpoint = .seasonNow(page: 1)
             case 3:
-                endpoint = .completeAnime(.scoredBy)
+                endpoint = .completeAnime(sortOption: .scoredBy, page: 1)
             case 4:
-                endpoint = .movieAnime(.scoredBy)
+                endpoint = .movieAnime(sortOption: .scoredBy, page: 1)
             default: return
             }
             let animeListVC = DIContainer.shared.makeAnimeListVC(endpoint: endpoint, mode: .anime)

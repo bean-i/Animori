@@ -51,7 +51,7 @@ final class ExploreViewModel: Reactor {
             if isLoading { return Observable.empty() }
             isLoading = true
             
-            let topAnime = AnimeClient.shared.getTopAnime(query: TopAnimeRequest.basic)
+            let topAnime = AnimeClient.shared.getTopAnime(sortOption: .popular, page: 1)
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setTopAnime($0) }
                 .catch { error in
@@ -59,7 +59,7 @@ final class ExploreViewModel: Reactor {
                 }
                 .asObservable()
             
-            let seasonAnime = AnimeClient.shared.getSeasonNow()
+            let seasonAnime = AnimeClient.shared.getSeasonNow(page: 1)
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setSeasonAnime($0) }
                 .catch { error in
@@ -67,7 +67,7 @@ final class ExploreViewModel: Reactor {
                 }
                 .asObservable()
             
-            let completeAnime = AnimeClient.shared.getCompleteAnime(sortBy: .scoredBy)
+            let completeAnime = AnimeClient.shared.getCompleteAnime(sortBy: .scoredBy, page: 1)
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setCompleteAnime($0) }
                 .catch { error in
@@ -75,7 +75,7 @@ final class ExploreViewModel: Reactor {
                 }
                 .asObservable()
             
-            let movieAnime = AnimeClient.shared.getMovieAnime(sortBy: .scoredBy)
+            let movieAnime = AnimeClient.shared.getMovieAnime(sortBy: .scoredBy, page: 1)
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setMovieAnime($0) }
                 .catch { error in
@@ -120,8 +120,8 @@ final class ExploreViewModel: Reactor {
     }
     
     private func sortTopAnime(_ sortOption: SortOption) -> Observable<Mutation> {
-        let newQuery = TopAnimeRequest(filter: sortOption.apiParameter, limit: 10)
-        return AnimeClient.shared.getTopAnime(query: newQuery)
+//        let newQuery = TopAnimeRequest(filter: sortOption.apiParameter, limit: 10, page: 1)
+        return AnimeClient.shared.getTopAnime(sortOption: sortOption, page: 1)
             .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
             .map { Mutation.setTopAnime($0) }
             .catch { error in

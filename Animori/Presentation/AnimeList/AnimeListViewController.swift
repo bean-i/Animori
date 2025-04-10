@@ -125,6 +125,20 @@ extension AnimeListViewController: View {
             }
             .disposed(by: disposeBag)
         
+        // rx.prefetchItems 사용 예시
+        mainView.animeListCollectionView.rx.prefetchItems
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] indexPaths in
+                guard let self = self, let reactor = self.reactor else { return }
+                let totalItems = self.mainView.animeListCollectionView.numberOfItems(inSection: 0)
+                if indexPaths.contains(where: { $0.item >= totalItems - 5 }) {
+                    reactor.action.onNext(.loadNextPage)
+                }
+            })
+            .disposed(by: disposeBag)
+
+        
+        
         reactor.pulse(\.$error)
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, _ in

@@ -9,6 +9,7 @@ import Foundation
 
 // MARK: - Response
 struct AnimeResponseDTO: Decodable {
+    let pagination: PaginationResponse
     let data: [AnimeDTO]
 }
 
@@ -95,6 +96,6 @@ extension AnimeDTO {
 // MARK: - 빈 데이터
 extension AnimeResponseDTO {
     static var empty: AnimeResponseDTO {
-        return AnimeResponseDTO(data: [])
+        return AnimeResponseDTO(pagination: PaginationResponse.basic, data: [])
     }
 }

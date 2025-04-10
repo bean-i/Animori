@@ -50,7 +50,7 @@ final class AnimeSearchViewModel: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadInfo:
-            let topAnime = AnimeClient.shared.getTopAnime(query: TopAnimeRequest.basic)
+            let topAnime = AnimeClient.shared.getTopAnime(sortOption: .popular, page: 1)
                 .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
                 .map { Mutation.setTopAnimes($0) }
                 .catch { error in
