@@ -8,6 +8,7 @@
 import Foundation
 
 protocol TopCharacterProtocol {
+    var id: Int { get }
     var image: String { get }
     var name: String { get }
     var favorites: String { get }
