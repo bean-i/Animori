@@ -143,7 +143,7 @@ extension AnimeSearchViewController: View {
             }
             .disposed(by: disposeBag)
         
-        // 장르 탭
+        // 셀 탭
         mainView.collectionView.rx.modelSelected(AnimeSearchSectionItem.self)
             .subscribe(with: self) { owner, item in
                 switch item {
@@ -153,9 +153,9 @@ extension AnimeSearchViewController: View {
                     reactor.action.onNext(.genreSelected(genre))
                 case .topAnime(let anime):
                     reactor.action.onNext(.animeSelected(anime.id))
-                case .topCharacter(_):
-                    break
-//                    print("캐릭터 선택", character.name)
+                case .topCharacter(let character):
+                    let vc = DIContainer.shared.makeCharacterDetailVC(id: character.id)
+                    owner.navigationController?.pushViewController(vc, animated: true)
                 }
             }
             .disposed(by: disposeBag)
