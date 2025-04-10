@@ -36,12 +36,11 @@ final class CharacterImageCell: BaseFSPagerViewCell {
     override func configureView() {
         posterImageView.clipsToBounds = true
         posterImageView.layer.cornerRadius = 10
-        posterImageView.tintColor = .am(.base(.gray))
+        posterImageView.tintColor = .am(.base(.white))
         posterImageView.contentMode = .scaleAspectFill
         posterImageView.clipsToBounds = true
         posterImageView.backgroundColor = .amGray
     }
-    
     
     func configureData(data: String) {
         currentTask?.cancel()
