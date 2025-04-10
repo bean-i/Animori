@@ -47,10 +47,10 @@ extension AnimeCharacterInfoDTO {
         let favorites = NumberFormatter.formatted(self.favorites)
         return AnimeCharacterInfoEntity(
             name: self.name,
-            kanjiName: self.kanjiName ?? "X",
-            nickname: self.nicknames.first ?? "X",
+            kanjiName: self.kanjiName ?? "-",
+            nickname: self.nicknames.first ?? "-",
             favorites: favorites,
-            about: self.about ?? "X"
+            about: self.about ?? "-"
         )
     }
 }
