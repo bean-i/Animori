@@ -129,13 +129,16 @@ extension AnimeDetailViewController: View {
         
         // OTT 셀 탭 액션
         mainView.collectionView.rx.modelSelected(AnimeDetailSectionItem.self)
-            .subscribe(onNext: { item in
+            .bind(with: self) { owner, item in
                 switch item {
                 case .ott(let ott):
                     reactor.action.onNext(.ottTapped(ott.url))
+                case .character(let character):
+                    let vc = DIContainer.shared.makeCharacterDetailVC(id: character.id)
+                    owner.navigationController?.pushViewController(vc, animated: true)
                 default: break
                 }
-            })
+            }
             .disposed(by: disposeBag)
         
         // OTT 셀 탭 -> 사파리 화면 띄우기
