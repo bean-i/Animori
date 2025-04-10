@@ -40,6 +40,13 @@ final class DIContainer {
         return vc
     }
     
+    func makeCharacterDetailVC(id: Int) -> AnimeCharacterDetailViewController {
+        let state = AnimeCharacterDetailViewModel.State()
+        let model = AnimeCharacterDetailViewModel(initialState: state, characterID: id)
+        let vc = AnimeCharacterDetailViewController(reactor: model)
+        return vc
+    }
+    
     func makeTabBarVC() -> AnimoriTabBarController {
         let vc = AnimoriTabBarController()
         vc.viewControllers = [
