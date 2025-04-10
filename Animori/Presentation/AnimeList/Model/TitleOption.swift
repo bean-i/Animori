@@ -8,6 +8,7 @@
 import Foundation
 
 enum TitleOption {
+    case topAnime
     case seasonNow
     case complete
     case movie
@@ -15,6 +16,7 @@ enum TitleOption {
     
     var displayName: String {
         switch self {
+        case .topAnime: return LocalizedStrings.AnimeSearch.topAnime
         case .seasonNow: return LocalizedStrings.AnimeList.seasonTitle
         case .complete: return LocalizedStrings.AnimeList.completeTitle
         case .movie: return LocalizedStrings.AnimeList.movieTitle

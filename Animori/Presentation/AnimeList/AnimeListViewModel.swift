@@ -10,10 +10,16 @@ import RxSwift
 import ReactorKit
 
 final class AnimeListViewModel: Reactor {
+    
+    enum AnimeMode {
+        case anime
+        case top
+    }
    
     enum Action {
         case loadAnimeList(AnimeEndPoint)
         case sortSelected(ListSortOption)
+        case topSortSelected(SortOption)
         case animeSelected(Int)
     }
     
@@ -21,6 +27,7 @@ final class AnimeListViewModel: Reactor {
         case setTitle(String)
         case setCurrentEndpoint(AnimeEndPoint)
         case setSortOptions(ListSortOption)
+        case setTopSortOptions(SortOption)
         case setAnimeList([any AnimeProtocol])
         case setSelectedAnime(Int)
         case setError(Error)
@@ -28,36 +35,33 @@ final class AnimeListViewModel: Reactor {
     
     struct State {
         var title: String = ""
-        var currentEndpoint: AnimeEndPoint?
+        var currentEndpoint: AnimeEndPoint
+        @Pulse var topSort: [SortOption] = SortOption.allCases
         @Pulse var sort: [ListSortOption] = ListSortOption.allCases
-        @Pulse var animeList: [any AnimeProtocol]
+        @Pulse var animeList: [any AnimeProtocol] = []
         @Pulse var selectedSortOption: ListSortOption = .scoredBy
+        @Pulse var selectedTopSortOption: SortOption = .popular
         @Pulse var selectedAnime: Int?
         @Pulse var error: Error? = nil
     }
     
     let initialState: State
-    private var currentEndpoint: AnimeEndPoint?
+    let mode: AnimeMode
     
-    init(initialState: State) {
+    init(initialState: State, mode: AnimeMode) {
         self.initialState = initialState
+        self.mode = mode
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .loadAnimeList(let query):
-            currentEndpoint = query
             return Observable.merge(
-                requestAnimeList(endpoint: query, sortBy: .scoredBy),
-                Observable.just(Mutation.setCurrentEndpoint(query)) // 추가
+                requestAnimeList(endpoint: query, sortBy: .scoredBy)
             )
             
         case .sortSelected(let sortOption):
-            guard let endpoint = currentEndpoint else {
-                return Observable.empty()
-            }
-            
-            let newAnimeList = requestAnimeList(endpoint: endpoint, sortBy: sortOption)
+            let newAnimeList = requestAnimeList(endpoint: currentState.currentEndpoint, sortBy: sortOption)
             
             return Observable.merge(
                 Observable.just(Mutation.setSortOptions(sortOption)),
@@ -66,6 +70,13 @@ final class AnimeListViewModel: Reactor {
 
         case .animeSelected(let id):
             return Observable.just(Mutation.setSelectedAnime(id))
+            
+        case .topSortSelected(let option):
+            let newTopAnime = sortTopAnime(option)
+            return Observable.merge(
+                Observable.just(Mutation.setTopSortOptions(option)),
+                newTopAnime
+            )
         }
     }
     
@@ -84,6 +95,8 @@ final class AnimeListViewModel: Reactor {
             newState.selectedAnime = id
         case .setError(let error):
             newState.error = error
+        case .setTopSortOptions(let option):
+            newState.selectedTopSortOption = option
         }
         return newState
     }
@@ -163,8 +176,19 @@ final class AnimeListViewModel: Reactor {
                 Observable.just(Mutation.setTitle("\(genre.name) \(LocalizedStrings.AnimeList.anime)"))
             )
             
-        default:
-            return Observable.just(Mutation.setAnimeList([]))
+        case .topAnime(let query):
+            let topAnime = AnimeClient.shared.getTopAnime(query: query)
+                .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
+                .map { Mutation.setAnimeList($0) }
+                .catch { error in
+                    Single.just(Mutation.setError(error))
+                }
+                .asObservable()
+            
+            return Observable.merge(
+                topAnime,
+                Observable.just(Mutation.setTitle(TitleOption.topAnime.displayName))
+            )
         }
     }
 
@@ -181,5 +205,16 @@ final class AnimeListViewModel: Reactor {
     
     private func sortAnimeByPopularity(_ anime: [any AnimeProtocol]) -> [any AnimeProtocol] {
         return anime.sorted { $0.scoredBy > $1.scoredBy }
+    }
+    
+    private func sortTopAnime(_ sortOption: SortOption) -> Observable<Mutation> {
+        let newQuery = TopAnimeRequest(filter: sortOption.apiParameter, limit: 25)
+        return AnimeClient.shared.getTopAnime(query: newQuery)
+            .map { $0.data.map { $0.toEntity() }.removeDuplicates() }
+            .map { Mutation.setAnimeList($0) }
+            .catch { error in
+                return Single.just(Mutation.setError(error))
+            }
+            .asObservable()
     }
 }
