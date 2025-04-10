@@ -27,9 +27,6 @@ final class ExploreViewController: BaseViewController<ExploreView> {
     // 밑 컬렉션뷰 2개에서 화면 전환하면, 정렬 탭 UI가 초기화되는 버그..
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        if !(reactor?.isLoading ?? false) { // 요청 중이 아니면 다시 시도
-//            reactor?.action.onNext(.loadAnime)
-//        }
         if let selectedSort = reactor?.currentState.selectedSortOption {
             let indexPath = IndexPath(item: selectedSort.rawValue, section: 0)
             mainView.collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
@@ -160,20 +157,18 @@ extension ExploreViewController: TrendCollectionViewCellDelegate {
 extension ExploreViewController: SectionHeaderViewDelegate {
     func sectionHeaderViewTapped(_ headerView: SectionHeaderView) {
         let sectionIndex = headerView.tag
+        let endpoint: AnimeEndPoint
         if sectionIndex >= 2 {
-            let state = AnimeListViewModel.State(animeList: [])
-            let model = AnimeListViewModel(initialState: state)
-            let animeListVC = AnimeListViewController(reactor: model)
-            
             switch sectionIndex {
             case 2:
-                model.action.onNext(.loadAnimeList(.seasonNow))
+                endpoint = .seasonNow
             case 3:
-                model.action.onNext(.loadAnimeList(.completeAnime(.scoredBy)))
+                endpoint = .completeAnime(.scoredBy)
             case 4:
-                model.action.onNext(.loadAnimeList(.movieAnime(.scoredBy)))
-            default: break
+                endpoint = .movieAnime(.scoredBy)
+            default: return
             }
+            let animeListVC = DIContainer.shared.makeAnimeListVC(endpoint: endpoint, mode: .anime)
             navigationController?.pushViewController(animeListVC, animated: true)
         }
     }

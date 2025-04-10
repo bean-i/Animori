@@ -10,17 +10,26 @@ import Foundation
 enum AnimeCharacterEndPoint: EndPoint {
     
     case topCharacter // getTopCharacters
+    case characterPictures(Int) // getCharacterPictures
+    case characterInfo(Int) // getCharacterById
+    case characterVoiceActors(Int)// getCharacterVoiceActors
     
     var baseURL: String? { return Bundle.main.baseURL }
     var path: String {
         switch self {
         case .topCharacter: return "/top/characters"
+        case .characterPictures(let id): return "/characters/\(id)/pictures"
+        case .characterInfo(let id): return "/characters/\(id)"
+        case .characterVoiceActors(let id): return "/characters/\(id)/voices"
         }
     }
     
     var method: HTTPMethod {
         switch self {
         case .topCharacter: return .get
+        case .characterPictures: return .get
+        case .characterInfo: return .get
+        case .characterVoiceActors: return .get
         }
     }
     
@@ -29,9 +38,7 @@ enum AnimeCharacterEndPoint: EndPoint {
     var encoder: JSONEncoder { return JSONEncoder() }
     
     var parameters: Encodable {
-        switch self {
-        case .topCharacter: return EmptyParameters()
-        }
+        return EmptyParameters()
     }
     
     func error(_ statusCode: Int?, data: Data) -> any Error {

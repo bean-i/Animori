@@ -23,42 +23,74 @@ extension AnimeListViewController: View {
     
     func bind(reactor: AnimeListViewModel) {
         
+        reactor.action.onNext(.loadAnimeList(reactor.currentState.currentEndpoint))
+        
         // 타이틀
         reactor.state
             .map { $0.title }
             .bind(to: navigationItem.rx.title)
             .disposed(by: disposeBag)
         
-        // 정렬버튼 나타내기
-        reactor.pulse(\.$sort)
-            .bind(to: mainView.sortButtonCollectionView.rx.items(cellIdentifier: SortButtonCell.identifier, cellType: SortButtonCell.self)) { (row, element, cell) in
-                cell.configureData(title: element.displayName)
-            }
-            .disposed(by: disposeBag)
+        switch reactor.mode {
+        case .anime:
+            // 정렬버튼 나타내기
+            reactor.pulse(\.$sort)
+                .bind(to: mainView.sortButtonCollectionView.rx.items(cellIdentifier: SortButtonCell.identifier, cellType: SortButtonCell.self)) { (row, element, cell) in
+                    cell.configureData(title: element.displayName)
+                }
+                .disposed(by: disposeBag)
+            
+            // 현재 선택된 정렬 버튼
+            reactor.pulse(\.$selectedSortOption)
+                .observe(on: MainScheduler.instance)
+                .bind(with: self) { owner, option in
+                    owner.mainView.sortButtonCollectionView.selectItem(at: IndexPath(item: option.rawValue, section: 0), animated: false, scrollPosition: [])
+                }
+                .disposed(by: disposeBag)
+            
+            // 정렬 버튼 탭
+            mainView.sortButtonCollectionView.rx.modelSelected(ListSortOption.self)
+                .bind(with: self) { owner, option in
+                    if owner.mainView.animeListCollectionView.numberOfItems(inSection: 0) > 0 {
+                        owner.mainView.animeListCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+                    }
+                    reactor.action.onNext(.sortSelected(option))
+                }
+                .disposed(by: disposeBag)
+            
+        case .top:
+            // 정렬버튼 나타내기
+            reactor.pulse(\.$topSort)
+                .bind(to: mainView.sortButtonCollectionView.rx.items(cellIdentifier: SortButtonCell.identifier, cellType: SortButtonCell.self)) { (row, element, cell) in
+                    cell.configureData(title: element.displayName)
+                }
+                .disposed(by: disposeBag)
+            
+            // 현재 선택된 정렬 버튼
+            reactor.pulse(\.$selectedTopSortOption)
+                .observe(on: MainScheduler.instance)
+                .bind(with: self) { owner, option in
+                    owner.mainView.sortButtonCollectionView.selectItem(at: IndexPath(item: option.rawValue, section: 0), animated: false, scrollPosition: [])
+                }
+                .disposed(by: disposeBag)
+            
+            // 정렬 버튼 탭
+            mainView.sortButtonCollectionView.rx.modelSelected(SortOption.self)
+                .bind(with: self) { owner, option in
+                    if owner.mainView.animeListCollectionView.numberOfItems(inSection: 0) > 0 {
+                        owner.mainView.animeListCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+                    }
+                    reactor.action.onNext(.topSortSelected(option))
+                }
+                .disposed(by: disposeBag)
+        }
+        
         
         // 애니메이션 리스트 나타내기
         reactor.pulse(\.$animeList)
             .observe(on: MainScheduler.instance)
             .bind(to: mainView.animeListCollectionView.rx.items(cellIdentifier: RecommendCollectionViewCell.identifier, cellType: RecommendCollectionViewCell.self)) { (row, element, cell) in
                 cell.configureData(with: element)
-            }
-            .disposed(by: disposeBag)
-        
-        // 현재 선택된 정렬 버튼
-        reactor.pulse(\.$selectedSortOption)
-            .observe(on: MainScheduler.instance)
-            .bind(with: self) { owner, option in
-                owner.mainView.sortButtonCollectionView.selectItem(at: IndexPath(item: option.rawValue, section: 0), animated: false, scrollPosition: [])
-            }
-            .disposed(by: disposeBag)
-        
-        // 정렬 버튼 탭
-        mainView.sortButtonCollectionView.rx.modelSelected(ListSortOption.self)
-            .bind(with: self) { owner, option in
-                if owner.mainView.animeListCollectionView.numberOfItems(inSection: 0) > 0 {
-                    owner.mainView.animeListCollectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
-                }
-                reactor.action.onNext(.sortSelected(option))
             }
             .disposed(by: disposeBag)
         
@@ -97,9 +129,7 @@ extension AnimeListViewController: View {
             .observe(on: MainScheduler.instance)
             .bind(with: self) { owner, _ in
                 let alert = DIContainer.shared.makeAlert(retryAction: {
-                    if let endpoint = reactor.currentState.currentEndpoint {
-                        owner.reactor?.action.onNext(.loadAnimeList(endpoint))
-                    }
+                    owner.reactor?.action.onNext(.loadAnimeList(reactor.currentState.currentEndpoint))
                 })
                 owner.present(alert, animated: true)
             }

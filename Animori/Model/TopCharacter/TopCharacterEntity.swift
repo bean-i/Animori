@@ -8,6 +8,7 @@
 import Foundation
 
 struct TopCharacterEntity: TopCharacterProtocol {
+    let id: Int
     let image: String
     let name: String
     let favorites: String

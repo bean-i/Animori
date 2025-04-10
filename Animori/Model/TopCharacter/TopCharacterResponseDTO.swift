@@ -70,6 +70,11 @@ extension TopCharacterDTO {
         
         let favorites = "Like \(NumberFormatter.formatted(self.favorites))"
 
-        return TopCharacterEntity(image: image, name: self.name, favorites: favorites)
+        return TopCharacterEntity(
+            id: self.characterId,
+            image: image,
+            name: self.name,
+            favorites: favorites
+        )
     }
 }

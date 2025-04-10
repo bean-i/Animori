@@ -36,7 +36,7 @@ final class CharacterCell: BaseCollectionViewCell {
         nameLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(8)
             make.horizontalEdges.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.bottom.lessThanOrEqualToSuperview()
         }
     }
     
@@ -61,4 +61,10 @@ final class CharacterCell: BaseCollectionViewCell {
         nameLabel.text = character.name
     }
     
+    func configureVoiceActor(_ actor: AnimeCharacterVoiceActorsProtocol) {
+        currentTask?.cancel()
+        currentTask = imageView.setImage(from: actor.image)
+
+        nameLabel.text = "[\(actor.language)]\n\(actor.name)"
+    }
 }

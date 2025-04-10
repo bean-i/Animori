@@ -49,6 +49,10 @@ struct TopAnimeRequest: Encodable {
     static var basic: TopAnimeRequest {
         return TopAnimeRequest(filter: "bypopularity", limit: 10)
     }
+    
+    static var page: TopAnimeRequest {
+        return TopAnimeRequest(filter: "bypopularity", limit: 25)
+    }
 }
 
 // MARK: - CompleteAnime (완결 명작, 극장판)

@@ -33,10 +33,30 @@ final class DIContainer {
         return vc
     }
     
-    func makeAnimeListVC() -> AnimeListViewController {
-        let state = AnimeListViewModel.State(animeList: [])
-        let model = AnimeListViewModel(initialState: state)
+    func makeAnimeListVC(endpoint: AnimeEndPoint, mode: AnimeListViewModel.AnimeMode) -> AnimeListViewController {
+        let state = AnimeListViewModel.State(currentEndpoint: endpoint)
+        let model = AnimeListViewModel(initialState: state, mode: mode)
         let vc = AnimeListViewController(reactor: model)
+        return vc
+    }
+    
+    func makeAnimeCharacterListVC(mode: AnimeCharacterListViewModel.CharacterMode) -> AnimeCharacterListViewController {
+        let state = AnimeCharacterListViewModel.State()
+        let model: AnimeCharacterListViewModel
+        switch mode {
+        case .anime(let id):
+            model = AnimeCharacterListViewModel(initialState: state, mode: .anime(id: id))
+        case .top:
+            model = AnimeCharacterListViewModel(initialState: state, mode: .top)
+        }
+        let vc = AnimeCharacterListViewController(reactor: model)
+        return vc
+    }
+    
+    func makeCharacterDetailVC(id: Int) -> AnimeCharacterDetailViewController {
+        let state = AnimeCharacterDetailViewModel.State()
+        let model = AnimeCharacterDetailViewModel(initialState: state, characterID: id)
+        let vc = AnimeCharacterDetailViewController(reactor: model)
         return vc
     }
     

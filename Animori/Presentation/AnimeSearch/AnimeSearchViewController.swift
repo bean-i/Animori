@@ -53,6 +53,8 @@ final class AnimeSearchViewController: BaseViewController<AnimeSearchView> {
     } configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: SectionHeaderView.identifier, for: indexPath) as! SectionHeaderView
         let section = dataSource.sectionModels[indexPath.section]
+        header.delegate = self
+        header.tag = indexPath.section
         if indexPath.section > 1 {
             header.configure(with: section.header)
         } else {
@@ -115,10 +117,8 @@ extension AnimeSearchViewController: View {
             .compactMap { $0 }
             .filter { !$0.isEmpty }
             .bind(with: self) { owner, keyword in
-                let state = AnimeListViewModel.State(animeList: [])
-                let model = AnimeListViewModel(initialState: state)
-                let vc = AnimeListViewController(reactor: model)
-                model.action.onNext(.loadAnimeList(.animeSearch(keyword, .scoredBy)))
+                let endpoint = AnimeEndPoint.animeSearch(keyword, .scoredBy)
+                let vc = DIContainer.shared.makeAnimeListVC(endpoint: endpoint, mode: .anime)
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
@@ -126,10 +126,8 @@ extension AnimeSearchViewController: View {
         reactor.pulse(\.$selectedGenre)
             .compactMap { $0 }
             .bind(with: self) { owner, genre in
-                let state = AnimeListViewModel.State(animeList: [])
-                let model = AnimeListViewModel(initialState: state)
-                let vc = AnimeListViewController(reactor: model)
-                model.action.onNext(.loadAnimeList(.animeByGenre(genre, .scoredBy)))
+                let endpoint = AnimeEndPoint.animeByGenre(genre, .scoredBy)
+                let vc = DIContainer.shared.makeAnimeListVC(endpoint: endpoint, mode: .anime)
                 owner.navigationController?.pushViewController(vc, animated: true)
             }
             .disposed(by: disposeBag)
@@ -143,7 +141,7 @@ extension AnimeSearchViewController: View {
             }
             .disposed(by: disposeBag)
         
-        // 장르 탭
+        // 셀 탭
         mainView.collectionView.rx.modelSelected(AnimeSearchSectionItem.self)
             .subscribe(with: self) { owner, item in
                 switch item {
@@ -153,9 +151,9 @@ extension AnimeSearchViewController: View {
                     reactor.action.onNext(.genreSelected(genre))
                 case .topAnime(let anime):
                     reactor.action.onNext(.animeSelected(anime.id))
-                case .topCharacter(_):
-                    break
-//                    print("캐릭터 선택", character.name)
+                case .topCharacter(let character):
+                    let vc = DIContainer.shared.makeCharacterDetailVC(id: character.id)
+                    owner.navigationController?.pushViewController(vc, animated: true)
                 }
             }
             .disposed(by: disposeBag)
@@ -174,3 +172,22 @@ extension AnimeSearchViewController: View {
     
 }
 
+// 헤더 탭 -> 애니메이션 목록 화면으로 전환
+extension AnimeSearchViewController: SectionHeaderViewDelegate {
+    func sectionHeaderViewTapped(_ headerView: SectionHeaderView) {
+        print(#function)
+        let sectionIndex = headerView.tag
+        let vc: UIViewController
+        switch sectionIndex {
+        case 1: // 장르 바로가기
+            return // 추후 추가..
+        case 2: // Top 애니메이션
+            vc = DIContainer.shared.makeAnimeListVC(endpoint: .topAnime(query: TopAnimeRequest.page), mode: .top)
+            
+        case 3: // Top 캐릭터
+            vc = DIContainer.shared.makeAnimeCharacterListVC(mode: .top)
+        default: return
+        }
+        navigationController?.pushViewController(vc, animated: true)
+    }
+}
