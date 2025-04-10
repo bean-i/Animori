@@ -22,7 +22,7 @@ final class AnimeDetailViewController: BaseViewController<AnimeDetailView> {
         self.reactor = reactor
     }
 
-    private var dataSource = RxCollectionViewSectionedReloadDataSource<AnimeDetailSection>(
+    private lazy var dataSource = RxCollectionViewSectionedReloadDataSource<AnimeDetailSection>(
         configureCell: { dataSource, collectionView, indexPath, item in
             switch item {
             case .review(let review):
@@ -54,6 +54,8 @@ final class AnimeDetailViewController: BaseViewController<AnimeDetailView> {
             ) as! AnimeDetailSectionView
             let section = dataSource.sectionModels[indexPath.section]
             header.configure(with: section.header)
+            header.tag = indexPath.section
+            header.delegate = self
             return header
         }
     )
@@ -95,7 +97,7 @@ extension AnimeDetailViewController: View {
                 let reviewSection = AnimeDetailSection(header: LocalizedStrings.AnimeDetail.review,
                                                    items: state.reviews.map { .review($0) })
             
-                let characterSection = AnimeDetailSection(header: LocalizedStrings.AnimeDetail.character,
+                let characterSection = AnimeDetailSection(header: "\(LocalizedStrings.AnimeDetail.character) [전체 보기]",
                                                       items: state.characters.map { .character($0) })
             
                 let ottSection = AnimeDetailSection(header: LocalizedStrings.AnimeDetail.ott,
@@ -162,4 +164,16 @@ extension AnimeDetailViewController: View {
             }
             .disposed(by: disposeBag)
     }
+}
+
+extension AnimeDetailViewController: AnimeDetailSectionViewDelegate {
+    func animeDetailSectionViewTapped(_ headerView: AnimeDetailSectionView) {
+        let sectionIndex = headerView.tag
+        if sectionIndex == 1 {
+            let vc = DIContainer.shared.makeAnimeCharacterListVC(mode: .anime(id: self.reactor?.animeID ?? 0))
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+    }
+    
+    
 }

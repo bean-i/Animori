@@ -26,6 +26,11 @@ extension AnimeCharacterListViewController: View {
         
         reactor.action.onNext(.loadCharacters)
         
+        reactor.state
+            .map { $0.title }
+            .bind(to: navigationItem.rx.title)
+            .disposed(by: disposeBag)
+        
         // 로딩뷰
         reactor.state
             .map { $0.isLoading }

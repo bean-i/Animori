@@ -20,6 +20,7 @@ final class AnimeCharacterListViewModel: Reactor {
     }
     
     enum Mutation {
+        case setTitle(String)
         case setLoading(Bool)
         case setAnimeCharacters([any AnimeCharacterProtocol])
         case setTopCharacters([TopCharacterProtocol])
@@ -27,6 +28,7 @@ final class AnimeCharacterListViewModel: Reactor {
     }
     
     struct State {
+        var title: String = ""
         var isLoading: Bool = false
         var animeCharacters: [any AnimeCharacterProtocol] = []
         var topCharacters: [TopCharacterProtocol] = []
@@ -48,10 +50,12 @@ final class AnimeCharacterListViewModel: Reactor {
             case .loadCharacters:
                 let startLoading = Observable.just(Mutation.setLoading(true))
                 let stopLoading = Observable.just(Mutation.setLoading(false))
+                let titleMutation: Observable<Mutation>
                 let request: Observable<Mutation>
                 
                 switch mode {
                 case .anime(let id):
+                    titleMutation = Observable.just(Mutation.setTitle("애니메이션 캐릭터"))
                     request = AnimeDetailClient.shared.getAnimeCharacters(id: id)
                         .map { Mutation.setAnimeCharacters($0.data.map { $0.toEntity() }) }
                         .catch { error in
@@ -59,16 +63,21 @@ final class AnimeCharacterListViewModel: Reactor {
                         }
                         .asObservable()
                     
+                    let combinedRequest = Observable.concat([titleMutation, request])
+                    return Observable.concat([startLoading, combinedRequest, stopLoading])
+                    
                 case .top:
+                    titleMutation = Observable.just(Mutation.setTitle("Top 캐릭터"))
                     request = AnimeCharacterClient.shared.getTopCharacters()
                         .map { Mutation.setTopCharacters($0.data.map { $0.toEntity() }) }
                         .catch { error in
                             Single.just(Mutation.setError(error))
                         }
                         .asObservable()
+                    
+                    let combinedRequest = Observable.concat([titleMutation, request])
+                    return Observable.concat([startLoading, combinedRequest, stopLoading])
                 }
-                
-                return Observable.concat([startLoading, request, stopLoading])
             }
         }
     }
@@ -76,6 +85,8 @@ final class AnimeCharacterListViewModel: Reactor {
     func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
+        case .setTitle(let title):
+            newState.title = title
         case .setLoading(let isLoading):
             newState.isLoading = isLoading
         case .setAnimeCharacters(let characters):

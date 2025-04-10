@@ -37,7 +37,7 @@ final class AnimeDetailViewModel: Reactor {
         @Pulse var error: Error? = nil
     }
     
-    private let animeID: Int
+    let animeID: Int
     let initialState: State
     
     init(animeID: Int, initialState: State) {

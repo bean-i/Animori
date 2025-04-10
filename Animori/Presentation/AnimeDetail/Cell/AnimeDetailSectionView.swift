@@ -8,9 +8,15 @@
 import UIKit
 import SnapKit
 
+// MARK: - 화면 전환 프로토콜
+protocol AnimeDetailSectionViewDelegate: AnyObject {
+    func animeDetailSectionViewTapped(_ headerView: AnimeDetailSectionView)
+}
+
 final class AnimeDetailSectionView: UICollectionReusableView {
     
     static let identifier = "AnimeDetailSectionView"
+    weak var delegate: AnimeDetailSectionViewDelegate?
     
     private let titleLabel = UILabel()
     
@@ -40,10 +46,17 @@ final class AnimeDetailSectionView: UICollectionReusableView {
         titleLabel.textColor = .am(.base(.white))
         titleLabel.textAlignment = .left
         titleLabel.numberOfLines = 1
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(headerTapped))
+        addGestureRecognizer(tapGesture)
     }
 
     func configure(with title: String) {
         titleLabel.text = title
+    }
+    
+    @objc private func headerTapped() {
+        delegate?.animeDetailSectionViewTapped(self)
     }
 
 }
