@@ -49,12 +49,11 @@ final class CharacterInfoCell: BaseCollectionViewCell {
         nameLabel.snp.makeConstraints { make in
             make.horizontalEdges.equalToSuperview().inset(8)
             make.bottom.equalTo(subTitleLabel.snp.top).inset(-4)
-            make.height.equalTo(12)
         }
         
         subTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(nameLabel.snp.bottom).offset(4)
             make.leading.bottom.equalToSuperview().inset(8)
-            make.height.equalTo(12)
         }
     }
     
@@ -88,5 +87,12 @@ final class CharacterInfoCell: BaseCollectionViewCell {
         
         nameLabel.text = character.name
         subTitleLabel.text = character.favorites
+    }
+    
+    func configureAnimeData(with character: any AnimeCharacterProtocol) {
+        currentTask?.cancel()
+        currentTask = characterImageView.setImage(from: character.image)
+        
+        nameLabel.text = character.name
     }
 }
