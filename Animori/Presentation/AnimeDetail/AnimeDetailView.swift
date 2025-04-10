@@ -153,8 +153,8 @@ final class AnimeDetailView: BaseView {
         backgroundColor = .am(.base(.black))
         
         contentView.clipsToBounds = true
-        posterImageView.tintColor = .am(.base(.gray))
-        posterImageView.backgroundColor = .white
+        posterImageView.tintColor = .am(.base(.white))
+        posterImageView.backgroundColor = .amGray
         posterImageView.contentMode = .scaleAspectFill
         
         gradientLayer.frame = self.bounds
