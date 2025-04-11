@@ -5,6 +5,7 @@ target 'Animori' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   pod 'FSPagerView'
+  pod 'Floaty', '~> 4.2.0'
   
   post_install do |installer|
     installer.pods_project.targets.each do |target|

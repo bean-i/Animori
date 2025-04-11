@@ -1,12 +1,15 @@
 PODS:
+  - Floaty (4.2.0)
   - FSPagerView (0.8.3)
 
 DEPENDENCIES:
+  - Floaty (~> 4.2.0)
   - FSPagerView
 
 SPEC CHECKSUMS:
+  Floaty: e2bd5a0f6f7f70899e26ff2da31081c8bee8d1b0
   FSPagerView: 670405b2f18e2a87fa37f20b00de783e562c25a8
 
-PODFILE CHECKSUM: ecc0c8642e3ddffaaf55b9d98b01420e1b68315d
+PODFILE CHECKSUM: 2236ecb7d0fd432b347e85af2b47533d927d5b73
 
 COCOAPODS: 1.4.0

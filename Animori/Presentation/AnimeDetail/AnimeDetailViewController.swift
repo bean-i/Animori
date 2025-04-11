@@ -11,6 +11,7 @@ import RxSwift
 import RxCocoa
 import RxDataSources
 import SafariServices
+import Toast
 
 final class AnimeDetailViewController: BaseViewController<AnimeDetailView> {
     
@@ -163,6 +164,46 @@ extension AnimeDetailViewController: View {
                 owner.present(alert, animated: true)
             }
             .disposed(by: disposeBag)
+        
+        // 플로팅 버튼 탭
+        mainView.finishedItem.handler = { _ in
+            reactor.action.onNext(.saveButtonTapped(.completed))
+        }
+        
+        mainView.watchingItem.handler = { _ in
+            reactor.action.onNext(.saveButtonTapped(.watching))
+        }
+        
+        mainView.plannedItem.handler = { _ in
+            reactor.action.onNext(.saveButtonTapped(.planToWatch))
+        }
+        // 버튼 상태 업데이트
+        reactor.state
+            .map { $0.savedStatus }
+            .distinctUntilChanged { $0 == $1 }
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] status in
+                self?.mainView.updateSaveStatusIcons(status)
+            })
+            .disposed(by: disposeBag)
+        
+        reactor.pulse(\.$saveResult)
+            .compactMap { $0 }
+            .observe(on: MainScheduler.instance)
+            .bind(with: self) { owner, didSave in
+                let statusString: String
+                if let status = reactor.currentState.savedStatus {
+                    statusString = status.display
+                } else {
+                    statusString = ""
+                }
+                let message = didSave
+                ? "✅ \(statusString)에 저장되었습니다"
+                : "❌ 보관함에서 삭제되었습니다"
+                owner.mainView.makeToast(message, duration: 2.0, position: .center)
+            }
+            .disposed(by: disposeBag)
+        
     }
 }
 

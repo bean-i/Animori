@@ -60,11 +60,19 @@ final class DIContainer {
         return vc
     }
     
+    func makeStorageVC() -> StorageViewController {
+        let state = StorageViewModel.State()
+        let model = StorageViewModel(initialState: state)
+        let vc = StorageViewController(reactor: model)
+        return vc
+    }
+    
     func makeTabBarVC() -> AnimoriTabBarController {
         let vc = AnimoriTabBarController()
         vc.viewControllers = [
             UINavigationController(rootViewController: makeExploreVC()),
-            UINavigationController(rootViewController: makeAnimeSearchVC())
+            UINavigationController(rootViewController: makeAnimeSearchVC()),
+            UINavigationController(rootViewController: makeStorageVC())
         ]
         return vc
     }

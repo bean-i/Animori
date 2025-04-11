@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EA18C7282DA98B56005EE80F /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EA18C7272DA98B56005EE80F /* RealmSwift */; };
 		EA2D91042DA2FBB000F351A5 /* Pods_Animori.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AAFD610C0CC52B7F9B52A38F /* Pods_Animori.framework */; };
 		EA2D91052DA2FBB000F351A5 /* Pods_Animori.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AAFD610C0CC52B7F9B52A38F /* Pods_Animori.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		EA7521292D983F56006C1DCC /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = EA7521282D983F56006C1DCC /* RxDataSources */; };
+		EAB455F22DA93A1F0087CC28 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = EAB455F12DA93A1F0087CC28 /* ReactorKit */; };
+		EAB456002DA93AA30087CC28 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = EAB455FF2DA93AA30087CC28 /* RxDataSources */; };
+		EAB458802DA96CCA0087CC28 /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = EAB4587F2DA96CCA0087CC28 /* Toast */; };
+		EAB458942DA97FEB0087CC28 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EAB458932DA97FEB0087CC28 /* SnapKit */; };
 		EAB5F7AD2D981352000D1B38 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = EAB5F7AC2D981352000D1B38 /* Localizable.xcstrings */; };
 		EAB722972D9B04F90066E803 /* RealmSwift in Embed Frameworks */ = {isa = PBXBuildFile; productRef = EAF70C962D95637B00ED7696 /* RealmSwift */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		EAF70B742D95388400ED7696 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = EAF70B732D95388400ED7696 /* .gitignore */; };
-		EAF70BA72D95628C00ED7696 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BA62D95628C00ED7696 /* SnapKit */; };
 		EAF70BAD2D9562B600ED7696 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BAC2D9562B600ED7696 /* RxCocoa */; };
-		EAF70BAF2D9562B600ED7696 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BAE2D9562B600ED7696 /* RxSwift */; };
-		EAF70BB52D9562DC00ED7696 /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BB42D9562DC00ED7696 /* ReactorKit */; };
-		EAF70C972D95637B00ED7696 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70C962D95637B00ED7696 /* RealmSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -71,13 +71,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EAF70C972D95637B00ED7696 /* RealmSwift in Frameworks */,
-				EAF70BB52D9562DC00ED7696 /* ReactorKit in Frameworks */,
-				EA7521292D983F56006C1DCC /* RxDataSources in Frameworks */,
-				EAF70BAF2D9562B600ED7696 /* RxSwift in Frameworks */,
+				EAB456002DA93AA30087CC28 /* RxDataSources in Frameworks */,
+				EAB455F22DA93A1F0087CC28 /* ReactorKit in Frameworks */,
+				EA18C7282DA98B56005EE80F /* RealmSwift in Frameworks */,
 				EA2D91042DA2FBB000F351A5 /* Pods_Animori.framework in Frameworks */,
+				EAB458942DA97FEB0087CC28 /* SnapKit in Frameworks */,
 				EAF70BAD2D9562B600ED7696 /* RxCocoa in Frameworks */,
-				EAF70BA72D95628C00ED7696 /* SnapKit in Frameworks */,
+				EAB458802DA96CCA0087CC28 /* Toast in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,11 +176,11 @@
 			mainGroup = EAF70B422D9537CB00ED7696;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				EAF70BA52D95628C00ED7696 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				EAF70BAB2D9562B600ED7696 /* XCRemoteSwiftPackageReference "RxSwift" */,
-				EAF70BB32D9562DC00ED7696 /* XCRemoteSwiftPackageReference "ReactorKit" */,
-				EAF70C952D95637A00ED7696 /* XCRemoteSwiftPackageReference "realm-swift" */,
-				EA7521272D983F56006C1DCC /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				EAB455F02DA93A1F0087CC28 /* XCRemoteSwiftPackageReference "ReactorKit" */,
+				EAB455FE2DA93AA30087CC28 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				EAB4587E2DA96CCA0087CC28 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+				EAB458922DA97FEB0087CC28 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				EA18C7262DA98B56005EE80F /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EAF70B4C2D9537CB00ED7696 /* Products */;
@@ -213,11 +213,16 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Animori/Pods-Animori-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/FSPagerView/FSPagerView.framework",
+				"${BUILT_PRODUCTS_DIR}/Floaty/Floaty.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FSPagerView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Floaty.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -495,7 +500,23 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		EA7521272D983F56006C1DCC /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+		EA18C7262DA98B56005EE80F /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = exactVersion;
+				version = 10.54.4;
+			};
+		};
+		EAB455F02DA93A1F0087CC28 /* XCRemoteSwiftPackageReference "ReactorKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactorKit/ReactorKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.0;
+			};
+		};
+		EAB455FE2DA93AA30087CC28 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources.git";
 			requirement = {
@@ -503,7 +524,15 @@
 				minimumVersion = 5.0.2;
 			};
 		};
-		EAF70BA52D95628C00ED7696 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+		EAB4587E2DA96CCA0087CC28 /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.1;
+			};
+		};
+		EAB458922DA97FEB0087CC28 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
@@ -519,14 +548,6 @@
 				minimumVersion = 6.9.0;
 			};
 		};
-		EAF70BB32D9562DC00ED7696 /* XCRemoteSwiftPackageReference "ReactorKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ReactorKit/ReactorKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.2.0;
-			};
-		};
 		EAF70C952D95637A00ED7696 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -538,30 +559,35 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		EA7521282D983F56006C1DCC /* RxDataSources */ = {
+		EA18C7272DA98B56005EE80F /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = EA7521272D983F56006C1DCC /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			package = EA18C7262DA98B56005EE80F /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		EAB455F12DA93A1F0087CC28 /* ReactorKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EAB455F02DA93A1F0087CC28 /* XCRemoteSwiftPackageReference "ReactorKit" */;
+			productName = ReactorKit;
+		};
+		EAB455FF2DA93AA30087CC28 /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EAB455FE2DA93AA30087CC28 /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = RxDataSources;
 		};
-		EAF70BA62D95628C00ED7696 /* SnapKit */ = {
+		EAB4587F2DA96CCA0087CC28 /* Toast */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = EAF70BA52D95628C00ED7696 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			package = EAB4587E2DA96CCA0087CC28 /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
+		};
+		EAB458932DA97FEB0087CC28 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EAB458922DA97FEB0087CC28 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
 		EAF70BAC2D9562B600ED7696 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EAF70BAB2D9562B600ED7696 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxCocoa;
-		};
-		EAF70BAE2D9562B600ED7696 /* RxSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EAF70BAB2D9562B600ED7696 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxSwift;
-		};
-		EAF70BB42D9562DC00ED7696 /* ReactorKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = EAF70BB32D9562DC00ED7696 /* XCRemoteSwiftPackageReference "ReactorKit" */;
-			productName = ReactorKit;
 		};
 		EAF70C962D95637B00ED7696 /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
