@@ -119,4 +119,12 @@ final class RecommendCollectionViewCell: BaseCollectionViewCell {
         titleLabel.text = anime.title
     }
     
+    func configureStorageData(with anime: AnimeSaveStatusTable) {
+        currentTask?.cancel()
+        currentTask = posterImageView.setImage(from: anime.animeImage)
+
+        titleLabel.text = anime.animeTitle
+        ratingLabel.text = "★ \(anime.animeScore)"
+    }
+    
 }
