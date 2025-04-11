@@ -163,6 +163,25 @@ extension AnimeDetailViewController: View {
                 owner.present(alert, animated: true)
             }
             .disposed(by: disposeBag)
+        
+        // 플로팅 버튼 탭
+        mainView.finishedItem.handler = { [weak self] _ in
+            reactor.action.onNext(.saveButtonTapped(.completed))
+        }
+        
+        mainView.watchingItem.handler = { [weak self] _ in
+            reactor.action.onNext(.saveButtonTapped(.watching))
+        }
+        
+        mainView.plannedItem.handler = { [weak self] _ in
+            reactor.action.onNext(.saveButtonTapped(.planToWatch))
+        }
+        // 버튼 상태 업데이트
+        reactor.pulse(\.$savedStatus)
+            .bind(with: self) { owner, status in
+                owner.mainView.updateSaveStatusIcons(status)
+            }
+            .disposed(by: disposeBag)
     }
 }
 
