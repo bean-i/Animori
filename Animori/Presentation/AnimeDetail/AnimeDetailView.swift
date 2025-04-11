@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Floaty
 
 final class AnimeDetailView: BaseView {
     let scrollView = UIScrollView()
@@ -31,6 +32,13 @@ final class AnimeDetailView: BaseView {
     
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout())
     
+    // 플로팅 버튼
+    let floatyButton = Floaty()
+    
+    let finishedItem = FloatyItem()
+    let watchingItem = FloatyItem()
+    let plannedItem = FloatyItem()
+    
     var collectionViewHeightConstraint: Constraint?
     private var lastCollectionViewHeight: CGFloat = 0
     
@@ -50,7 +58,7 @@ final class AnimeDetailView: BaseView {
             collectionView
         )
         scrollView.addSubview(scrollContainView)
-        addSubview(scrollView)
+        addSubViews(scrollView, floatyButton)
     }
 
     override func configureLayout() {
@@ -197,6 +205,48 @@ final class AnimeDetailView: BaseView {
         collectionView.register(OTTCell.self, forCellWithReuseIdentifier: OTTCell.identifier)
         collectionView.register(RecommendCollectionViewCell.self, forCellWithReuseIdentifier: RecommendCollectionViewCell.identifier)
         collectionView.register(AnimeDetailSectionView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: AnimeDetailSectionView.identifier)
+        
+        configureFloatyButton()
+    }
+    
+    private func configureFloatyButton() {
+        // 메인 플로팅 버튼 설정
+        floatyButton.buttonColor = .amGray
+        floatyButton.plusColor = .amWhite
+        floatyButton.paddingX = 20
+        floatyButton.paddingY = 100
+        
+        // 시청 중 버튼 설정
+        watchingItem.buttonColor = .amWhite
+        watchingItem.title = "시청 중"
+        watchingItem.tintColor = .amGray
+        watchingItem.icon = UIImage(systemName: "play")
+        floatyButton.addItem(item: watchingItem)
+        
+        // 시청 예정 버튼 설정
+        plannedItem.buttonColor = .amWhite
+        plannedItem.title = "시청 예정"
+        plannedItem.tintColor = .amGray
+        plannedItem.icon = UIImage(systemName: "gauge.with.needle")
+        floatyButton.addItem(item: plannedItem)
+        
+        // 시청 완료 버튼 설정
+        finishedItem.buttonColor = .amWhite
+        finishedItem.title = "시청 완료"
+        finishedItem.tintColor = .amGray
+        finishedItem.icon = UIImage(systemName: "checkmark.square")
+        floatyButton.addItem(item: finishedItem)
+        
+        // 아이템이 표시되는 방향 설정
+        floatyButton.openAnimationType = .pop
+        floatyButton.overlayColor = UIColor.black.withAlphaComponent(0.5)
+        
+        // 초기 위치 설정
+        floatyButton.verticalDirection = .up
+        floatyButton.relativeToSafeArea = true
+        
+        floatyButton.sticky = true
+        floatyButton.hasShadow = true
     }
     
     // MARK: - ConfigureData
@@ -208,6 +258,28 @@ final class AnimeDetailView: BaseView {
         ageView.configureData(age: anime.age)
         periodLabel.text = anime.airedPeriod
         plotLabelView.setText(anime.plot)
+    }
+    
+    func updateSaveStatusIcons(_ status: AnimeWatchStatus?) {
+        let isCompleted = (status == .completed)
+        let isWatching  = (status == .watching)
+        let isPlanned   = (status == .planToWatch)
+
+        finishedItem.icon = UIImage(
+            systemName: isCompleted
+            ? "checkmark.square.fill"
+            : "checkmark.square"
+        )
+        watchingItem.icon = UIImage(
+            systemName: isWatching
+            ? "play.fill"
+            : "play"
+        )
+        plannedItem.icon = UIImage(
+            systemName: isPlanned
+            ? "gauge.with.needle.fill"
+            : "gauge.with.needle"
+        )
     }
     
     // MARK: - Compositional Layout
