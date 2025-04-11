@@ -27,6 +27,7 @@ final class AnimeDetailViewModel: Reactor {
         case setOTTURL(URL?)
         case setError(Error)
         case setSaveStatus(AnimeWatchStatus?)
+        case setSaveResult(Bool)
     }
 
     struct State {
@@ -38,6 +39,7 @@ final class AnimeDetailViewModel: Reactor {
         var ottURL: URL? = nil
         @Pulse var error: Error? = nil
         @Pulse var savedStatus: AnimeWatchStatus? = nil
+        @Pulse var saveResult: Bool? = nil
     }
     
     let animeID: Int
@@ -101,20 +103,21 @@ final class AnimeDetailViewModel: Reactor {
             return Observable.just(Mutation.setOTTURL(moveTo))
             
         case .saveButtonTapped(let newStatus):
-            return Observable.create { [weak self] observer in
+            return Observable.create { [weak self] obs in
                 guard let self = self else {
-                    observer.onCompleted()
+                    obs.onCompleted()
                     return Disposables.create()
                 }
-                // 토글 로직 (있으면 삭제, 없으면 추가)
-                self.saveService.toggleStatus(
+                // 토글: 저장됐으면 true, 삭제됐으면 false
+                let didSave = self.saveService.toggleStatus(
                     anime: self.currentState.animeDetail,
                     status: newStatus
                 )
-                // 변경된 상태 읽어서 방출
-                let updated = self.saveService.getAnimeStatus(animeId: self.animeID)
-                observer.onNext(.setSaveStatus(updated))
-                observer.onCompleted()
+                // 1) 저장 상태(AnimeWatchStatus?) 업데이트
+                obs.onNext(.setSaveStatus(self.saveService.getAnimeStatus(animeId: self.animeID)))
+                // 2) 토글 결과(Bool) 업데이트
+                obs.onNext(.setSaveResult(didSave))
+                obs.onCompleted()
                 return Disposables.create()
             }
         }
@@ -139,6 +142,8 @@ final class AnimeDetailViewModel: Reactor {
             newState.error = error
         case .setSaveStatus(let status):
             newState.savedStatus = status
+        case .setSaveResult(let result):
+            newState.saveResult = result
         }
         return newState
     }

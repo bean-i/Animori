@@ -15,7 +15,7 @@ protocol AnimeSaveStatusService {
     func create(data: AnimeSaveStatusTable)
     func delete(animeId: String)
     func getAnimeStatus(animeId: Int) -> AnimeWatchStatus?
-    func toggleStatus(anime: any AnimeDetailProtocol, status: AnimeWatchStatus)
+    func toggleStatus(anime: any AnimeDetailProtocol, status: AnimeWatchStatus) -> Bool
 }
 
 final class AnimeSaveStatusRepository: AnimeSaveStatusService {
@@ -68,7 +68,7 @@ final class AnimeSaveStatusRepository: AnimeSaveStatusService {
         return anime?.status
     }
     
-    func toggleStatus(anime: any AnimeDetailProtocol, status: AnimeWatchStatus) {
+    func toggleStatus(anime: any AnimeDetailProtocol, status: AnimeWatchStatus) -> Bool {
         // 해당 애니메이션이 이미 같은 상태로 저장되어 있는지 확인
         if let existingAnime = realm.objects(AnimeSaveStatusTable.self).filter("animeId == %@ AND status == %@", anime.id, status).first {
             // 이미 같은 상태로 저장되어 있다면 삭제
@@ -76,10 +76,12 @@ final class AnimeSaveStatusRepository: AnimeSaveStatusService {
                 try realm.write {
                     realm.delete(existingAnime)
                 }
+                return false
 //                print("✅ 상태 제거: \(status.rawValue)")
             } catch {
 //                print("⚠️ 상태 제거 중 오류: \(error.localizedDescription)")
             }
+            return false
         } else {
             // 이전에 다른 상태로 저장된 항목이 있는지 확인
             let existingEntries = realm.objects(AnimeSaveStatusTable.self).filter("animeId == %@", anime.id)
@@ -101,10 +103,12 @@ final class AnimeSaveStatusRepository: AnimeSaveStatusService {
                     // 새 항목 추가
                     realm.add(newAnimeStatus)
                 }
+                return true
 //                print("✅ 상태 변경: \(status.rawValue)")
             } catch {
 //                print("⚠️ 상태 변경 중 오류: \(error.localizedDescription)")
             }
+            return true
         }
     }
 }

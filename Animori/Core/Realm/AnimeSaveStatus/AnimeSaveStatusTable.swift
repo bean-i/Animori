@@ -13,6 +13,17 @@ enum AnimeWatchStatus: String, PersistableEnum {
     case completed = "completed"
     case watching = "watching"
     case planToWatch = "planToWatch"
+    
+    var display: String {
+        switch self {
+        case .completed:
+            return "시청 완료"
+        case .watching:
+            return "시청 중"
+        case .planToWatch:
+            return "시청 예정"
+        }
+    }
 }
 
 // 시청 상태 저장 테이블
