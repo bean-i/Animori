@@ -40,6 +40,7 @@ final class TrendCollectionViewCell: BaseCollectionViewCell {
         trendPagerView.transformer = transformer
         trendPagerView.scrollDirection = .horizontal
         trendPagerView.itemSize = CGSize(width: bounds.width * 0.6, height: bounds.height)
+        trendPagerView.automaticSlidingInterval = 2.5
         
         trendPagerView.register(TrendPagerViewCell.self, forCellWithReuseIdentifier: TrendPagerViewCell.identifier)
         trendPagerView.delegate = self
