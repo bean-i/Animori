@@ -54,7 +54,7 @@ class AsyncOperation: Operation {
 
     override func start() {
         if isCancelled {
-            print("[AsyncOperation] start 전에 이미 취소됨 → finish()")
+//            print("[AsyncOperation] start 전에 이미 취소됨 → finish()")
             finish()
             return
         }
@@ -63,7 +63,7 @@ class AsyncOperation: Operation {
         
         internalTask = Task {
             if Task.isCancelled {
-                print("[AsyncOperation] Task 시작 전 취소됨")
+//                print("[AsyncOperation] Task 시작 전 취소됨")
                 finish()
                 return
             }
@@ -80,7 +80,7 @@ class AsyncOperation: Operation {
     
     override func cancel() {
         super.cancel()
-        print("[AsyncOperation] cancel() 호출됨")
+//        print("[AsyncOperation] cancel() 호출됨")
         internalTask?.cancel()
         finish()
     }

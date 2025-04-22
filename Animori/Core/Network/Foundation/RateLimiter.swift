@@ -22,7 +22,7 @@ actor RateLimiter {
         self.available = maxRequests
         self.interval = interval
         self.lastRefill = Date()
-        print("[RateLimiter] 초기화 - maxRequests: \(maxRequests), interval: \(interval)")
+//        print("[RateLimiter] 초기화 - maxRequests: \(maxRequests), interval: \(interval)")
     }
 
     func acquire() async {
@@ -30,22 +30,22 @@ actor RateLimiter {
             refillIfNeeded()
 
             if Task.isCancelled {
-                print("[RateLimiter] 취소된 요청. acquire 중단")
+//                print("[RateLimiter] 취소된 요청. acquire 중단")
                 return
             }
 
             if available > 0 {
                 available -= 1
-                print("[RateLimiter] 토큰 소비. 남은 토큰: \(available)")
+//                print("[RateLimiter] 토큰 소비. 남은 토큰: \(available)")
                 return
             }
 
-            print("[RateLimiter] 토큰 부족. 대기 중...")
+//            print("[RateLimiter] 토큰 부족. 대기 중...")
 
             do {
                 try await Task.sleep(nanoseconds: UInt64(interval * 1_000_000_000))
             } catch {
-                print("[RateLimiter] sleep 중 취소됨 → acquire 중단")
+//                print("[RateLimiter] sleep 중 취소됨 → acquire 중단")
                 return
             }
         }
@@ -57,7 +57,7 @@ actor RateLimiter {
         if elapsed >= interval {
             available = maxRequests
             lastRefill = now
-            print("[RateLimiter] 토큰 재충전. available: \(available) at \(now)")
+//            print("[RateLimiter] 토큰 재충전. available: \(available) at \(now)")
         }
     }
 }
