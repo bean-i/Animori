@@ -10,6 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var pendingDeeplinkURL: URL?
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -17,6 +18,46 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = DIContainer.shared.makeTabBarVC()
         window?.makeKeyAndVisible()
+        
+        // 👉 URLContexts에도 딥링크가 있는 경우 처리
+        if let url = connectionOptions.urlContexts.first?.url {
+            handleDeeplink(url)
+        }
+        
+        // 👉 혹시 저장된 게 있다면 여기서 처리
+        if let pending = pendingDeeplinkURL {
+            handleDeeplink(pending)
+            pendingDeeplinkURL = nil
+        }
+    }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let url = URLContexts.first?.url else { return }
+        
+        // window가 아직 준비되지 않은 경우, URL만 저장
+        if window?.rootViewController == nil {
+            pendingDeeplinkURL = url
+            return
+        }
+        
+        handleDeeplink(url)
+    }
+    
+    func handleDeeplink(_ url: URL) {
+        guard url.scheme == "animori",
+              url.host == "anime",
+              let idString = url.pathComponents.dropFirst().first,
+              let animeID = Int(idString),
+              let tabBar = window?.rootViewController as? AnimoriTabBarController
+        else { return }
+
+        tabBar.selectedIndex = 0
+
+        guard let nav = tabBar.selectedViewController as? UINavigationController else { return }
+
+        let exploreVC = DIContainer.shared.makeExploreVC()
+        let detailVC = DIContainer.shared.makeAnimeDetailVC(id: animeID)
+        nav.setViewControllers([exploreVC, detailVC], animated: true)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
