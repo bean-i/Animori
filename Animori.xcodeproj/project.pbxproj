@@ -20,6 +20,9 @@
 		EACEF1BD2DB7D34C00A60F4C /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EACEF18D2DB7B72F00A60F4C /* WidgetKit.framework */; };
 		EACEF1BE2DB7D34C00A60F4C /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EACEF18F2DB7B73000A60F4C /* SwiftUI.framework */; };
 		EACEF1C92DB7D34D00A60F4C /* AnimoriWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = EACEF1BC2DB7D34C00A60F4C /* AnimoriWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		EACEF1E82DB8C54D00A60F4C /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = EACEF1E72DB8C54D00A60F4C /* FirebaseAnalyticsWithoutAdIdSupport */; };
+		EACEF1EA2DB8C54D00A60F4C /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = EACEF1E92DB8C54D00A60F4C /* FirebaseCrashlytics */; };
+		EACEF1EC2DB8C54D00A60F4C /* FirebasePerformance in Frameworks */ = {isa = PBXBuildFile; productRef = EACEF1EB2DB8C54D00A60F4C /* FirebasePerformance */; };
 		EAF70B742D95388400ED7696 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = EAF70B732D95388400ED7696 /* .gitignore */; };
 		EAF70BAD2D9562B600ED7696 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = EAF70BAC2D9562B600ED7696 /* RxCocoa */; };
 /* End PBXBuildFile section */
@@ -134,9 +137,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA18C9A52DA99250005EE80F /* Floaty.framework in Frameworks */,
+				EACEF1E82DB8C54D00A60F4C /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
+				EACEF1EC2DB8C54D00A60F4C /* FirebasePerformance in Frameworks */,
 				EA18C9A32DA9924C005EE80F /* FSPagerView.framework in Frameworks */,
 				EAB456002DA93AA30087CC28 /* RxDataSources in Frameworks */,
 				EAB455F22DA93A1F0087CC28 /* ReactorKit in Frameworks */,
+				EACEF1EA2DB8C54D00A60F4C /* FirebaseCrashlytics in Frameworks */,
 				EA18C7282DA98B56005EE80F /* RealmSwift in Frameworks */,
 				EAB458942DA97FEB0087CC28 /* SnapKit in Frameworks */,
 				EAF70BAD2D9562B600ED7696 /* RxCocoa in Frameworks */,
@@ -230,6 +236,7 @@
 				E6F30B61362720C9CAEEB1BC /* [CP] Embed Pods Frameworks */,
 				3AD04C1168FF63A7E76912AA /* [CP] Copy Pods Resources */,
 				EACEF19C2DB7B73100A60F4C /* Embed Foundation Extensions */,
+				EACEF1ED2DB8C64400A60F4C /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -279,6 +286,7 @@
 				EAB4587E2DA96CCA0087CC28 /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 				EAB458922DA97FEB0087CC28 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				EA18C7262DA98B56005EE80F /* XCRemoteSwiftPackageReference "realm-swift" */,
+				EACEF1E62DB8C54D00A60F4C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EAF70B4C2D9537CB00ED7696 /* Products */;
@@ -371,6 +379,28 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Animori/Pods-Animori-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		EACEF1ED2DB8C64400A60F4C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -467,6 +497,7 @@
 				CODE_SIGN_ENTITLEMENTS = Animori/Animori.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5S7XHWYU87;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Animori/Info.plist;
@@ -726,6 +757,14 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		EACEF1E62DB8C54D00A60F4C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.12.0;
+			};
+		};
 		EAF70BAB2D9562B600ED7696 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
@@ -769,6 +808,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EAB458922DA97FEB0087CC28 /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		EACEF1E72DB8C54D00A60F4C /* FirebaseAnalyticsWithoutAdIdSupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EACEF1E62DB8C54D00A60F4C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsWithoutAdIdSupport;
+		};
+		EACEF1E92DB8C54D00A60F4C /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EACEF1E62DB8C54D00A60F4C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		EACEF1EB2DB8C54D00A60F4C /* FirebasePerformance */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EACEF1E62DB8C54D00A60F4C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebasePerformance;
 		};
 		EAF70BAC2D9562B600ED7696 /* RxCocoa */ = {
 			isa = XCSwiftPackageProductDependency;
