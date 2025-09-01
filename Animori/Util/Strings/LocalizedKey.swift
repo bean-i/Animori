@@ -49,6 +49,21 @@ enum LocalizedKey {
         static let movieTitle = "anime_list_title_movie"
     }
     
+    enum MyLibrary {
+        static let library = "library"
+        static let watching = "library_watching"
+        static let toWatch  = "library_toWatch"
+        static let watched = "library_watched"
+    }
+    
+    enum Character {
+        static let japaneseName = "character_japaneseName"
+        static let nickname = "character_nickname"
+        static let savedUsers = "character_savedUsers"
+        static let bio = "character_bio"
+        static let voiceActor = "character_voiceActor"
+    }
+    
     enum Alert {
         static let title = "alert_networkError_title"
         static let message = "alert_networkError_message"

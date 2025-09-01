@@ -48,15 +48,15 @@ final class StorageViewModel: Reactor {
                 
                 let sections: [StorageSection] = [
                   StorageSection(
-                    header: "시청 중",
+                    header: LocalizedStrings.MyLibrary.watching,
                     items: watching.map { .watching($0) }
                   ),
                   StorageSection(
-                    header: "시청 예정",
+                    header: LocalizedStrings.MyLibrary.toWatch,
                     items: planned.map { .planned($0) }
                   ),
                   StorageSection(
-                    header: "시청 완료",
+                    header: LocalizedStrings.MyLibrary.watched,
                     items: finished.map { .finished($0) }
                   )
                 ]

@@ -49,6 +49,21 @@ enum LocalizedStrings {
         static let movieTitle = NSLocalizedString(LocalizedKey.AnimeList.movieTitle, comment: "")
     }
     
+    enum MyLibrary {
+        static let library = NSLocalizedString(LocalizedKey.MyLibrary.library, comment: "")
+        static let watching = NSLocalizedString(LocalizedKey.MyLibrary.watching, comment: "")
+        static let toWatch = NSLocalizedString(LocalizedKey.MyLibrary.toWatch, comment: "")
+        static let watched = NSLocalizedString(LocalizedKey.MyLibrary.watched, comment: "")
+    }
+    
+    enum Character {
+        static let japaneseName = NSLocalizedString(LocalizedKey.Character.japaneseName, comment: "")
+        static let nickname = NSLocalizedString(LocalizedKey.Character.nickname, comment: "")
+        static let savedUsers = NSLocalizedString(LocalizedKey.Character.savedUsers, comment: "")
+        static let bio = NSLocalizedString(LocalizedKey.Character.bio, comment: "")
+        static let voiceActor = NSLocalizedString(LocalizedKey.Character.voiceActor, comment: "")
+    }
+    
     enum Alert {
         static let title = NSLocalizedString(LocalizedKey.Alert.title, comment: "")
         static let message = NSLocalizedString(LocalizedKey.Alert.message, comment: "")

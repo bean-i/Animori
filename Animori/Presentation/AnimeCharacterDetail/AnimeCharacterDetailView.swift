@@ -133,7 +133,7 @@ final class AnimeCharacterDetailView: BaseView {
         nameLabel.numberOfLines = 0
         nameLabel.textAlignment = .center
         
-        introHeader.text = "소개"
+        introHeader.text = LocalizedStrings.Character.bio
         introHeader.font = .am(.titleSemibold)
         introHeader.textColor = .am(.base(.white))
         introHeader.textAlignment = .left
@@ -142,7 +142,7 @@ final class AnimeCharacterDetailView: BaseView {
         introMoreButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         introMoreButton.tintColor = .am(.base(.white))
         
-        voiceActorHeader.text = "성우"
+        voiceActorHeader.text = LocalizedStrings.Character.voiceActor
         voiceActorHeader.font = .am(.titleSemibold)
         voiceActorHeader.textColor = .am(.base(.white))
         voiceActorHeader.textAlignment = .left
@@ -155,9 +155,9 @@ final class AnimeCharacterDetailView: BaseView {
     }
     
     func configureData(data: AnimeCharacterInfoProtocol) {
-        nameInfoView.configure(title: "일본어 이름", value: data.kanjiName)
-        nicknameInfoView.configure(title: "닉네임", value: data.nickname)
-        likedByInfoView.configure(title: "저장한 사람", value: data.favorites, isSeparator: true)
+        nameInfoView.configure(title: LocalizedStrings.Character.japaneseName, value: data.kanjiName)
+        nicknameInfoView.configure(title: LocalizedStrings.Character.nickname, value: data.nickname)
+        likedByInfoView.configure(title: LocalizedStrings.Character.savedUsers, value: data.favorites, isSeparator: true)
         introDetailView.setText(data.about)
     }
     

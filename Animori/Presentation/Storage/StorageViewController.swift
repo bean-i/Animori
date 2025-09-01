@@ -27,7 +27,7 @@ final class StorageViewController: BaseViewController<StorageView> {
     }
     
     override func configureNavigation() {
-        title = "보관함"
+        title = LocalizedStrings.MyLibrary.library
     }
     
     private lazy var dataSource = RxCollectionViewSectionedReloadDataSource<StorageSection>(

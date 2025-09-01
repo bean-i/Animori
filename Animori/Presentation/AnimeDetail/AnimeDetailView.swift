@@ -218,21 +218,21 @@ final class AnimeDetailView: BaseView {
         
         // 시청 중 버튼 설정
         watchingItem.buttonColor = .amWhite
-        watchingItem.title = "시청 중"
+        watchingItem.title = LocalizedStrings.MyLibrary.watching
         watchingItem.tintColor = .amGray
         watchingItem.icon = UIImage(systemName: "play")
         floatyButton.addItem(item: watchingItem)
         
         // 시청 예정 버튼 설정
         plannedItem.buttonColor = .amWhite
-        plannedItem.title = "시청 예정"
+        plannedItem.title = LocalizedStrings.MyLibrary.toWatch
         plannedItem.tintColor = .amGray
         plannedItem.icon = UIImage(systemName: "gauge.with.needle")
         floatyButton.addItem(item: plannedItem)
         
         // 시청 완료 버튼 설정
         finishedItem.buttonColor = .amWhite
-        finishedItem.title = "시청 완료"
+        finishedItem.title = LocalizedStrings.MyLibrary.watched
         finishedItem.tintColor = .amGray
         finishedItem.icon = UIImage(systemName: "checkmark.square")
         floatyButton.addItem(item: finishedItem)

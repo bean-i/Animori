@@ -98,7 +98,7 @@ extension AnimeDetailViewController: View {
                 let reviewSection = AnimeDetailSection(header: LocalizedStrings.AnimeDetail.review,
                                                    items: state.reviews.map { .review($0) })
             
-                let characterSection = AnimeDetailSection(header: "\(LocalizedStrings.AnimeDetail.character) [전체 보기]",
+                let characterSection = AnimeDetailSection(header: "\(LocalizedStrings.AnimeDetail.character) [一覧を見る]",
                                                       items: state.characters.map { .character($0) })
             
                 let ottSection = AnimeDetailSection(header: LocalizedStrings.AnimeDetail.ott,
