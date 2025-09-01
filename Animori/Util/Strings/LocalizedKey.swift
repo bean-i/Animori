@@ -74,6 +74,12 @@ enum LocalizedKey {
     enum Phrase {
         static let loading = "phrase_loading"
         static let translating = "phrase_translating"
+        static let more = "phrase_more"
+    }
+    
+    enum Toast {
+        static let saved = "toast_saved"
+        static let removed = "toast_removed"
     }
     
 }

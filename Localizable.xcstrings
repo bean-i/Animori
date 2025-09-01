@@ -721,6 +721,30 @@
         }
       }
     },
+    "phrase_more" : {
+      "comment" : "더 보기",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View More"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "もっと見る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "더 보기"
+          }
+        }
+      }
+    },
     "phrase_translating" : {
       "comment" : "번역 중 문구",
       "extractionState" : "manual",
@@ -885,6 +909,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "인기순"
+          }
+        }
+      }
+    },
+    "toast_removed" : {
+      "comment" : "(토스트) 삭제",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Removed from Library"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ライブラリから削除しました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "보관함에서 삭제되었습니다"
+          }
+        }
+      }
+    },
+    "toast_saved" : {
+      "comment" : "(토스트) 저장",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved to %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ に保存しました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 에 저장되었습니다"
           }
         }
       }

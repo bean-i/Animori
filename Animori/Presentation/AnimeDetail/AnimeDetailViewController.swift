@@ -98,7 +98,7 @@ extension AnimeDetailViewController: View {
                 let reviewSection = AnimeDetailSection(header: LocalizedStrings.AnimeDetail.review,
                                                    items: state.reviews.map { .review($0) })
             
-                let characterSection = AnimeDetailSection(header: "\(LocalizedStrings.AnimeDetail.character) [一覧を見る]",
+                let characterSection = AnimeDetailSection(header: "\(LocalizedStrings.AnimeDetail.character) [\(LocalizedStrings.Phrase.more)]",
                                                       items: state.characters.map { .character($0) })
             
                 let ottSection = AnimeDetailSection(header: LocalizedStrings.AnimeDetail.ott,
@@ -198,8 +198,8 @@ extension AnimeDetailViewController: View {
                     statusString = ""
                 }
                 let message = didSave
-                ? "✅ \(statusString)에 저장되었습니다"
-                : "❌ 보관함에서 삭제되었습니다"
+                ? "✅ \(LocalizedStrings.Toast.save(statusString).message)"
+                : "❌ \(LocalizedStrings.Toast.remove.message)"
                 owner.mainView.makeToast(message, duration: 2.0, position: .center)
             }
             .disposed(by: disposeBag)

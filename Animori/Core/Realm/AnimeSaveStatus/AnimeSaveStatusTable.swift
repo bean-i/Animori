@@ -17,11 +17,11 @@ enum AnimeWatchStatus: String, PersistableEnum {
     var display: String {
         switch self {
         case .completed:
-            return "시청 완료"
+            return LocalizedStrings.MyLibrary.watched
         case .watching:
-            return "시청 중"
+            return LocalizedStrings.MyLibrary.watching
         case .planToWatch:
-            return "시청 예정"
+            return LocalizedStrings.MyLibrary.toWatch
         }
     }
 }

@@ -74,6 +74,20 @@ enum LocalizedStrings {
     enum Phrase {
         static let loading = NSLocalizedString(LocalizedKey.Phrase.loading, comment: "")
         static let translating = NSLocalizedString(LocalizedKey.Phrase.translating, comment: "")
+        static let more = NSLocalizedString(LocalizedKey.Phrase.more, comment: "")
     }
     
+    enum Toast {
+        case save(String)
+        case remove
+        
+        var message: String {
+            switch self {
+            case .save(let to):
+                return String(format: NSLocalizedString(LocalizedKey.Toast.saved, comment: ""), to)
+            case .remove:
+                return NSLocalizedString(LocalizedKey.Toast.removed, comment: "")
+            }
+        }
+    }
 }
